@@ -17,6 +17,7 @@ import {
   TableIcon,
   UserCircleIcon,
 } from "../icons/index";
+import KnowledgeCard from "@/components/sidebar/KnowledgeCard";
 // import SidebarWidget from "./SidebarWidget";
 
 type NavItem = {
@@ -101,6 +102,8 @@ const AppSidebar: React.FC = () => {
     navItems: NavItem[],
     menuType: "main" | "others"
   ) => (
+      <>
+
     <ul className="flex flex-col gap-4">
       {navItems.map((nav, index) => (
         <li key={nav.name}>
@@ -221,6 +224,7 @@ const AppSidebar: React.FC = () => {
         </li>
       ))}
     </ul>
+      </>
   );
 
   const [openSubmenu, setOpenSubmenu] = useState<{
@@ -289,7 +293,7 @@ const AppSidebar: React.FC = () => {
 
   return (
     <aside
-      className={`fixed flex flex-col px-5 right-0 bg-white lg:bg-transparent dark:border-gray-800 text-gray-900 h-[calc(100vh_-_63px)] transition-all duration-300 ease-in-out z-45 
+      className={`fixed flex flex-col pr-5 right-0 bg-white lg:bg-transparent dark:border-gray-800 text-gray-900 h-[calc(100vh_-_63px)] transition-all duration-300 ease-in-out z-45 
         ${
           isExpanded || isMobileOpen
             ? "w-[290px]"
@@ -300,6 +304,7 @@ const AppSidebar: React.FC = () => {
       onMouseEnter={() => !isExpanded}
     >
       <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar py-8">
+        <KnowledgeCard />
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
             <div>
