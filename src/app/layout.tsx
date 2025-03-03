@@ -1,4 +1,4 @@
-import { Outfit } from "next/font/google";
+import { Outfit, Vazirmatn } from "next/font/google";
 import "./globals.css";
 
 import { SidebarProvider } from "@/context/SidebarContext";
@@ -9,6 +9,11 @@ const outfit = Outfit({
   subsets: ["latin"],
 });
 
+
+const vazir = Vazirmatn({
+  variable: "--font-vazirmatn-sans",
+  subsets: ["arabic"],
+});
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -16,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${outfit.variable} dark:bg-gray-900`}>
+      <body className={`${vazir.variable} dark:bg-gray-900`}>
         <ThemeProvider>
           <SidebarProvider>{children}</SidebarProvider>
         </ThemeProvider>
