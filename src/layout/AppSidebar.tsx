@@ -25,7 +25,7 @@ type NavItem = {
   name: string;
   icon: React.ReactNode;
   title?: string,
-  path: string;
+  path?: string;
   subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
 };
 
@@ -59,6 +59,7 @@ const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
+    path:'',
     subItems: [{ name: "Ecommerce", path: "/", pro: false }],
   },
   {
