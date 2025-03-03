@@ -18,6 +18,7 @@ import {
   UserCircleIcon,
 } from "../icons/index";
 import KnowledgeCard from "@/components/sidebar/KnowledgeCard";
+import Button from "@/components/ui/button/Button";
 // import SidebarWidget from "./SidebarWidget";
 
 type NavItem = {
@@ -26,6 +27,32 @@ type NavItem = {
   path?: string;
   subItems?: { name: string; path: string; pro?: boolean; new?: boolean }[];
 };
+
+const diloopNavItems: NavItem[] = [
+  {
+    icon: <GridIcon />,
+    name: "پیشخوان",
+    path: "/",
+  },
+  {
+    icon: <CalenderIcon />,
+    name: "کسب و کار آنلاین",
+    path: "/course-categories",
+  },
+  {
+    icon: <UserCircleIcon />,
+    name: "مهارت های کارمندی",
+    path: "/calendar",
+  },
+
+  {
+    name: "کارآفرینی و استارتاپ ها",
+    icon: <ListIcon />,
+    path: "/form-elements",
+  },
+];
+
+
 
 const navItems: NavItem[] = [
   {
@@ -104,7 +131,7 @@ const AppSidebar: React.FC = () => {
   ) => (
       <>
 
-    <ul className="flex flex-col gap-4">
+    <ul className="flex flex-col">
       {navItems.map((nav, index) => (
         <li key={nav.name}>
           {nav.subItems ? (
@@ -227,6 +254,136 @@ const AppSidebar: React.FC = () => {
       </>
   );
 
+  const renderCustomMenuItems = (
+      navItems: NavItem[],
+      menuType: "main" | "others"
+  ) => (
+      <>
+
+        <ul className="flex flex-col bg-white rounded-lg overflow-hidden  shadow shadow-md">
+          {navItems.map((nav, index) => (
+              <li key={nav.name}>
+                {nav.subItems ? (
+                    <button
+                        onClick={() => handleSubmenuToggle(index, menuType)}
+                        className={`custom-menu-item group  ${
+                            openSubmenu?.type === menuType && openSubmenu?.index === index
+                                ? "menu-item-active"
+                                : "menu-item-inactive"
+                        } cursor-pointer ${
+                            !isExpanded
+                                ? "lg:justify-center"
+                                : "lg:justify-start"
+                        }`}
+                    >
+              <span
+                  className={` ${
+                      openSubmenu?.type === menuType && openSubmenu?.index === index
+                          ? "menu-item-icon-active"
+                          : "menu-item-icon-inactive"
+                  }`}
+              >
+                {nav.icon}
+              </span>
+                      {(isExpanded || isMobileOpen) && (
+                          <span className={`menu-item-text`}>{nav.name}</span>
+                      )}
+                      {(isExpanded || isMobileOpen) && (
+                          <ChevronDownIcon
+                              className={`ml-auto w-5 h-5 transition-transform duration-200  ${
+                                  openSubmenu?.type === menuType &&
+                                  openSubmenu?.index === index
+                                      ? "rotate-180 text-brand-500"
+                                      : ""
+                              }`}
+                          />
+                      )}
+                    </button>
+                ) : (
+                    nav.path && (
+                        <Link
+                            href={nav.path}
+                            className={`custom-menu-item group ${
+                                isActive(nav.path) ? "menu-item-active" : "menu-item-inactive"
+                            }`}
+                        >
+                <span
+                    className={`${
+                        isActive(nav.path)
+                            ? "menu-item-icon-active"
+                            : "menu-item-icon-inactive"
+                    }`}
+                >
+                  {nav.icon}
+                </span>
+                          {(isExpanded || isMobileOpen) && (
+                              <span className={`menu-item-text`}>{nav.name}</span>
+                          )}
+                        </Link>
+                    )
+                )}
+                {nav.subItems && (isExpanded || isMobileOpen) && (
+                    <div
+                        ref={(el) => {
+                          subMenuRefs.current[`${menuType}-${index}`] = el;
+                        }}
+                        className="overflow-hidden transition-all duration-300"
+                        style={{
+                          height:
+                              openSubmenu?.type === menuType && openSubmenu?.index === index
+                                  ? `${subMenuHeight[`${menuType}-${index}`]}px`
+                                  : "0px",
+                        }}
+                    >
+                      <ul className="mt-2 space-y-1 ml-9">
+                        {nav.subItems.map((subItem) => (
+                            <li key={subItem.name}>
+                              <Link
+                                  href={subItem.path}
+                                  className={`menu-dropdown-item ${
+                                      isActive(subItem.path)
+                                          ? "menu-dropdown-item-active"
+                                          : "menu-dropdown-item-inactive"
+                                  }`}
+                              >
+                                {subItem.name}
+                                <span className="flex items-center gap-1 ml-auto">
+                        {subItem.new && (
+                            <span
+                                className={`ml-auto ${
+                                    isActive(subItem.path)
+                                        ? "menu-dropdown-badge-active"
+                                        : "menu-dropdown-badge-inactive"
+                                } menu-dropdown-badge `}
+                            >
+                            new
+                          </span>
+                        )}
+                                  {subItem.pro && (
+                                      <span
+                                          className={`ml-auto ${
+                                              isActive(subItem.path)
+                                                  ? "menu-dropdown-badge-active"
+                                                  : "menu-dropdown-badge-inactive"
+                                          } menu-dropdown-badge `}
+                                      >
+                            pro
+                          </span>
+                                  )}
+                      </span>
+                              </Link>
+                            </li>
+                        ))}
+                      </ul>
+                    </div>
+                )}
+              </li>
+          ))}
+        </ul>
+      </>
+  );
+
+
   const [openSubmenu, setOpenSubmenu] = useState<{
     type: "main" | "others";
     index: number;
@@ -293,7 +450,7 @@ const AppSidebar: React.FC = () => {
 
   return (
     <aside
-      className={`fixed flex flex-col pr-5 right-0 bg-white lg:bg-transparent dark:border-gray-800 text-gray-900 h-[calc(100vh_-_63px)] transition-all duration-300 ease-in-out z-45 
+      className={`fixed flex flex-col px-5 lg:pl-0 right-0 bg-white/[0.55] backdrop-blur-[5px] lg:bg-transparent dark:border-gray-800 text-gray-900 h-[calc(100vh_-_63px)] transition-all duration-300 ease-in-out z-45 
         ${
           isExpanded || isMobileOpen
             ? "w-[290px]"
@@ -303,16 +460,16 @@ const AppSidebar: React.FC = () => {
         lg:translate-x-0`}
       onMouseEnter={() => !isExpanded}
     >
-      <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar py-8">
+      <div className="flex flex-col duration-300 ease-linear no-scrollbar py-6 gap-6">
         <KnowledgeCard />
-        <nav className="mb-6">
-          <div className="flex flex-col gap-4">
+        <div className="flex gap-3 font-vazir">
+          <Button className="flex-1 bg-success-400 hover:bg-success-400">شاغل</Button>
+          <Button className="flex-1 bg-success-900 hover:bg-success-900">بیکار</Button>
+        </div>
+        <nav className="mb-6 font-vazir">
+          <div className="flex flex-col">
             <div>
-              {renderMenuItems(navItems, "main")}
-            </div>
-
-            <div className="">
-              {renderMenuItems(othersItems, "others")}
+              {renderCustomMenuItems(diloopNavItems, "main")}
             </div>
           </div>
         </nav>

@@ -2,10 +2,11 @@
 import React, { useEffect, useRef, useState,useCallback } from "react";
 
 import {
+    ArrowUpIcon,
     BoxCubeIcon,
     CalenderIcon,
     ChevronDownIcon,
-    GridIcon,
+    GridIcon, GroupIcon,
     HorizontaLDots,
     ListIcon,
     PageIcon,
@@ -14,6 +15,7 @@ import {
     TableIcon,
     UserCircleIcon,
 } from "../../icons/index";
+import Badge from "@/components/ui/badge/Badge";
 // import SidebarWidget from "./SidebarWidget";
 
 type KnowledgeItem = {
@@ -74,10 +76,10 @@ const KnowledgeCard: React.FC = () => {
     }
 
     return (
-        <div className="flex flex-col duration-300 ease-linear no-scrollbar">
-            <nav className="mb-6">
-                <div className="flex flex-col gap-4">
-                    <div className="bg-white p-4 rounded-xl flex flex-col gap-6">
+        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6   shadow shadow-md flex flex-col duration-300 ease-linear no-scrollbar font-vazir text-sm">
+            <nav>
+                <div className="flex flex-col gap-4 ">
+                    <div className="bg-white rounded-lg flex flex-col gap-6">
                         {knowledgeItems.map((item, index) => (
                             <>
                                 <div className="flex flex-col gap-2" key={index}>
