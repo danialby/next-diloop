@@ -28,7 +28,7 @@ const knowledgeItems: KnowledgeItem[] = [
         icon: <GridIcon />,
         key: "UserKnowledge",
         title: "دانش شما",
-        percent: 10,
+        percent: 20,
     },
     {
         icon: <GridIcon />,
@@ -74,7 +74,7 @@ const KnowledgeCard: React.FC = () => {
     }
 
     return (
-        <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar py-8">
+        <div className="flex flex-col duration-300 ease-linear no-scrollbar">
             <nav className="mb-6">
                 <div className="flex flex-col gap-4">
                     <div className="bg-white p-4 rounded-xl flex flex-col gap-6">
@@ -95,8 +95,6 @@ const KnowledgeCard: React.FC = () => {
                                                 key={part}
                                                 className={`z-0 relative h-[5px] flex-1 rounded-full border-0 border-blue bg-gray-100 box-content max-w-1/10 overflow-hidden
                                                  ${item.percent >= (part * 10) && '!bg-blue-400'}`}>
-                                                <span className={`absolute top-0  bg-blue-200 w-full h-[5px] z-1 
-                                                ${item.percent < (part * 10) ? '!translate-x-'+item.percent % (part * 10) : '-translate-x-full'}`}></span>
                                             </div>
 
                                         ))}
