@@ -3,25 +3,28 @@ import React from "react";
 
 interface BreadcrumbProps {
   pageTitle: string;
+  defaultItemTitle?: string;
 }
 
-const PageBreadcrumb: React.FC<BreadcrumbProps> = ({ pageTitle }) => {
+const PageBreadcrumb: React.FC<BreadcrumbProps> = ({ pageTitle, defaultItemTitle}) => {
   return (
     <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
-      <h2
-        className="text-xl font-semibold text-gray-800 dark:text-white/90"
-        x-text="pageName"
-      >
-        {pageTitle}
-      </h2>
+      {/*<h2*/}
+      {/*  className="text-xl font-semibold text-gray-800 dark:text-white/90"*/}
+      {/*  x-text="pageName"*/}
+      {/*>*/}
+      {/*  {pageTitle}*/}
+      {/*</h2>*/}
       <nav>
-        <ol className="flex items-center gap-1.5">
+        <ol className="flex items-center gap-1.5 font-vazir">
+          {
+              defaultItemTitle && (
           <li>
             <Link
               className="inline-flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400"
               href="/"
             >
-              Home
+              پیشخوان
               <svg
                 className="stroke-current"
                 width="17"
@@ -40,9 +43,11 @@ const PageBreadcrumb: React.FC<BreadcrumbProps> = ({ pageTitle }) => {
               </svg>
             </Link>
           </li>
-          <li className="text-sm text-gray-800 dark:text-white/90">
-            {pageTitle}
-          </li>
+              )}
+                  <li className="text-sm text-gray-800 dark:text-white/90">
+                    {pageTitle}
+                  </li>
+
         </ol>
       </nav>
     </div>

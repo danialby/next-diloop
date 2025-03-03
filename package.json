@@ -31,7 +31,8 @@
     "react-dropzone": "^14.3.5",
     "react-flatpickr": "^3.10.13",
     "swiper": "^11.2.0",
-    "tailwind-merge": "^2.6.0"
+    "tailwind-merge": "^2.6.0",
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

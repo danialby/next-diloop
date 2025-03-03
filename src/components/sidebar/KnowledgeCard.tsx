@@ -1,21 +1,8 @@
 "use client";
-import React, { useEffect, useRef, useState,useCallback } from "react";
-
 import {
-    ArrowUpIcon,
-    BoxCubeIcon,
-    CalenderIcon,
-    ChevronDownIcon,
-    GridIcon, GroupIcon,
-    HorizontaLDots,
-    ListIcon,
-    PageIcon,
-    PieChartIcon,
-    PlugInIcon,
-    TableIcon,
-    UserCircleIcon,
+    GridIcon
 } from "../../icons/index";
-import Badge from "@/components/ui/badge/Badge";
+// import Badge from "@/components/ui/badge/Badge";
 // import SidebarWidget from "./SidebarWidget";
 
 type KnowledgeItem = {
@@ -67,14 +54,6 @@ const KnowledgeCard: React.FC = () => {
     //         </ul>
     //     </>
     // );
-    const percentState = (percent: number) => {
-            return percent === 10
-            ? "mr-0"
-            : isExpanded
-                ? "lg:mr-[290px]"
-                : "lg:mr-[70px]";
-    }
-
     return (
         <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6   shadow shadow-md flex flex-col duration-300 ease-linear no-scrollbar font-vazir text-sm">
             <nav>
