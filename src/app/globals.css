@@ -603,3 +603,8 @@ layer(base);
   opacity: 0.8;
   cursor: grabbing; /* Changes the cursor to indicate dragging */
 }
+
+
+.dark * {
+  @apply dark:text-white
+}

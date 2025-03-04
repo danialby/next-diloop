@@ -35,7 +35,7 @@ export default function SkillsLayout({
                 </div>
             </div>
             <div
-                className={`w-full bg-white rounded-2xl shadow shadow-md p-6`}
+                className={`w-full bg-white  dark:bg-white/[0.03] rounded-2xl shadow shadow-md p-6`}
             >
                 <SkillsBreadCrumb pageTitle={coursePageTitle} />
                 {/* Skills Page Content */}

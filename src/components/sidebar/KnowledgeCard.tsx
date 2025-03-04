@@ -2,27 +2,23 @@
 import {
     GridIcon
 } from "../../icons/index";
+import {JSX} from "react";
 // import Badge from "@/components/ui/badge/Badge";
 // import SidebarWidget from "./SidebarWidget";
 
-type KnowledgeItem = {
-    title: string;
-    key: string;
-    icon: React.ReactNode;
-    percent: number;
-};
+type KnowledgeItem = { icon: React.JSX.Element; title: string; percent: number; key: string }
 
 const knowledgeItems: KnowledgeItem[] = [
     {
+        title: 'دانش شما',
+        key: 'UserKnowledge',
         icon: <GridIcon />,
-        key: "UserKnowledge",
-        title: "دانش شما",
         percent: 20,
     },
     {
-        icon: <GridIcon />,
-        key: "SiteKnowledge",
         title: "دانش سایت",
+        key: "SiteKnowledge",
+        icon: <GridIcon />,
         percent: 50,
     },
 ]
@@ -55,10 +51,10 @@ const KnowledgeCard: React.FC = () => {
     //     </>
     // );
     return (
-        <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6   shadow shadow-md flex flex-col duration-300 ease-linear no-scrollbar font-vazir text-sm">
+        <div className="rounded-2xl border border-gray-200 bg-white  dark:bg-white/[0.03]  p-5 dark:border-gray-800 md:p-6   shadow shadow-md flex flex-col duration-300 ease-linear no-scrollbar font-vazir text-sm">
             <nav>
                 <div className="flex flex-col gap-4 ">
-                    <div className="bg-white rounded-lg flex flex-col gap-6">
+                    <div className="rounded-lg flex flex-col gap-6">
                         {knowledgeItems.map((item, index) => (
                             <>
                                 <div className="flex flex-col gap-2" key={index}>

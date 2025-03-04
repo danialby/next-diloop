@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import React from "react";
 import Image from "next/image";
 import {HorizontalDots} from "@/icons";
+import SkillCard from "@/components/skills/SkillCard";
 
 type SkillItem = {
     name: string;
@@ -52,23 +53,9 @@ export const metadata: Metadata = {
 };
 export default function page() {
     return (
-        <div className={`flex items-center justify-center gap-8 `}>
+        <div className={`flex items-center justify-center gap-4 `}>
             { Skills.map((skill, index) => (
-                <div key={index} className={`overflow-hidden rounded-2xl  shadow shadow-md bg-gray-50`}>
-                    <div className="flex flex-1 flex-col">
-                        <Image
-                            src={skill.image}
-                            alt={skill.title}
-                            className="dark:hidden"
-                            width={472}
-                            height={152}
-                        />
-                        <div className={`flex flex-row justify-between items-center px-2 py-4 w-full`}>
-                            <span>{skill.title}</span>
-                            <HorizontalDots/>
-                        </div>
-                    </div>
-                </div>
+                <SkillCard cardData={skill} key={index} />
             ))}
         </div>
     );
