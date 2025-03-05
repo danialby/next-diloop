@@ -1,7 +1,5 @@
 import { Metadata } from "next";
 import React from "react";
-import Image from "next/image";
-import { HorizontalDots } from "../../../../../icons/index";
 import SkillCard from "@/components/skills/SkillCard";
 type SkillItem = {
     name: string;

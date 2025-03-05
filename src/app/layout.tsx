@@ -1,13 +1,14 @@
-import { Outfit, Vazirmatn } from "next/font/google";
+// import { Outfit } from "next/font/google";
+import { Vazirmatn } from "next/font/google";
 import "./globals.css";
 
 import { SidebarProvider } from "@/context/SidebarContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 
-const outfit = Outfit({
-  variable: "--font-outfit-sans",
-  subsets: ["latin"],
-});
+// const outfit = Outfit({
+//   variable: "--font-outfit-sans",
+//   subsets: ["latin"],
+// });
 
 
 const vazir = Vazirmatn({

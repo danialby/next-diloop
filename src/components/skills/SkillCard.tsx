@@ -1,8 +1,19 @@
 import Image from "next/image";
 import {HorizontalDots} from "@/icons";
 import React from "react";
+
+type SkillItem = {
+    name: string;
+    title: string;
+    image: string;
+    path?: string;
+    subItems?: {
+        courses: object,
+        new?: boolean
+    }[];
+};
 interface SkillCardProps {
-    cardData: Object;
+    cardData: SkillItem;
 }
 
 

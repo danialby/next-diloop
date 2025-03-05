@@ -5,7 +5,8 @@
 import Button from "@/components/ui/button/Button";
 // import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
+// import { useState } from "react";
 import Image from "next/image";
 import CustomInput from "@/components/custom/CustomInput";
 
