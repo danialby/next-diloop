@@ -133,8 +133,8 @@ const AppSidebar: React.FC = () => {
   const handleOnClick = (payload: NavItem) => {
     console.log(payload)
     setCoursePageTitle(payload.name)
-    if (payload?.path != null) {
-      router.push(payload?.path)
+    if (payload.path != null) {
+      router.push(payload.path)
     }
   }
 
