@@ -3,6 +3,7 @@ import "./globals.css";
 
 import { SidebarProvider } from "@/context/SidebarContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+import {NextDevtoolsProvider} from "@next-devtools/core";
 
 const outfit = Outfit({
   variable: "--font-outfit-sans",
@@ -22,8 +23,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${vazir.variable} dark:bg-gray-900`}>
+
         <ThemeProvider>
-          <SidebarProvider>{children}</SidebarProvider>
+          <SidebarProvider>
+              <NextDevtoolsProvider>
+                  {children}
+              </NextDevtoolsProvider>
+              </SidebarProvider>
         </ThemeProvider>
       </body>
     </html>

@@ -1,6 +1,7 @@
+const { withNextDevtools } = require('@next-devtools/core/plugin')
 import type { NextConfig } from "next";
 
-const nextConfig: NextConfig = {
+const nextConfig: NextConfig = withNextDevtools({
   /* config options here */
   webpack(config) {
     config.module.rules.push({
@@ -9,6 +10,6 @@ const nextConfig: NextConfig = {
     });
     return config;
   },
-};
+});
 
 export default nextConfig;
