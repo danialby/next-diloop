@@ -57,15 +57,14 @@ const KnowledgeCard: React.FC = () => {
                 <div className="flex flex-col gap-4 ">
                     <div className="rounded-lg flex flex-col gap-6">
                         {knowledgeItems.map((item, index) => (
-                            <>
-                                <div className="flex flex-col gap-2" key={index}>
+                            <div className="flex flex-col gap-2" key={item.key}>
                                     <div className="flex justify-between">
-                            <span>
-                        {item.title}
-                    </span>
+                                         <span>
+                                            {item.title}
+                                         </span>
                                         <span>
-                                {item.percent} %
-                                 </span>
+                                            {item.percent} %
+                                        </span>
                                     </div>
                                     <div className="w-full flex flex-row-reverse justify-between items-center gap-1">
                                         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((part) => (
@@ -78,8 +77,6 @@ const KnowledgeCard: React.FC = () => {
                                         ))}
                                     </div>
                                 </div>
-
-                            </>
                         ))}
                     </div>
                 </div>

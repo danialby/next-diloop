@@ -15,7 +15,7 @@ export default function InputCodeForm() {
     const router = useRouter();
     // Custom renderer for minutes:seconds format
     const [countCompleted, setCountCompleted] = useState(false);
-    const renderer = ({ minutes, seconds, completed }) => {
+    const renderer = ({ minutes, seconds }) => {
             return <span>{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
     };
     const [otp, setOtp] = useState('');
@@ -82,7 +82,7 @@ export default function InputCodeForm() {
                                 {/*<Label className={`self-start`}>کد تایید</Label>*/}
                                 <div className={`flex flex-1 flex-col  m-0 w-full dir-ltr`}>
                                     <div className={`flex justify-between flex-row-reverse text-xs`}>
-                                        <Link className={`flex items-center gap-1 dark:text-gray-400`} href={`/user`}>
+                                        <Link className={`flex items-center gap-1 dark:text-gray-400`} href={`/login`}>
                                             <PencilIcon className={`w-5`} />
                                             <span>
                                                 ویرایش شماره

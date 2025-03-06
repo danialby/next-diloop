@@ -19,7 +19,7 @@ export default function UserLogin() {
     // send code to number
     console.log(userLoginNumber)
     setUserLoginNumber(userLoginNumber)
-    router.replace('/user/input-code')
+    router.replace('/login/input-code')
     return userLoginNumber
   }
 
