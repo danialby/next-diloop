@@ -2,13 +2,14 @@
 import {
     GridIcon
 } from "../../icons/index";
-import {JSX} from "react";
-// import Badge from "@/components/ui/badge/Badge";
-// import SidebarWidget from "./SidebarWidget";
+import { JSX } from 'React'
 
-type KnowledgeItem = { icon: React.JSX.Element; title: string; percent: number; key: string }
-
-const knowledgeItems: KnowledgeItem[] = [
+const knowledgeItems: ({
+    icon: JSX.Element;
+    title: string;
+    percent: number;
+    key: string
+})[] = [
     {
         title: 'دانش شما',
         key: 'UserKnowledge',
@@ -62,7 +63,7 @@ const KnowledgeCard: React.FC = () => {
                             <span>
                         {item.title}
                     </span>
-                                    <span>
+                                        <span>
                                 {item.percent} %
                                  </span>
                                     </div>
