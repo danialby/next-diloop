@@ -1,7 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap')
-@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap')
 layer(base);
-
 @import 'tailwindcss';
 
 
@@ -12,7 +10,7 @@ layer(base);
 @theme {
   --font-*: initial;
   --font-outfit: Outfit, sans-serif;
-  --font-vazir: Vazirmatn, sans-serif;
+  --font-vazir: VazirFD, sans-serif;
   --breakpoint-*: initial;
   --breakpoint-2xsm: 375px;
   --breakpoint-xsm: 425px;
@@ -603,7 +601,6 @@ layer(base);
   opacity: 0.8;
   cursor: grabbing; /* Changes the cursor to indicate dragging */
 }
-
 
 .dark * {
   @apply dark:text-white
