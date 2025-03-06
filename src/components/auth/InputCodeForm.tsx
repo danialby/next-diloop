@@ -10,11 +10,24 @@ import Image from "next/image";
 import CustomInput from "@/components/custom/CustomInput";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from '@/store/authStore';
+import Label from "@/components/form/Label";
+import { OtpInput } from 'reactjs-otp-input';
+import Countdown, { zeroPad, calcTimeDelta, formatTimeDelta } from 'react-countdown';
+export default function InputCodeForm() {
 
-const router = useRouter()
+    const router = useRouter();
+    const [error] = useState('');
+    // Custom renderer for minutes:seconds format
+    const renderer = ({ minutes, seconds, completed }) => {
+        if (completed) {
+            return <span>زمان </span>;
+        } else {
+            return <span>{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
+        }
+    };
+    const [otp, setOtp] = useState('');
 
-export default function SignInForm() {
-    const [userNumber] = useState('');
+    const handleChange = (otp) => setOtp(otp);
     // const [showPassword, setShowPassword] = useState(false);
     // const [isChecked, setIsChecked] = useState(false);
 
@@ -28,12 +41,15 @@ export default function SignInForm() {
     //   router.push('/auth/register')
     // }
     // }
-    const { setUserNumber } = useAuthStore()
-    const handleLogin = (phone: string) => {
+
+    const { userNumber,setUserNumber } = useAuthStore()
+    const handleLogin = (evt: { preventDefault: () => void; }) => {
+        evt.preventDefault();
         // send code to number
-        console.log(phone)
-        setUserNumber(phone)
+        console.log(userNumber)
+        setUserNumber(userNumber)
         router.push('/input-code')
+        return userNumber
     }
 
     return (
@@ -48,25 +64,42 @@ export default function SignInForm() {
                             alt="Logo"
                         />
                     </div>
-                    <div className="text-center">
-
-                        <h1 className="mb-2 font-semibold text-gray-800 text-title-sm dark:text-white/90 sm:text-title-md">
-                            ورود به دیلوپ
-                        </h1>
+                    <div className="text-center flex flex-col gap-2 mb-4">
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                            برای ورود شماره موبایل خود را وارد کنید.
+                            کد تایید به شماره
+                            <span
+                                className={`font-bold text-lg px-2 text-black dark:!text-blue-500 tracking-[1px]`}>{userNumber}</span>
+                            ارسال شد.
+
                         </p>
+                        <Countdown className={`font-vazir`} date={Date.now() + 120000}      renderer={renderer} />
+                        <h1 className="mb-2 text-lg font-semibold text-gray-800 dark:text-white/90">
+                            در قسمت پایین وارد کنید
+                        </h1>
                     </div>
-                    <div className={`w-1 h-1 rounded-full bg-gray-300 my-6`} />
                     <div>
-                        <form>
+                        <form onSubmit={handleLogin}>
                             <div className="space-y-6 flex flex-col justify-center items-center w-full`">
-                                <div  className={`m-0`}>
-                                    <CustomInput defaultValue={userNumber} floatingLabel={true} placeholder="شماره موبایل" type="text"
-                                                 className={`border-[2px] rounded-xl`} />
-                                    <span className={`text-rose-400 text-xs`}>
-                    مشکلی پیش آمده. لطفا صبر کنید
-                  </span>
+                                <Label className={`self-start`}>کد تایید</Label>
+                                <div className={`flex flex-1 flex-col  m-0 w-full dir-ltr`}>
+
+                                    {/*<CustomInput*/}
+                                    {/*    type="text"*/}
+                                    {/*    defaultValue={userNumber}*/}
+                                    {/*    error={error.length > 0}*/}
+                                    {/*    onChange={(e) => {*/}
+                                    {/*        setUserNumber(e.target.value)*/}
+                                    {/*    }}*/}
+                                    {/*    floatingLabel={false}*/}
+                                    {/*    placeholder="09123456789"*/}
+                                    {/*    hint={error || ""}*/}
+                                    {/*    className={`rounded-xl font-outfit tracking-[2px] mt-1`}*/}
+                                    {/*/>*/}
+                                    <OtpInput className={`w-full justify-between gap-4`} isInputNum={true} shouldAutoFocus={true} inputStyle={`border-b-3 border-blue-400  !w-8 h-10 focus-visible:outline-none`}
+                                              value={otp}
+                                              onChange={handleChange}
+                                              numInputs={6}
+                                              separator={<span></span>} />
                                 </div>
                                 {/*<div className="flex items-center justify-around">*/}
                                 {/*  <div className="flex items-center gap-3">*/}
@@ -82,26 +115,14 @@ export default function SignInForm() {
                                 {/*    ورود با کلمه عبور*/}
                                 {/*  </Link>*/}
                                 {/*</div>*/}
-                                <div className={`w-1 h-1 rounded-full bg-gray-300 my-6`} />
-                                <div>
-                                    <Button className="w-full" size="sm" onClick={handleLogin(userNumber)}>
-                                        ورود  |  ثبت نام
-                                    </Button>
-                                </div>
+                                {/*<div className={`w-1 h-1 rounded-full bg-gray-300 my-6`} />*/}
+                                {/*<div>*/}
+                                {/*    <Button className="w-full" size="sm">*/}
+                                {/*        ورود  |  ثبت نام*/}
+                                {/*    </Button>*/}
+                                {/*</div>*/}
                             </div>
                         </form>
-                        <div>
-                            <p className="text-xs font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start py-4">
-                                <span>ورود یا ثبت نام شما به منزله پذیرش </span>
-                                <Link
-                                    href="/terms"
-                                    className="text-brand-500 hover:text-brand-600 dark:text-brand-400"
-                                >
-                                    قوانین دیلوپ
-                                </Link>
-                                <span> می باشد</span>
-                            </p>
-                        </div>
                     </div>
                 </div>
             </div>

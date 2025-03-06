@@ -59,6 +59,9 @@ importers:
       react-apexcharts:
         specifier: ^1.7.0
         version: 1.7.0(apexcharts@4.5.0)(react@19.0.0)
+      react-countdown:
+        specifier: ^2.3.6
+        version: 2.3.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react-dnd:
         specifier: ^16.0.1
         version: 16.0.1(@types/node@20.17.22)(@types/react@19.0.10)(react@19.0.0)
@@ -74,6 +77,9 @@ importers:
       react-flatpickr:
         specifier: ^3.10.13
         version: 3.10.13(react@19.0.0)
+      reactjs-otp-input:
+        specifier: ^2.0.10
+        version: 2.0.10(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       swiper:
         specifier: ^11.2.0
         version: 11.2.4
@@ -2373,6 +2379,12 @@ packages:
       apexcharts: '>=4.0.0'
       react: '>=0.13'
 
+  react-countdown@2.3.6:
+    resolution: {integrity: sha512-ZfX6S08Hb6x6W6eCn1hMDvxPICI/T30fd+gaeVTCR/2cGZ2WJ3f26e4ImNIMX1fHkopJrUdnRpWXP13/D39+gg==}
+    peerDependencies:
+      react: '>= 15'
+      react-dom: '>= 15'
+
   react-dnd-html5-backend@16.0.1:
     resolution: {integrity: sha512-Wu3dw5aDJmOGw8WjH1I1/yTH+vlXEL4vmjk5p+MHxP8HuHJS1lAGeIdG/hze1AvNeXWo/JgULV87LyQOr+r5jw==}
 
@@ -2413,6 +2425,12 @@ packages:
   react@19.0.0:
     resolution: {integrity: sha512-V8AVnmPIICiWpGfm6GLzCR/W5FXLchHop40W4nXBmdlEceh16rCN8O8LNWm5bh5XUX91fh7KpA+W0TgMKmgTpQ==}
     engines: {node: '>=0.10.0'}
+
+  reactjs-otp-input@2.0.10:
+    resolution: {integrity: sha512-JNHvMs0AYNcXw2EmbfOgNVlLzPoX6i8UfsUSjhcFl7I0SdIPxxfiaNEUly4ys9TUgXgIElUxY+dqKRgrbKYT1w==}
+    peerDependencies:
+      react: '>=17.0.0'
+      react-dom: '>=17.0.0'
 
   redux@4.2.1:
     resolution: {integrity: sha512-LAUYz4lc+Do8/g7aeRa8JkyDErK6ekstQaqWQrNRW//MY1TvCEpMtpTWvlQ+FPbWCx+Xixu/6SHt5N0HR+SB4w==}
@@ -5307,6 +5325,12 @@ snapshots:
       prop-types: 15.8.1
       react: 19.0.0
 
+  react-countdown@2.3.6(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+    dependencies:
+      prop-types: 15.8.1
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
+
   react-dnd-html5-backend@16.0.1:
     dependencies:
       dnd-core: 16.0.1
@@ -5344,6 +5368,11 @@ snapshots:
   react-is@16.13.1: {}
 
   react@19.0.0: {}
+
+  reactjs-otp-input@2.0.10(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+    dependencies:
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
 
   redux@4.2.1:
     dependencies:

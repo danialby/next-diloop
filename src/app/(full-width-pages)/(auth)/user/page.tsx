@@ -6,6 +6,6 @@ export const metadata: Metadata = {
   description: "This is Next.js Signin Page TailAdmin Dashboard Template",
 };
 
-export default function SignIn() {
+export default function UserLoginPage() {
   return <UserLogin />;
 }

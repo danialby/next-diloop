@@ -5,17 +5,20 @@
 import Button from "@/components/ui/button/Button";
 // import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, {FormEvent, useState} from "react";
 import Image from "next/image";
 import CustomInput from "@/components/custom/CustomInput";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from '@/store/authStore';
+import InputField from "@/components/form/input/InputField";
+import Label from "@/components/form/Label";
+import Input from "@/components/form/input/InputField";
 
 
-export default function SignInForm() {
+export default function UserLogin() {
 
   const router = useRouter();
-  const [userNumber] = useState('');
+  const [error] = useState('');
   // const [showPassword, setShowPassword] = useState(false);
   // const [isChecked, setIsChecked] = useState(false);
 
@@ -29,8 +32,9 @@ export default function SignInForm() {
   //   router.push('/auth/register')
   // }
   // }
-  const { setUserNumber } = useAuthStore()
-  const handleLogin = (evt) => {
+
+  const { userNumber,setUserNumber } = useAuthStore()
+  const handleLogin = (evt: FormEvent) => {
     evt.preventDefault();
     // send code to number
     console.log(userNumber)
@@ -60,16 +64,24 @@ export default function SignInForm() {
                 برای ورود شماره موبایل خود را وارد کنید.
               </p>
             </div>
-            <div className={`w-1 h-1 rounded-full bg-gray-300 my-6`} />
+            <div className={`w-5 h-1 bg-white/30 rounded-full my-6`} />
             <div>
               <form onSubmit={handleLogin}>
                 <div className="space-y-6 flex flex-col justify-center items-center w-full`">
-                  <div  className={`m-0`}>
-                    <CustomInput defaultValue={userNumber} floatingLabel={true} placeholder="شماره موبایل" type="text"
-                                 className={`border-[2px] rounded-xl`} />
-                    <span className={`text-rose-400 text-xs`}>
-                    مشکلی پیش آمده. لطفا صبر کنید
-                  </span>
+                  <div className={`flex flex-1 flex-col  m-0 w-full`}>
+                    <Label>شماره موبایل</Label>
+                    <CustomInput
+                        type="text"
+                        defaultValue={userNumber}
+                        error={error.length > 0}
+                        onChange={(e) => {
+                          setUserNumber(e.target.value)
+                        }}
+                        floatingLabel={false}
+                        placeholder="09123456789"
+                        hint={error || ""}
+                        className={`rounded-xl font-outfit tracking-[2px] mt-1`}
+                    />
                   </div>
                   {/*<div className="flex items-center justify-around">*/}
                   {/*  <div className="flex items-center gap-3">*/}
@@ -85,24 +97,25 @@ export default function SignInForm() {
                   {/*    ورود با کلمه عبور*/}
                   {/*  </Link>*/}
                   {/*</div>*/}
-                  <div className={`w-1 h-1 rounded-full bg-gray-300 my-6`} />
-                  <div>
-                    <Button type="button" className="w-full" size="sm">
-                      ورود  |  ثبت نام
+                  {/*<div className={`w-1 h-1 rounded-full bg-gray-300 my-6`} />*/}
+                  <div className={`my-4`}/>
+                  <div className={`flex flex-1  m-0 w-full`}>
+                    <Button className="w-full rounded-xl" size="sm">
+                      ورود
                     </Button>
                   </div>
                 </div>
               </form>
               <div>
-                <p className="text-xs font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start py-4">
-                  <span>ورود یا ثبت نام شما به منزله پذیرش </span>
+                <p className="text-xs font-normal text-center sm:text-start py-4">
+                  <span className={`text-gray-700 dark:text-gray-400 `}>ورود یا ثبت نام شما به منزله پذیرش </span>
                   <Link
                       href="/terms"
-                      className="text-brand-500 hover:text-brand-600 dark:text-brand-400"
+                      className="!text-blue-500 hover:!text-blue-600 dark:!text-blue-400 dark:hover:!text-blue-600"
                   >
                     قوانین دیلوپ
                   </Link>
-                  <span> می باشد</span>
+                  <span className={`text-gray-700 dark:text-gray-400 `}> می باشد</span>
                 </p>
               </div>
             </div>
