@@ -54,21 +54,31 @@ const CustomInput: FC<InputProps> = ({
         inputClasses += `relative z-2 focus:placeholder:hidden bg-transparent text-gray-800 border-gray-300 focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800`;
     }
     const [isFocused, setIsFocused] = useState<boolean>(false);
+    const [hasValue, setHasValue] = useState<boolean>(false);
     const handleOnFocus = () => {
         setIsFocused(true)
     }
     const handleOnBlur = () => {
         setIsFocused(false)
     }
+
+    const handleOnInput = (e: React.FormEvent<HTMLInputElement>) => {
+        if(e.currentTarget.value.length > 0) {
+            setHasValue(true);
+        }
+        else {
+            setHasValue(false);
+        }
+    }
+
     return (
-        <div className="relative group">
+        <div className="relative group w-full">
             <input
                 type={type}
                 id={id}
                 name={name}
                 placeholder={!floatingLabel ? placeholder : ''}
                 defaultValue={defaultValue}
-                onChange={onChange}
                 min={min}
                 max={max}
                 step={step}
@@ -76,9 +86,11 @@ const CustomInput: FC<InputProps> = ({
                 className={inputClasses}
                 onFocus={handleOnFocus}
                 onBlur={handleOnBlur}
+                onChange={onChange}
+                onInput={(e) => handleOnInput(e)}
             />
 
-            <span className={`absolute transition-all duration-300 right-4 top-2.5  scale-100 -z-1 text-gray-300  ${(isFocused || defaultValue) && '  bg-white !text-blue-500 p-0.75 px-0.5 z-10 !right-2.5 !-top-3 text-xs'}`}>{placeholder}</span>
+            {floatingLabel && <span className={`absolute transition-all duration-300 right-4 top-2.5  scale-100 -z-1 text-gray-300  ${(isFocused || hasValue) && '  !text-blue-500 p-0.75 px-0.5 z-10 !right-0 !-top-5.5 text-xs'}`}>{placeholder}</span>}
 
             {/* Optional Hint Text */}
             {hint && (

@@ -2,7 +2,6 @@
 import {
     GridIcon
 } from "../../icons/index";
-import {JSX} from "react";
 // import Badge from "@/components/ui/badge/Badge";
 // import SidebarWidget from "./SidebarWidget";
 
