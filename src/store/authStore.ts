@@ -9,9 +9,9 @@ interface AuthStoreState {
 }
 
 // Create the store with TypeScript types
-export const useAuthStore = create<AuthStoreState>(
+export const useAuthStore = create<AuthStoreState>()(
     persist(
-        (set, get) => ({
+        (set) => ({
             userLoginNumber: '',
             setUserLoginNumber:(userLoginNumber: string) => set(state => ({ ...state, userLoginNumber: userLoginNumber })),
         }),
