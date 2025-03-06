@@ -1,55 +1,37 @@
 "use client";
-// import Checkbox from "@/components/form/input/Checkbox";
-// import Input from "@/components/form/input/InputField";
-// import Label from "@/components/form/Label";
-import Button from "@/components/ui/button/Button";
-// import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
-import Link from "next/link";
 import React, { useState } from "react";
 import Image from "next/image";
-import CustomInput from "@/components/custom/CustomInput";
+import {PencilIcon, ResendIcon} from "@/icons";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from '@/store/authStore';
-import Label from "@/components/form/Label";
 import { OtpInput } from 'reactjs-otp-input';
-import Countdown, { zeroPad, calcTimeDelta, formatTimeDelta } from 'react-countdown';
+import Countdown, { zeroPad  } from 'react-countdown';
+import Link from "next/link";
+import Button from "@/components/ui/button/Button";
+import Logo from '/public/images/logo/diloop-logo.png'
+
 export default function InputCodeForm() {
 
     const router = useRouter();
-    const [error] = useState('');
     // Custom renderer for minutes:seconds format
+    const [countCompleted, setCountCompleted] = useState(false);
     const renderer = ({ minutes, seconds, completed }) => {
-        if (completed) {
-            return <span>زمان </span>;
-        } else {
             return <span>{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
-        }
     };
     const [otp, setOtp] = useState('');
 
     const handleChange = (otp) => setOtp(otp);
-    // const [showPassword, setShowPassword] = useState(false);
-    // const [isChecked, setIsChecked] = useState(false);
-
-    // const handleRegisterOrLogin = (number) => {
-    // check number in database
-    // let isRegistered = true
-    // if(isRegistered) {
-    //   router.push('/auth/login')
-    // }
-    // else {
-    //   router.push('/auth/register')
-    // }
-    // }
-
-    const { userNumber,setUserNumber } = useAuthStore()
+    const { userLoginNumber } = useAuthStore()
     const handleLogin = (evt: { preventDefault: () => void; }) => {
         evt.preventDefault();
         // send code to number
-        console.log(userNumber)
-        setUserNumber(userNumber)
+        console.log(userLoginNumber)
         router.push('/input-code')
-        return userNumber
+        return userLoginNumber
+    }
+
+    const handleTimerReset = () => {
+        setCountCompleted(false)
     }
 
     return (
@@ -60,67 +42,64 @@ export default function InputCodeForm() {
                         <Image
                             width={231}
                             height={48}
-                            src="/images/logo/Dlogo.png"
+                            src={Logo}
                             alt="Logo"
                         />
                     </div>
-                    <div className="text-center flex flex-col gap-2 mb-4">
+                    <div className="text-center flex flex-col gap-2 mb-4 items-center">
                         <p className="text-sm text-gray-500 dark:text-gray-400">
-                            کد تایید به شماره
+                             کد تایید به شماره
                             <span
-                                className={`font-bold text-lg px-2 text-black dark:!text-blue-500 tracking-[1px]`}>{userNumber}</span>
+                                className={`font-bold text-lg px-2 text-black dark:!text-blue-500 tracking-[1px]`}>{userLoginNumber}</span>
                             ارسال شد.
 
                         </p>
-                        <Countdown className={`font-vazir`} date={Date.now() + 120000}      renderer={renderer} />
-                        <h1 className="mb-2 text-lg font-semibold text-gray-800 dark:text-white/90">
-                            در قسمت پایین وارد کنید
+
+                            {countCompleted ?
+                                (
+                                <div onClick={handleTimerReset} className={`flex items-center px-2 py-1 text-xs bg-blue-700 rounded-full text-white gap-1 dark:text-gray-400 cursor-pointer ${countCompleted ? '' : 'disabled'}`}
+                                >
+                                    <ResendIcon className={`w-5`} />
+                                    <span>
+                                               ارسال مجدد کد
+                                            </span>
+                                </div>
+                                ) :
+                                (
+                                    <span className={`font-black text-white bg-orange-500 rounded-full px-2` }>
+                                    <Countdown date={Date.now() + 20000} renderer={renderer} onComplete={() => setCountCompleted(true)} />
+                                                     </span>
+                                )
+                            }
+
+                        <h1 className="text-sm mb-2 font-semibold text-gray-800 dark:text-white/90">
+                            کد دریافت شده را در قسمت پایین وارد کنید
                         </h1>
                     </div>
                     <div>
                         <form onSubmit={handleLogin}>
                             <div className="space-y-6 flex flex-col justify-center items-center w-full`">
-                                <Label className={`self-start`}>کد تایید</Label>
+                                {/*<Label className={`self-start`}>کد تایید</Label>*/}
                                 <div className={`flex flex-1 flex-col  m-0 w-full dir-ltr`}>
-
-                                    {/*<CustomInput*/}
-                                    {/*    type="text"*/}
-                                    {/*    defaultValue={userNumber}*/}
-                                    {/*    error={error.length > 0}*/}
-                                    {/*    onChange={(e) => {*/}
-                                    {/*        setUserNumber(e.target.value)*/}
-                                    {/*    }}*/}
-                                    {/*    floatingLabel={false}*/}
-                                    {/*    placeholder="09123456789"*/}
-                                    {/*    hint={error || ""}*/}
-                                    {/*    className={`rounded-xl font-outfit tracking-[2px] mt-1`}*/}
-                                    {/*/>*/}
-                                    <OtpInput className={`w-full justify-between gap-4`} isInputNum={true} shouldAutoFocus={true} inputStyle={`border-b-3 border-blue-400  !w-8 h-10 focus-visible:outline-none`}
+                                    <div className={`flex justify-between flex-row-reverse text-xs`}>
+                                        <Link className={`flex items-center gap-1 dark:text-gray-400`} href={`/user`}>
+                                            <PencilIcon className={`w-5`} />
+                                            <span>
+                                                ویرایش شماره
+                                            </span>
+                                        </Link>
+                                    </div>
+                                    <OtpInput className={`text-black dark:text-white w-full justify-between gap-4 mt-4`} isInputNum={true} shouldAutoFocus={true} inputStyle={`border-b-3 border-blue-400  !w-8 h-10 focus-visible:outline-none`}
                                               value={otp}
                                               onChange={handleChange}
                                               numInputs={6}
                                               separator={<span></span>} />
+                                    <div className={`flex flex-1  mt-6 w-full`}>
+                                        <Button className={`w-full rounded-xl`} disabled={otp.length < 6} size="sm">
+                                            ورود
+                                        </Button>
+                                    </div>
                                 </div>
-                                {/*<div className="flex items-center justify-around">*/}
-                                {/*  <div className="flex items-center gap-3">*/}
-                                {/*    /!*<Checkbox checked={isChecked} onChange={setIsChecked} />*!/*/}
-                                {/*    <span className="block font-normal text-gray-700 text-theme-sm dark:text-gray-400">*/}
-                                {/*      اکانت دارید؟*/}
-                                {/*    </span>*/}
-                                {/*  </div>*/}
-                                {/*  <Link*/}
-                                {/*    href="/reset-password"*/}
-                                {/*    className="text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"*/}
-                                {/*  >*/}
-                                {/*    ورود با کلمه عبور*/}
-                                {/*  </Link>*/}
-                                {/*</div>*/}
-                                {/*<div className={`w-1 h-1 rounded-full bg-gray-300 my-6`} />*/}
-                                {/*<div>*/}
-                                {/*    <Button className="w-full" size="sm">*/}
-                                {/*        ورود  |  ثبت نام*/}
-                                {/*    </Button>*/}
-                                {/*</div>*/}
                             </div>
                         </form>
                     </div>
