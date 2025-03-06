@@ -118,7 +118,7 @@ const othersItems: NavItem[] = [
     icon: <PlugInIcon />,
     name: "Authentication",
     subItems: [
-      { name: "Sign In", path: "/user", pro: false },
+      { name: "Sign In", path: "/login", pro: false },
       { name: "Sign Up", path: "/signup", pro: false },
     ],
   },
@@ -475,9 +475,9 @@ const AppSidebar: React.FC = () => {
         lg:translate-x-0`}
       onMouseEnter={() => !isExpanded}
     >
-      <div className="flex flex-col duration-300 ease-linear no-scrollbar py-6 gap-6">
+      <div className="flex flex-col duration-300 ease-linear no-scrollbar py-6 gap-6 overflow-hidden">
         <KnowledgeCard />
-        <div className="flex gap-3 font-vazir">
+        <div className="flex gap-3 font-vazir w-full">
           <Button className="flex-1 bg-success-400 hover:bg-success-400">شاغل</Button>
           <Button className="flex-1 bg-success-900 hover:bg-success-900">بیکار</Button>
         </div>
