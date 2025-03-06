@@ -6,6 +6,7 @@ import { useSidebar } from "@/context/SidebarContext";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState ,useEffect,useRef} from "react";
+import Logo from '/public/images/logo/diloop-logo.png'
 
 const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
@@ -119,7 +120,7 @@ const AppHeader: React.FC = () => {
               />
             </svg>
           </button>
-        <Image src={'/images/logo/DLogo.png'} alt={'diloop'} width={100} height={100} />
+        <Image src={Logo} alt={'diloop'} width={100} height={100} />
         </div>
         <div
           className={`${
