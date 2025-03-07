@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, {FormEvent, useState} from "react";
 import Image from "next/image";
 import {PencilIcon, ResendIcon} from "@/icons";
 import { useRouter } from "next/navigation";
@@ -9,31 +9,97 @@ import Countdown, { zeroPad  } from 'react-countdown';
 import Link from "next/link";
 import Button from "@/components/ui/button/Button";
 import Logo from '/public/images/logo/diloop-logo.png'
+import {useMutation} from "@tanstack/react-query";
+import {Login, VerifyOtp} from "@/app/api/auth/routes";
+
+
+
+
+const verify =  async({mobile, otp, page}) => {
+    const response = await VerifyOtp({mobile, otp, page});
+    return response.json();
+}
+
+
+const resend =  async({mobile, method}) => {
+    const response = await Login({mobile, method});
+    return response.json();
+}
+
 
 export default function InputCodeForm() {
 
     const router = useRouter();
+    const [error, setError] = useState('');
+    const { setAuthToken } = useAuthStore()
+
     // Custom renderer for minutes:seconds format
     const [countCompleted, setCountCompleted] = useState(false);
-    const renderer = ({ minutes, seconds }) => {
-            return <span>{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
-    };
-    const [otp, setOtp] = useState('');
-
-    const handleChange = (otp) => setOtp(otp);
-    const { userLoginNumber } = useAuthStore()
-    const handleLogin = (evt: { preventDefault: () => void; }) => {
-        evt.preventDefault();
-        // send code to number
-        console.log(userLoginNumber)
-        router.push('/input-code')
-        return userLoginNumber
-    }
-
     const handleTimerReset = () => {
         setCountCompleted(false)
     }
+    const renderer = ({ minutes, seconds }) => {
+            return <span>{zeroPad(minutes)}:{zeroPad(seconds)}</span>;
+    };
 
+
+    const { userLoginNumber } = useAuthStore()
+    const [otp, setOtp] = useState('');
+    const handleChange = (otp) => setOtp(otp);
+
+
+    const { mutate: VerifyMutate, isPending: VerifyIsPending } = useMutation({
+        mutationFn: verify,
+        throwOnError: true,
+        onSuccess: (response) => {
+            // send code to number
+            console.log(response)
+            const hasFalseResult = response?.data?.result !== undefined && response?.data?.result === false;
+            if(response?.errors || hasFalseResult) {
+                setError(response?.message)
+                return;
+            }
+            setAuthToken(response?.data?.token);
+            document.cookie = `auth_token=${response?.data?.token}`;
+            router.push('/')
+        },
+        onError: (error) => {
+            console.log(error)
+            setError('مشکل پیش آمده، دوباره تلاش کنید')
+        }
+    });
+
+    const handleVerify = (evt: FormEvent) => {
+        evt.preventDefault();
+        VerifyMutate(
+            {mobile: userLoginNumber, otp, page: 'login'}
+        );
+    }
+
+
+    const { mutate: ResendMutate,isPending: ResendIsPending,  } = useMutation({
+        mutationFn: resend,
+        throwOnError: true,
+        onSuccess: (response) => {
+            // send code to number
+            console.log(response)
+            if(response.errors || !response.data.result) {
+                setError(response.message)
+                return;
+            }
+            handleTimerReset()
+        },
+        onError: (error) => {
+            console.log(error)
+            setError('مشکل پیش آمده، دوباره تلاش کنید')
+        }
+    });
+
+    const handleResend = () => {
+        ResendMutate(
+            {mobile: userLoginNumber, method: 'otp'}
+        );
+    }
     return (
         <div className="flex flex-col flex-1 lg:w-1/2 w-full font-vazir">
             <div className="flex flex-col items-center justify-center flex-1 w-full max-w-md mx-auto">
@@ -57,13 +123,12 @@ export default function InputCodeForm() {
 
                             {countCompleted ?
                                 (
-                                <div onClick={handleTimerReset} className={`flex items-center px-2 py-1 text-xs bg-blue-700 rounded-full text-white gap-1 dark:text-gray-400 cursor-pointer ${countCompleted ? '' : 'disabled'}`}
+                                <Button startIcon={<ResendIcon className={`w-5`} />} loading={ResendIsPending} onClick={handleResend} className={`flex items-center !px-2 !py-1 text-xs bg-blue-700 !rounded-full text-white gap-1 dark:text-gray-400 cursor-pointer ${countCompleted ? '' : 'disabled'}`}
                                 >
-                                    <ResendIcon className={`w-5`} />
                                     <span>
                                                ارسال مجدد کد
                                             </span>
-                                </div>
+                                </Button>
                                 ) :
                                 (
                                     <span className={`font-black text-white bg-orange-500 rounded-full px-2` }>
@@ -77,7 +142,7 @@ export default function InputCodeForm() {
                         </h1>
                     </div>
                     <div>
-                        <form onSubmit={handleLogin}>
+                        <form onSubmit={handleVerify}>
                             <div className="space-y-6 flex flex-col justify-center items-center w-full`">
                                 {/*<Label className={`self-start`}>کد تایید</Label>*/}
                                 <div className={`flex flex-1 flex-col  m-0 w-full dir-ltr`}>
@@ -94,8 +159,11 @@ export default function InputCodeForm() {
                                               onChange={handleChange}
                                               numInputs={6}
                                               separator={<span></span>} />
+                                    <span className={`relative text-xs text-rose-400 top-2 `} style={{direction: 'rtl'}}>
+                                        {error}
+                                    </span>
                                     <div className={`flex flex-1  mt-6 w-full`}>
-                                        <Button className={`w-full rounded-xl`} disabled={otp.length < 6} size="sm">
+                                        <Button loading={VerifyIsPending} className={`w-full rounded-xl`} disabled={otp.length < 6} size="sm">
                                             ورود
                                         </Button>
                                     </div>
@@ -108,3 +176,4 @@ export default function InputCodeForm() {
         </div>
     );
 }
+
