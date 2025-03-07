@@ -11,7 +11,7 @@ export class ApiService {
         return response.json();
     }
 
-    async post<T>(endpoint: string, data: unknown): Promise<{ response: Response }> {
+    async post<T>(endpoint: string, data: unknown): Promise<T> {
         const response = await fetch(`${this.baseUrl}${endpoint}`, {
             method: 'POST',
             headers: { 'Content-Type': 'content/json' },

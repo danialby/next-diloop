@@ -56,7 +56,7 @@ const KnowledgeCard: React.FC = () => {
             <nav>
                 <div className="flex flex-col gap-4 ">
                     <div className="rounded-lg flex flex-col gap-6">
-                        {knowledgeItems.map((item, index) => (
+                        {knowledgeItems.map((item) => (
                             <div className="flex flex-col gap-2" key={item.key}>
                                     <div className="flex justify-between">
                                          <span>
