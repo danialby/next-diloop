@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import './style.css'
 
 interface ButtonProps {
   children: ReactNode; // Button text or content
@@ -8,6 +9,7 @@ interface ButtonProps {
   endIcon?: ReactNode; // Icon after the text
   onClick?: () => void; // Click handler
   disabled?: boolean; // Disabled state
+  loading?: boolean; // Disabled state
   className?: string; // Disabled state
 }
 
@@ -20,6 +22,7 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   className = "",
   disabled = false,
+  loading = false,
 }) => {
   // Size Classes
   const sizeClasses = {
@@ -39,14 +42,31 @@ const Button: React.FC<ButtonProps> = ({
     <button
       className={`inline-flex items-center justify-center font-medium gap-2 rounded-lg transition ${className} ${
         sizeClasses[size]
-      } ${variantClasses[variant]} ${
+      } ${variantClasses[variant]} 
+      ${
         disabled ? "cursor-not-allowed opacity-50" : ""
-      }`}
+      }
+      ${loading && "opacity-80 cursor-default pointer-events-none"}`}
       onClick={onClick}
       disabled={disabled}
     >
+
       {startIcon && <span className="flex items-center">{startIcon}</span>}
-      {children}
+      {loading ?
+          <div aria-label="Loading"
+               className="relative inline-flex flex-col gap-2 items-center justify-center">
+            <div className="relative flex w-5 h-5">
+              <i
+                  className="absolute w-full h-full rounded-full border-2 border-b-primary animate-spinner-ease-spin border-solid border-t-transparent border-l-transparent border-r-transparent">
+              </i>
+              <i
+                  className="absolute w-full h-full rounded-full border-2 border-b-primary opacity-75 animate-spinner-linear-spin border-dotted border-t-transparent border-l-transparent border-r-transparent">
+              </i>
+            </div>
+          </div>
+          :
+          children
+      }
       {endIcon && <span className="flex items-center">{endIcon}</span>}
     </button>
   );

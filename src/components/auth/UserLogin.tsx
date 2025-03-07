@@ -1,26 +1,55 @@
 "use client";
+import React, {FormEvent, useState} from "react";
+import {useMutation} from '@tanstack/react-query';
 import Button from "@/components/ui/button/Button";
 import Link from "next/link";
-import React, {FormEvent, useState} from "react";
 import Image from "next/image";
 import CustomInput from "@/components/custom/CustomInput";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from '@/store/authStore';
 import Label from "@/components/form/Label";
 import Logo from '/public/images/logo/diloop-logo.png'
+import {Login} from "@/app/api/auth/routes";
+
+
+const login =  async({mobile, method}) => {
+  const response = await Login({mobile, method});
+  return response.json();
+}
 
 export default function UserLogin() {
 
   const router = useRouter();
-  const [error] = useState('');
-  const { userLoginNumber,setUserLoginNumber } = useAuthStore()
-  const handleLogin = (evt: FormEvent) => {
+  const [error, setError] = useState('');
+  const [phone, setPhone] = useState('');
+  const { setUserLoginNumber } = useAuthStore()
+
+  const { mutate, isPending  } = useMutation({
+    mutationFn: login,
+    throwOnError: true,
+    onSuccess: (response) => {
+      // send code to number
+      console.log(response)
+      const hasFalseResult = response?.data?.result !== undefined && response?.data?.result === false;
+      if(response?.errors || hasFalseResult) {
+        setError(response.message)
+        return;
+      }
+      setUserLoginNumber(phone)
+      router.push('/login/input-code')
+    },
+    onError: (error) => {
+      console.log(error)
+      setError('مشکل پیش آمده، دوباره تلاش کنید')
+    }
+  });
+
+  function handleLogin(evt: FormEvent) {
     evt.preventDefault();
-    // send code to number
-    console.log(userLoginNumber)
-    setUserLoginNumber(userLoginNumber)
-    router.replace('/login/input-code')
-    return userLoginNumber
+    mutate({
+      mobile: phone as string,
+      method: 'otp',
+    });
   }
 
   return (
@@ -52,10 +81,10 @@ export default function UserLogin() {
                     <Label>شماره موبایل</Label>
                     <CustomInput
                         type="text"
-                        defaultValue={''}
+                        defaultValue={phone}
                         error={error.length > 0}
                         onChange={(e) => {
-                          setUserLoginNumber(e.target.value)
+                          setPhone(e.target.value)
                         }}
                         floatingLabel={false}
                         placeholder="09123456789"
@@ -65,7 +94,7 @@ export default function UserLogin() {
                   </div>
                   <div className={`my-4`}/>
                   <div className={`flex flex-1  m-0 w-full`}>
-                    <Button className="w-full rounded-xl" size="sm">
+                    <Button loading={isPending} className="w-full rounded-xl" size="sm">
                       ورود
                     </Button>
                   </div>
