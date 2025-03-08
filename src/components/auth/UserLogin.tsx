@@ -70,7 +70,7 @@ export default function UserLogin() {
                 ورود به دیلوپ
               </h1>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                برای ورود شماره موبایل خود را وارد کنید.
+                برای ورود شماره موبایل خود را وارد کنید...
               </p>
             </div>
             <div className={`w-5 h-1 bg-white/30 rounded-full my-6`} />
