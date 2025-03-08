@@ -32,6 +32,7 @@ jobs:
         script: |
               cd ${{vars.DILOOP_BUILD_DIR}} && yarn
               yarn build
+              rm -rf ${{vars.DILOOP_TARGET_DIR}}/*
               cp -ar ${{vars.DILOOP_BUILD_DIR}}/*  ${{vars.DILOOP_TARGET_DIR}}
               rm -rf ${{vars.DILOOP_BUILD_DIR}}/*
               pm2 restart reactdiloop
