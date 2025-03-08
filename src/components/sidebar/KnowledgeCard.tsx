@@ -2,7 +2,7 @@
 import {
     GridIcon
 } from "../../icons/index";
-import { JSX } from 'React'
+import { JSX } from 'react'
 
 const knowledgeItems: ({
     icon: JSX.Element;
