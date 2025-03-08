@@ -14,7 +14,7 @@ const knowledgeItems: ({
         title: 'دانش شما',
         key: 'UserKnowledge',
         icon: <GridIcon />,
-        percent: 20,
+        percent: 22,
     },
     {
         title: "دانش سایت",
