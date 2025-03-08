@@ -30,8 +30,8 @@ jobs:
         port: ${{ vars.DILOOP_PORT }}
         key: ${{ secrets.DILOOPSERVERKEY }}
         script: |
-              cd ${{vars.DILOOP_BUILD_DIR}} && yarn
-              yarn build
+              cd ${{vars.DILOOP_BUILD_DIR}} && pnpm install
+              pnpm build
               rm -rf ${{vars.DILOOP_TARGET_DIR}}/*
               cp -ar ${{vars.DILOOP_BUILD_DIR}}/*  ${{vars.DILOOP_TARGET_DIR}}
               rm -rf ${{vars.DILOOP_BUILD_DIR}}/*
