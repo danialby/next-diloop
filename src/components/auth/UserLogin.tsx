@@ -8,41 +8,40 @@ import {useRouter} from "next/navigation";
 import {useAuthStore} from '@/store/authStore';
 import Label from "@/components/form/Label";
 import Logo from '/public/images/logo/diloop-logo.png'
-import {Login} from "@/app/api/auth/routes";
+import { Login } from "@/app/api/auth/routes";
 
-import usePublicQuery from '@/hooks/usePublicQuery';
+import {useMutation} from "@tanstack/react-query";
 
 
 export default function UserLogin() {
 
   const router = useRouter();
   const [phone, setPhone] = useState('');
+  const [error, setError] = useState('');
   const { setUserLoginNumber } = useAuthStore()
 
 
-  const { data, error, isLoading, refetch } = usePublicQuery(
-      ['login'],
-      () => {
-        const response = Login({mobile: phone, method: 'otp'});
-        return response
-      },
-      null,
-      false
-  );
-
-  function handleLogin(evt: FormEvent) {
-    evt.preventDefault();
-      refetch().then(() => {
-        const hasFalseResult = data?.result !== undefined && result?.data?.result === false;
-        if(result?.data?.errors || hasFalseResult) {
+  const mutateLogin = useMutation(
+      {
+        mutationFn: () => Login({mobile: phone, method: 'otp'}),
+        onSuccess: (response ) => {
+          // send code to number
+          console.log(response)
+          setUserLoginNumber(phone)
+          router.push('/login/input-code')
+        },
+        onError: (error) => {
           console.log(error)
-          return;
+          setError(error?.response?.data?.message);
         }
-        // send code to number
-        console.log(data)
-        // setUserLoginNumber(phone)
-        // router.push('/login/input-code')
-      })
+  })
+
+
+
+
+  const handleLogin = (evt: FormEvent) => {
+    evt.preventDefault();
+    mutateLogin.mutate();
     }
 
   // Dependency array ensures this runs when `data` changes
@@ -88,7 +87,7 @@ export default function UserLogin() {
                   </div>
                   <div className={`my-4`}/>
                   <div className={`flex flex-1  m-0 w-full`}>
-                    <Button loading={isLoading} className="w-full rounded-xl" size="sm">
+                    <Button loading={mutateLogin?.isPending} className="w-full rounded-xl" size="sm">
                       ورود
                     </Button>
                   </div>

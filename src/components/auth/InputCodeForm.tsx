@@ -12,21 +12,6 @@ import Logo from '/public/images/logo/diloop-logo.png'
 import {useMutation} from "@tanstack/react-query";
 import {Login, VerifyOtp} from "@/app/api/auth/routes";
 
-
-
-
-const verify =  async({mobile, otp, page}) => {
-    const response = await VerifyOtp({mobile, otp, page});
-    return response.json();
-}
-
-
-const resend =  async({mobile, method}) => {
-    const response = await Login({mobile, method});
-    return response.json();
-}
-
-
 export default function InputCodeForm() {
 
     const router = useRouter();
@@ -48,57 +33,41 @@ export default function InputCodeForm() {
     const handleChange = (otp) => setOtp(otp);
 
 
-    const { mutate: VerifyMutate, isPending: VerifyIsPending } = useMutation({
-        mutationFn: verify,
-        throwOnError: true,
+    const VerifyMutate= useMutation({
+        mutationFn: () => VerifyOtp({mobile: userLoginNumber, otp, page: 'login'}),
         onSuccess: (response) => {
             // send code to number
-            console.log(response)
-            const hasFalseResult = response?.data?.result !== undefined && response?.data?.result === false;
-            if(response?.errors || hasFalseResult) {
-                setError(response?.message)
-                return;
-            }
             setAuthToken(response?.data?.token);
             document.cookie = `auth_token=${response?.data?.token}`;
             router.push('/')
         },
         onError: (error) => {
             console.log(error)
-            setError('مشکل پیش آمده، دوباره تلاش کنید')
+            setError(error?.response?.data?.message);
         }
     });
 
     const handleVerify = (evt: FormEvent) => {
         evt.preventDefault();
-        VerifyMutate(
-            {mobile: userLoginNumber, otp, page: 'login'}
-        );
+        VerifyMutate.mutate();
     }
 
-
-    const { mutate: ResendMutate,isPending: ResendIsPending,  } = useMutation({
-        mutationFn: resend,
-        throwOnError: true,
-        onSuccess: (response) => {
-            // send code to number
-            console.log(response)
-            if(response.errors || !response.data.result) {
-                setError(response.message)
-                return;
-            }
-            handleTimerReset()
-        },
+    const ResendMutate= useMutation({
+        mutationFn: () => Login({mobile: userLoginNumber, method: 'otp'}),
+            onSuccess: (response ) => {
+        // send code to number
+                console.log(response)
+                handleTimerReset()
+    },
         onError: (error) => {
-            console.log(error)
-            setError('مشکل پیش آمده، دوباره تلاش کنید')
-        }
+        console.log(error)
+        setError(error?.response?.data?.message);
+    }
     });
 
+
     const handleResend = () => {
-        ResendMutate(
-            {mobile: userLoginNumber, method: 'otp'}
-        );
+        ResendMutate.mutate();
     }
     return (
         <div className="flex flex-col flex-1 lg:w-1/2 w-full font-vazir">
@@ -123,7 +92,7 @@ export default function InputCodeForm() {
 
                             {countCompleted ?
                                 (
-                                <Button startIcon={<ResendIcon className={`w-5`} />} loading={ResendIsPending} onClick={handleResend} className={`flex items-center !px-2 !py-1 text-xs bg-blue-700 !rounded-full text-white gap-1 dark:text-gray-400 cursor-pointer ${countCompleted ? '' : 'disabled'}`}
+                                <Button startIcon={<ResendIcon className={`w-5`} />} loading={ResendMutate.isPending} onClick={handleResend} className={`flex items-center !px-2 !py-1 text-xs bg-blue-700 !rounded-full text-white gap-1 dark:text-gray-400 cursor-pointer ${countCompleted ? '' : 'disabled'}`}
                                 >
                                     <span>
                                                ارسال مجدد کد
@@ -163,7 +132,7 @@ export default function InputCodeForm() {
                                         {error}
                                     </span>
                                     <div className={`flex flex-1  mt-6 w-full`}>
-                                        <Button loading={VerifyIsPending} className={`w-full rounded-xl`} disabled={otp.length < 6} size="sm">
+                                        <Button loading={VerifyMutate.isPending} className={`w-full rounded-xl`} disabled={otp.length < 6} size="sm">
                                             ورود
                                         </Button>
                                     </div>

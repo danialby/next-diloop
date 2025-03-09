@@ -5,12 +5,16 @@ const usePublicQuery = <T>(
     queryFn: QueryFunction<T>, // Unique key for the query
     options?: UseQueryOptions<T> | null,  // Additional React Query options
     enabled: boolean = true,
+    retry: boolean = false,
+    throwOnError: boolean = true,
 ): UseQueryResult<T> => {
     return useQuery<T>({
         queryKey, // Unique key for caching
         queryFn,
         enabled,
+        retry,
         ...options, // Spread additional options (e.g., staleTime, retry)
+        throwOnError
     });
 };
 
