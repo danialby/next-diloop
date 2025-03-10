@@ -52,6 +52,9 @@ import ChatIcon from "./chat.svg";
 import MoreDotIcon from "./more-dot.svg";
 import BellIcon from "./bell.svg";
 import ResendIcon from "./resend.svg"
+import Users from "./users.svg"
+import Categories from "./Categories.svg"
+import TagLeft from "./TagLeft.svg"
 
 export {
   DownloadIcon,
@@ -107,5 +110,8 @@ export {
   HorizontalDots,
   ChevronUpIcon,
   ChatIcon,
-  ResendIcon
+  ResendIcon,
+  Users,
+  Categories,
+  TagLeft
 };

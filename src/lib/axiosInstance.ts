@@ -13,7 +13,7 @@ useAxios.interceptors.request.use(
     (config) => {
             config.headers["Accept"] = "application/json"
             config.headers["Access-Control-Allow-Origin"] = "*"
-            config.headers["authorization"] = getToken()
+            config.headers["authorization"] = 'Bearer '+getToken()
 
         if (config.headers["Content-Type"] === "multipart/form-data") {
             // Set the Content-Type header to multipart/form-data

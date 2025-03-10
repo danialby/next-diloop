@@ -39,7 +39,7 @@ export default function InputCodeForm() {
             // send code to number
             setAuthToken(response?.data?.token);
             document.cookie = `auth_token=${response?.data?.token}`;
-            router.push('/')
+            router.push('/admin-panel')
         },
         onError: (error) => {
             console.log(error)
@@ -101,7 +101,7 @@ export default function InputCodeForm() {
                                 ) :
                                 (
                                     <span className={`font-black text-white bg-orange-500 rounded-full px-2` }>
-                                    <Countdown date={Date.now() + 20000} renderer={renderer} onComplete={() => setCountCompleted(true)} />
+                                    <Countdown date={Date.now() + 120000} renderer={renderer} onComplete={() => setCountCompleted(true)} />
                                                      </span>
                                 )
                             }
