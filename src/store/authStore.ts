@@ -1,7 +1,6 @@
 // stores/globalStore.ts
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware'
-import {use} from "react";
 
 // Define the type for the store state
 interface AuthStoreState {

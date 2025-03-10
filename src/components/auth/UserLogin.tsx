@@ -8,7 +8,7 @@ import {useRouter} from "next/navigation";
 import {useAuthStore} from '@/store/authStore';
 import Label from "@/components/form/Label";
 import Logo from '/public/images/logo/diloop-logo.png'
-import { Login } from "@/app/api/auth/routes";
+import { useApiRoutes } from "@/app/api/auth/routes";
 
 import {useMutation} from "@tanstack/react-query";
 
@@ -19,7 +19,7 @@ export default function UserLogin() {
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
   const { setUserLoginNumber } = useAuthStore()
-
+  const { Login } = useApiRoutes();
 
   const mutateLogin = useMutation(
       {
@@ -32,7 +32,7 @@ export default function UserLogin() {
         },
         onError: (error) => {
           console.log(error)
-          setError(error?.response?.data?.message);
+          setError(error?.['response']?.data?.message);
         }
   })
 

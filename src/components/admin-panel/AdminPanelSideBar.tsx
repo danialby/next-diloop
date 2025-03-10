@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useRef, useState,useCallback } from "react";
-import { useGlobalStore } from '@/store/globalStore'
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { usePathname } from "next/navigation";

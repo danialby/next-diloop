@@ -1,7 +1,12 @@
 import useAxios from "@/hooks/useAxios";
 
-const axiosInstance = useAxios()
+export function useAdminPanelRoutes() {
+    const axiosInstance = useAxios()
 
-export async function getUsersList() {
-    return await axiosInstance.get('/admin/api/v1/users');
+    const getUsersList = async () => {
+        return await axiosInstance.get('/admin/api/v1/users');
+    }
+
+    return { getUsersList }
 }
+

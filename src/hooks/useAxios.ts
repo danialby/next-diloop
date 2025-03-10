@@ -1,7 +1,7 @@
-import axiosInstance from '../lib/axiosInstance';
+import axiosInstance from '@/lib/axiosInstance';
 
 const useAxios = () => {
-    const get = async <T>(url: string, config?: any): Promise<T> => {
+    const get = async <T>(url: string, _data?: object | never, config?: never): Promise<T> => {
         try {
             const response = await axiosInstance.get<T>(url, config);
             return response.data;
@@ -10,7 +10,7 @@ const useAxios = () => {
         }
     };
 
-    const post = async <T>(url: string, data?: any, config?: any): Promise<T> => {
+    const post = async <T>(url: string, data?: object | never, config?: never): Promise<T> => {
         try {
             const response = await axiosInstance.post<T>(url, data, config);
             return response.data;
