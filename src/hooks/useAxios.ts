@@ -19,7 +19,25 @@ const useAxios = () => {
         }
     };
 
-    return { get, post };
+    const put = async <T>(url: string, data?: object | never, config?: never): Promise<T> => {
+        try {
+            const response = await axiosInstance.put<T>(url, data, config);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    const _delete = async <T>(url: string, data?: object | never, config?: never): Promise<T> => {
+        try {
+            const response = await axiosInstance.delete<T>(url, config);
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    return { get, post, put, _delete };
 };
 
 export default useAxios;
