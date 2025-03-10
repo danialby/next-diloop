@@ -1,57 +1,50 @@
 "use client";
 import React, {FormEvent, useState} from "react";
-import {useMutation} from '@tanstack/react-query';
 import Button from "@/components/ui/button/Button";
 import Link from "next/link";
 import Image from "next/image";
 import CustomInput from "@/components/custom/CustomInput";
-import { useRouter } from "next/navigation";
-import { useAuthStore } from '@/store/authStore';
+import {useRouter} from "next/navigation";
+import {useAuthStore} from '@/store/authStore';
 import Label from "@/components/form/Label";
 import Logo from '/public/images/logo/diloop-logo.png'
-import {Login} from "@/app/api/auth/routes";
+import { Login } from "@/app/api/auth/routes";
 
+import {useMutation} from "@tanstack/react-query";
 
-const login =  async({mobile, method}) => {
-  const response = await Login({mobile, method});
-  return response.json();
-}
 
 export default function UserLogin() {
 
   const router = useRouter();
-  const [error, setError] = useState('');
   const [phone, setPhone] = useState('');
+  const [error, setError] = useState('');
   const { setUserLoginNumber } = useAuthStore()
 
-  const { mutate, isPending  } = useMutation({
-    mutationFn: login,
-    throwOnError: true,
-    onSuccess: (response) => {
-      // send code to number
-      console.log(response)
-      const hasFalseResult = response?.data?.result !== undefined && response?.data?.result === false;
-      if(response?.errors || hasFalseResult) {
-        setError(response.message)
-        return;
-      }
-      setUserLoginNumber(phone)
-      router.push('/login/input-code')
-    },
-    onError: (error) => {
-      console.log(error)
-      setError('مشکل پیش آمده، دوباره تلاش کنید')
-    }
-  });
 
-  function handleLogin(evt: FormEvent) {
+  const mutateLogin = useMutation(
+      {
+        mutationFn: () => Login({mobile: phone, method: 'otp'}),
+        onSuccess: (response ) => {
+          // send code to number
+          console.log(response)
+          setUserLoginNumber(phone)
+          router.push('/login/input-code')
+        },
+        onError: (error) => {
+          console.log(error)
+          setError(error?.response?.data?.message);
+        }
+  })
+
+
+
+
+  const handleLogin = (evt: FormEvent) => {
     evt.preventDefault();
-    mutate({
-      mobile: phone as string,
-      method: 'otp',
-    });
-  }
+    mutateLogin.mutate();
+    }
 
+  // Dependency array ensures this runs when `data` changes
   return (
       <div className="flex flex-col flex-1 lg:w-1/2 w-full font-vazir">
         <div className="flex flex-col items-center justify-center flex-1 w-full max-w-md mx-auto">
@@ -82,7 +75,7 @@ export default function UserLogin() {
                     <CustomInput
                         type="text"
                         defaultValue={phone}
-                        error={error.length > 0}
+                        error={error?.length > 0}
                         onChange={(e) => {
                           setPhone(e.target.value)
                         }}
@@ -94,7 +87,7 @@ export default function UserLogin() {
                   </div>
                   <div className={`my-4`}/>
                   <div className={`flex flex-1  m-0 w-full`}>
-                    <Button loading={isPending} className="w-full rounded-xl" size="sm">
+                    <Button loading={mutateLogin?.isPending} className="w-full rounded-xl" size="sm">
                       ورود
                     </Button>
                   </div>

@@ -1,6 +1,7 @@
 // stores/globalStore.ts
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware'
+import {use} from "react";
 
 // Define the type for the store state
 interface AuthStoreState {
@@ -23,5 +24,12 @@ export const useAuthStore = create<AuthStoreState>()(
             name: 'LOGIN_INFO', // name of the item in the storage (must be unique)
             storage: createJSONStorage(() => localStorage), // (optional) by default, 'localStorage' is used
         }));
+
+
+
+export const getAuthToken = () => {
+    const store = useAuthStore.getState()
+    return store.auth_token
+}
 
 export default useAuthStore;

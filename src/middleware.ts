@@ -4,10 +4,9 @@ import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
-    console.log(request)
-
-    if (pathname.startsWith('/dashboard')) {
+    if (pathname.includes('/dashboard') || pathname.includes('/admin-panel')) {
         const token = request.cookies.get('auth_token');
+        console.log(token)
         if (!token) {
             return Response.redirect(new URL('/login', request.url));
         }
@@ -16,5 +15,5 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
 }
 export const config = {
-    matcher: ['/dashboard'],
+    matcher: ['/dashboard', '/admin-panel'],
 }
