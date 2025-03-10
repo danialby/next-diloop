@@ -21,13 +21,13 @@ export default function AdminLayout({
 
 
   return (
-    <div className="min-h-screen">
+    <div className="relative min-h-screen">
         <AppHeader />
       {/* Sidebar and Backdrop */}
       <AdminPanelSidebar />
       {/* Main Content Area */}
       <div
-        className={`flex-1 transition-all  duration-300 ease-in-out ${mainContentMargin}`}
+        className={`transition-all block  duration-300 ease-in-out relative ${mainContentMargin}`}
       >
         {/* Page Content */}
         <div className={`p-4 mx-auto md:p-6 left-0`}>{children}</div>

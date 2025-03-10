@@ -26,7 +26,7 @@ export default function SkillsLayout({
     return (
         <div className={`w-full flex flex-col gap-3 font-vazir`} >
             <div className="flex flex-row justify-between">
-                <SearchBar />
+                <SearchBar className="hidden lg:block" />
                 <div className="">
                     <MultiSelect label={''} options={multiOptions} onChange={(values) => setSelectedValues(values)}/>
                     <p className="sr-only">

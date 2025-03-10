@@ -90,7 +90,7 @@ const CustomInput: FC<InputProps> = ({
                 onInput={(e) => handleOnInput(e)}
             />
 
-            {floatingLabel && <span className={`absolute transition-all duration-300 right-4 top-2.5  scale-100 -z-1 text-gray-300  ${(isFocused || hasValue) && '  !text-blue-500 p-0.75 px-0.5 z-10 !right-0 !-top-5.5 text-xs'}`}>{placeholder}</span>}
+            {floatingLabel && <span className={`absolute transition-all duration-300 right-4 top-2.5  scale-100 -z-1 text-gray-400  ${(isFocused || hasValue) && '  !text-blue-500 p-0.75 px-0.5 z-10 !right-0 !-top-5.5 text-xs'}`}>{placeholder}</span>}
 
             {/* Optional Hint Text */}
             {hint && (

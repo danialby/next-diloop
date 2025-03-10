@@ -7,6 +7,10 @@ export function useAdminPanelRoutes() {
         return await axiosInstance.get('/admin/api/v1/users');
     }
 
-    return { getUsersList }
+
+    const getCategoriesList = async () => {
+        return await axiosInstance.get('/admin/api/v1/skill-teach/category', {});
+    }
+    return { getUsersList, getCategoriesList }
 }
 

@@ -1,7 +1,14 @@
 "use client";
 import React, { useEffect,useRef} from "react";
 
-const SearchBar: React.FC = () => {
+// Define the props interface
+interface SearchBarProps {
+    className?: string;
+    inputClasses?: string;
+    placeholder?: string;
+}
+
+const SearchBar: React.FC<SearchBarProps> = ({placeholder = 'جستجو...', className = '', inputClasses=''}) => {
     const skillInputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -20,15 +27,15 @@ const SearchBar: React.FC = () => {
     }, []);
 
     return (
-<div className="hidden lg:block">
+<div className={className}>
     <form>
         <div className="relative">
 
             <input
                 ref={skillInputRef}
                 type="text"
-                placeholder="جستجو..."
-                className="dark:bg-dark-900 h-11 w-full rounded-lg border border-gray-200 bg-white py-2.5 pl-12 pr-10 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 xl:w-[250px]"
+                placeholder={placeholder}
+                className={`dark:bg-dark-900 h-11 rounded-lg border border-gray-200 bg-white py-2.5 pl-12 pr-10 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900 dark:bg-white/[0.03] dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 ${inputClasses}`}
             />
 
             {/*<button*/}
