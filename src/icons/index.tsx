@@ -53,7 +53,7 @@ import MoreDotIcon from "./more-dot.svg";
 import BellIcon from "./bell.svg";
 import ResendIcon from "./resend.svg"
 import Users from "./users.svg"
-import Categories from "./Categories.svg"
+import Categories from "./categories.svg"
 import TagLeft from "./TagLeft.svg"
 
 export {
