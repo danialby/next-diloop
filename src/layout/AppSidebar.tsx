@@ -16,7 +16,7 @@ import {
   PlugInIcon,
   TableIcon,
   UserCircleIcon,
-} from "../icons/index";
+} from "@/icons/index";
 import KnowledgeCard from "@/components/sidebar/KnowledgeCard";
 import Button from "@/components/ui/button/Button";
 // import SidebarWidget from "./SidebarWidget";
@@ -133,8 +133,8 @@ const AppSidebar: React.FC = () => {
   const handleOnClick = (payload: NavItem) => {
     console.log(payload)
     setCoursePageTitle(payload.name)
-    if (payload.path != null) {
-      router.push(payload.path)
+    if (payload?.path != null) {
+      router.push(payload?.path)
     }
   }
 

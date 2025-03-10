@@ -55,6 +55,7 @@ import ResendIcon from "./resend.svg"
 import Users from "./users.svg"
 import Categories from "./categories.svg"
 import TagLeft from "./tag-left.svg"
+import Details from "./details.svg"
 
 export {
   DownloadIcon,
@@ -113,5 +114,6 @@ export {
   ResendIcon,
   Users,
   Categories,
-  TagLeft
+  TagLeft,
+  Details
 };

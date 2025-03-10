@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import React from "react";
+import CategoriesPanel from "@/components/admin-panel/CategoriesPanel";
 
 
 
@@ -9,10 +10,12 @@ export const metadata: Metadata = {
     description: "This is Next.js Home for TailAdmin Dashboard Template",
 };
 
-export default function Categories() {
+const Categories: React.FC = () => {
     return (
-        <div>
-            Categories
+        <div className={`h-full`}>
+        <CategoriesPanel />
         </div>
-    );
-}
+    )
+};
+
+export default Categories;
