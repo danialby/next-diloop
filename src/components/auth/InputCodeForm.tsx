@@ -10,14 +10,13 @@ import Link from "next/link";
 import Button from "@/components/ui/button/Button";
 import Logo from '/public/images/logo/diloop-logo.png'
 import {useMutation} from "@tanstack/react-query";
-import {Login, VerifyOtp} from "@/app/api/auth/routes";
-
+import { useApiRoutes } from "@/app/api/auth/routes";
 export default function InputCodeForm() {
 
     const router = useRouter();
     const [error, setError] = useState('');
     const { setAuthToken } = useAuthStore()
-
+    const { VerifyOtp, Login } = useApiRoutes();
     // Custom renderer for minutes:seconds format
     const [countCompleted, setCountCompleted] = useState(false);
     const handleTimerReset = () => {
@@ -35,15 +34,15 @@ export default function InputCodeForm() {
 
     const VerifyMutate= useMutation({
         mutationFn: () => VerifyOtp({mobile: userLoginNumber, otp, page: 'login'}),
-        onSuccess: (response) => {
+        onSuccess: (response ) => {
             // send code to number
-            setAuthToken(response?.data?.token);
-            document.cookie = `auth_token=${response?.data?.token}`;
+            setAuthToken(response?.['data'].token);
+            document.cookie = `auth_token=${response?.['data']['token']}`;
             router.push('/admin-panel')
         },
         onError: (error) => {
             console.log(error)
-            setError(error?.response?.data?.message);
+            setError(error?.['response']?.data?.message);
         }
     });
 
@@ -61,7 +60,7 @@ export default function InputCodeForm() {
     },
         onError: (error) => {
         console.log(error)
-        setError(error?.response?.data?.message);
+        setError(error?.['response']?.data?.message);
     }
     });
 

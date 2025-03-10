@@ -15,7 +15,7 @@ export default function SortableTable({data, columns}) {
 
   // Create the table instance
   const table = useReactTable({
-    data: data.data,
+    data: data,
     columns,
     state: {
       sorting,
