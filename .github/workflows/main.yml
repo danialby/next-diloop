@@ -20,7 +20,7 @@ jobs:
         port: ${{ vars.DILOOP_PORT }}
         key: ${{ secrets.DILOOPSERVERKEY }}
         source: "."
-        target: ${{ vars.DILOOP_BUILD_DIR }}
+        target: ${{ vars.DILOOP_TARGET_DIR }}
 
     - name: Executing remote command via ssh
       uses: appleboy/ssh-action@master
@@ -30,8 +30,7 @@ jobs:
         port: ${{ vars.DILOOP_PORT }}
         key: ${{ secrets.DILOOPSERVERKEY }}
         script: |
-              cd ${{vars.DILOOP_BUILD_DIR}} && yarn
-              yarn build
-              cp -ar ${{vars.DILOOP_BUILD_DIR}}/*  ${{vars.DILOOP_TARGET_DIR}}
-              rm -rf ${{vars.DILOOP_BUILD_DIR}}/*
+              cd ${{vars.DILOOP_TARGET_DIR}}
+              pnpm install  
+              pnpm build
               pm2 restart reactdiloop

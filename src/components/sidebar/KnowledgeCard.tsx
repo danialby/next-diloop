@@ -2,7 +2,7 @@
 import {
     GridIcon
 } from "../../icons/index";
-import { JSX } from 'React'
+import { JSX } from 'react'
 
 const knowledgeItems: ({
     icon: JSX.Element;
@@ -14,7 +14,7 @@ const knowledgeItems: ({
         title: 'دانش شما',
         key: 'UserKnowledge',
         icon: <GridIcon />,
-        percent: 20,
+        percent: 25,
     },
     {
         title: "دانش سایت",
