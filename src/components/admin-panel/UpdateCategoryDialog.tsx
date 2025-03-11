@@ -54,6 +54,7 @@ function UpdateCategoryDialog({category, _parents}) {
         {
             mutationFn: () => updateNewCategory(
                 {
+                    id: category?.id,
                     name_en:nameEn,
                     name_fa:nameFa,
                     description,

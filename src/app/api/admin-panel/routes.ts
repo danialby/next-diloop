@@ -18,8 +18,8 @@ export function useAdminPanelRoutes() {
         });
     }
 
-    const updateNewCategory = async ({name_en, name_fa, description, is_active, parent_id, tags, poster_image}) => {
-        return await axiosInstance.put('/admin/api/v1/skill-teach/category', {
+    const updateNewCategory = async ({id, name_en, name_fa, description, is_active, parent_id, tags, poster_image}) => {
+        return await axiosInstance.put(`/admin/api/v1/skill-teach/category/${ id }`, {
             name_en, name_fa, description, is_active, parent_id, tags, poster_image
         });
     }
