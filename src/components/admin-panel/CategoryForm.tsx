@@ -2,6 +2,7 @@
 import React from "react";
 import SortableTable from "@/components/tables/SortableTable";
 import {toPersianDate, toPersianTime} from "@/utils/dateUtils";
+import {CategoryTable} from "@/components/admin-panel/CategoryTable";
 
 export default function CategoryForm({data, isLoading}) {
 // Define the columns
@@ -43,7 +44,7 @@ export default function CategoryForm({data, isLoading}) {
 
     return (
         <>
-            {isLoading &&
+            {isLoading ?
                 <div className={`flex items-center justify-center w-full h-[300px]`}>
                     <div aria-label="Loading"
                          className="relative inline-flex flex-col gap-2 items-center justify-center">
@@ -56,8 +57,13 @@ export default function CategoryForm({data, isLoading}) {
                             </i>
                         </div>
                     </div>
-                </div>}
-            {data && <SortableTable data={data?.data?.categories} columns={columns} actions={true} />}
+                </div>
+                :
+                <>
+                    { data && <CategoryTable data={data} /> }
+                     {/*<SortableTable data={data?.data?.categories} columns={columns} actions={true} />*/}
+                </>
+            }
         </>
     )
 }

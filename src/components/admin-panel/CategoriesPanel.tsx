@@ -25,8 +25,8 @@ export default function CategoriesPanel() {
         return (
             <div className="relative h-full rounded-xl border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03] font-vazir">
                 <CategoryTabs tabs={_CategoryTabs}>
-                    <CategoryForm data={CategoriesData} isLoading={isPending} />
-                    <CategoryForm data={CategoriesData} isLoading={isPending} />
+                    <CategoryForm data={CategoriesData?.data?.categories} isLoading={isPending} />
+                    <CategoryForm data={CategoriesData?.data?.categories} isLoading={isPending} />
                 </CategoryTabs>
             </div>
         )

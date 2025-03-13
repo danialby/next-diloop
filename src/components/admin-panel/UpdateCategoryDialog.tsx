@@ -16,7 +16,7 @@ interface Parent{
 }
 
 
-function UpdateCategoryDialog({category, _parents}) {
+function UpdateCategoryDialog({category, _parents = []}) {
     // Determine input styles based on state (disabled, success, error)
     const { updateNewCategory } = useAdminPanelRoutes();
 
@@ -36,7 +36,7 @@ function UpdateCategoryDialog({category, _parents}) {
 
 
 
-    const handleSelectedParent = (value) => {
+    const handleSelectedParent = (value: Parent) => {
         console.log(value)
         setSelectedParent(value)
     }
@@ -44,7 +44,7 @@ function UpdateCategoryDialog({category, _parents}) {
     const filteredParents =
         query === ''
             ? parents
-            : parents.filter((parent) => {
+            : parents.filter((parent: Parent) => {
                 return parent.text.toLowerCase().includes(query.toLowerCase())
             })
 
