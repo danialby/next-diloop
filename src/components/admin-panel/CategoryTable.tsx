@@ -35,6 +35,9 @@ import {toPersianDate, toPersianTime} from "@/utils/dateUtils";
 import ViewCategoryDialog from "@/components/admin-panel/ViewCategoryDialog";
 import UpdateCategoryDialog from "@/components/admin-panel/UpdateCategoryDialog";
 import DeleteCategoryDialog from "@/components/admin-panel/DeleteCategoryDialog";
+import NewCategoryDialog from "@/components/admin-panel/NewCategoryDialog";
+import {useEffect, useMemo} from "react";
+import TestCategoryDialog from "@/components/admin-panel/TestCategoryDialog";
 
 // const data: Payment[] = [
 //     {
@@ -80,9 +83,20 @@ export type CategoryRow = {
 export const columns: ColumnDef<CategoryRow>[] = [
     {
         accessorKey: "id",
-        header: () => <div className="text-right">#</div>,
+        header: ({ column }) => {
+            return (
+                <div className="text-right"><Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    #
+                    <ArrowUpDown/>
+                </Button>
+                </div>
+            )
+        },
         cell: ({ row }) => (
-            <div>{row.getValue("id")}</div>
+            <div className={'text-center'}>{row.getValue("id")}</div>
         ),
     },
     {
@@ -117,7 +131,18 @@ export const columns: ColumnDef<CategoryRow>[] = [
     },
     {
         accessorKey: "created_at",
-        header: () => <div className="text-right">تاریخ</div>,
+        header: ({ column }) => {
+            return (
+                <div className="text-right"><Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    تاریخ
+                    <ArrowUpDown/>
+                </Button>
+                </div>
+            )
+        },
         cell: ({ row }) => <>
             <div className={`flex flex-col`}>
                 <span> {toPersianDate(row.getValue('created_at'))} </span>
@@ -127,10 +152,12 @@ export const columns: ColumnDef<CategoryRow>[] = [
     },
     {
         id: "actions",
+        header: () => <div className="text-right">عملیات</div>,
         cell: ({ row }) => {
             return (
                 <div className={'flex gap-1'}>
                     <ViewCategoryDialog category={row}/>
+                    <TestCategoryDialog category={row}/>
                     <UpdateCategoryDialog category={row} />
                     <DeleteCategoryDialog category={row} />
                 </div>
@@ -186,6 +213,11 @@ export function CategoryTable({data}) {
         },
     })
 
+    const parents = useMemo(() => {
+        return data.filter(item => item.parent_id === null);
+    }, [data]);
+
+
     return (
         <div className="w-full">
             <div className="flex items-center py-4">
@@ -199,8 +231,8 @@ export function CategoryTable({data}) {
                 />
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="ml-auto">
-                            Columns <ChevronDown />
+                        <Button variant="outline" className="ml-auto mr-2">
+                            ستون ها <ChevronDown />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
@@ -223,6 +255,7 @@ export function CategoryTable({data}) {
                             })}
                     </DropdownMenuContent>
                 </DropdownMenu>
+                <NewCategoryDialog _parents={parents} />
             </div>
             <div className="rounded-md border">
                 <Table>
@@ -275,10 +308,6 @@ export function CategoryTable({data}) {
                 </Table>
             </div>
             <div className="flex items-center justify-end space-x-2 py-4">
-                <div className="flex-1 text-sm text-muted-foreground">
-                    {table.getFilteredSelectedRowModel().rows.length} of{" "}
-                    {table.getFilteredRowModel().rows.length} row(s) selected.
-                </div>
                 <div className="space-x-2">
                     <Button
                         variant="outline"

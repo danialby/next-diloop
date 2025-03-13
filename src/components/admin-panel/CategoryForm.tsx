@@ -59,10 +59,10 @@ export default function CategoryForm({data, isLoading}) {
                     </div>
                 </div>
                 :
-                <>
+                <div className={`mx-4`}>
                     { data && <CategoryTable data={data} /> }
                      {/*<SortableTable data={data?.data?.categories} columns={columns} actions={true} />*/}
-                </>
+                </div>
             }
         </>
     )

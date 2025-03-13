@@ -41,12 +41,6 @@ const CategoryTabs = ({ children, tabs }) => {
                     }}
                 />
             </div>
-            <div
-                className={`w-full mt-6 flex flex-col gap-4 md:gap-0 md:flex-row md:justify-around items-center justify-center`}>
-                <SearchBar placeholder="جستجو در دسته بندی ها"
-                           inputClasses={`!rounded-full w-[250px] md:w-[300px]`}/>
-                <NewCategoryDialog _parents={parents} />
-            </div>
             {/* Tab Content */}
             <div className="mt-4 overflow-x-hidden relative min-h-[calc(100vh_-_320px)] no-scrollbar  shadow-[inset_0_0_10px_rgba(0,0,0,0.1)] rounded-xl">
                 {React.Children.map(children, (child, index) => (

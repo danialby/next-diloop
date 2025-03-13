@@ -41,15 +41,6 @@ function NewCategoryDialog({_parents}) {
       setSelectedParent(value)
     }
 
-    const filteredParents =
-        query === ''
-            ? parents
-            : parents.filter((parent) => {
-                return parent.text.toLowerCase().includes(query.toLowerCase())
-            })
-
-
-
     const mutateAddCategory = useMutation(
         {
             mutationFn: () => addNewCategory(
@@ -154,7 +145,7 @@ function NewCategoryDialog({_parents}) {
                                             'bg-transparent text-gray-800 border-gray-300 focus:border-brand-300 focus:ring-3 focus:ring-brand-500/10',
                                             'dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 dark:focus:border-brand-800'
                                         )}
-                                        displayValue={(parent: Parent) => parent?.text}
+                                        displayValue={(parent: Parent) => parent?.name_fa}
                                         onChange={(event) => setQuery(event.target.value)}
                                     />
                                     <ComboboxButton className="group absolute inset-y-0 left-0 px-2.5 text-black">
@@ -171,7 +162,7 @@ function NewCategoryDialog({_parents}) {
                                         'transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0'
                                     )}
                                 >
-                                    {parents && filteredParents.map((parent: Parent) => (
+                                    {parents.map((parent: Parent) => (
                                         <ComboboxOption
                                             key={parent.value}
                                             value={parent}
@@ -179,7 +170,7 @@ function NewCategoryDialog({_parents}) {
                                         >
                                             <CheckLineIcon
                                                 className="invisible w-4 h-4 fill-blue-800 group-data-[selected]:visible"/>
-                                            <div className="text-sm/6 text-black">{parent.text}</div>
+                                            <div className="text-sm/6 text-black">{parent.name_fa}</div>
                                         </ComboboxOption>
                                     ))}
                                 </ComboboxOptions>
