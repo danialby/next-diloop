@@ -1,6 +1,7 @@
 import useAxios from "@/hooks/useAxios";
 
 export function useAdminPanelRoutes() {
+
     const axiosInstance = useAxios()
 
     const getUsersList = async () => {
@@ -18,17 +19,17 @@ export function useAdminPanelRoutes() {
         });
     }
 
-    const updateNewCategory = async ({name_en, name_fa, description, is_active, parent_id, tags, poster_image}) => {
-        return await axiosInstance.put('/admin/api/v1/skill-teach/category', {
+    const updateCategory = async ({id, name_en, name_fa, description, is_active, parent_id, tags, poster_image}) => {
+        return await axiosInstance.put(`/admin/api/v1/skill-teach/category/${ id }`, {
             name_en, name_fa, description, is_active, parent_id, tags, poster_image
         });
     }
 
-    const deleteNewCategory = async ({id}) => {
+    const deleteCategory = async ({id}) => {
         return await axiosInstance._delete(`/admin/api/v1/skill-teach/category/${id}`, {
             id
         });
     }
-    return { getUsersList, getCategoriesList, addNewCategory, updateNewCategory, deleteNewCategory }
+    return { getUsersList, getCategoriesList, addNewCategory, updateCategory, deleteCategory }
 }
 

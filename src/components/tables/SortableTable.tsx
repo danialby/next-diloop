@@ -1,129 +1,173 @@
-import React from "react";
+"use client"
+
+import * as React from "react"
 import {
+  ColumnFiltersState,
+  SortingState,
+  VisibilityState,
   flexRender,
   getCoreRowModel,
-  useReactTable,
+  getFilteredRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
-  SortingState,
-} from "@tanstack/react-table";
-import {ChevronDownIcon, ChevronUpIcon, PlusIcon} from "@/icons";
-import Button from "@/components/ui/button/Button";
-import ViewCategoryDialog from "@/components/admin-panel/ViewCategoryDialog";
-import UpdateCategoryDialog from "@/components/admin-panel/UpdateCategoryDialog";
-import DeleteCategoryDialog from "@/components/admin-panel/DeleteCategoryDialog";
+  useReactTable,
+} from "@tanstack/react-table"
+import { ChevronDown } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Input } from "@/components/ui/input"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
 
 
-export default function SortableTable({data, columns, actions = false}) {
-  // State for sorting
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const parents = [
-    { value: "1", text: "همه" },
-    { value: "2", text: "کسب و کار بزرگ" },
-    { value: "3", text: "متوسط" },
-    { value: "4", text: "کوچک" },
-    { value: "5", text: "خانگی" },
-  ];
-  // Create the table instance
+export function SortableTable({data, columns, inputPlaceHolder, searchColumn}) {
+  const [sorting, setSorting] = React.useState<SortingState>([])
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+      []
+  )
+  const [columnVisibility, setColumnVisibility] =
+      React.useState<VisibilityState>({})
+  const [rowSelection, setRowSelection] = React.useState({})
+
   const table = useReactTable({
-    data: data,
+    data,
     columns,
+    onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
+    onRowSelectionChange: setRowSelection,
     state: {
       sorting,
+      columnFilters,
+      columnVisibility,
+      rowSelection,
     },
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-  });
+  })
 
   return (
-      <div className="overflow-hidden rounded-xl border border-gray-200  dark:bg-white/[0.03] font-vazir">
-        <div className="max-w-full overflow-x-auto">
-          <div>
-            <table className="w-full relative">
-              {/* Table Header */}
-              <thead className="border-b border-gray-100 dark:border-white/[0.05] sticky top-0 z-20 bg-white/[0.05]">
+      <div className="w-full">
+        <div className="flex items-center py-4">
+          <Input
+              placeholder={inputPlaceHolder}
+              value={(table.getColumn(searchColumn)?.getFilterValue() as string) ?? ""}
+              onChange={(event) =>
+                  table.getColumn(searchColumn)?.setFilterValue(event.target.value)
+              }
+              className="max-w-sm"
+          />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="ml-auto mr-2">
+                ستون ها <ChevronDown />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {table
+                  .getAllColumns()
+                  .filter((column) => column.getCanHide())
+                  .map((column) => {
+                    return (
+                        <DropdownMenuCheckboxItem
+                            key={column.id}
+                            className="capitalize"
+                            checked={column.getIsVisible()}
+                            onCheckedChange={(value) =>
+                                column.toggleVisibility(!!value)
+                            }
+                        >
+                          {column.id}
+                        </DropdownMenuCheckboxItem>
+                    )
+                  })}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        <div className="rounded-md border">
+          <Table>
+            <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
-                  <tr key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => (
-                          <th
-                              key={header.id}
-                              className={`px-5 py-3 bg-gray-200 select-none font-bold text-gray-500 text-start text-theme-lg dark:text-gray-400
-                            ${header.column.getCanSort() ? "cursor-pointer hover:text-blue-600" : ""}`}
-                              onClick={header.column.getToggleSortingHandler()}
-                          >
-                            <div className="flex items-center gap-1">
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => {
+                      return (
+                          <TableHead key={header.id}>
+                            {header.isPlaceholder
+                                ? null
+                                : flexRender(
+                                    header.column.columnDef.header,
+                                    header.getContext()
+                                )}
+                          </TableHead>
+                      )
+                    })}
+                  </TableRow>
+              ))}
+            </TableHeader>
+            <TableBody>
+              {table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                      <TableRow
+                          key={row.id}
+                          data-state={row.getIsSelected() && "selected"}
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                            <TableCell key={cell.id}>
                               {flexRender(
-                                  header.column.columnDef.header,
-                                  header.getContext()
+                                  cell.column.columnDef.cell,
+                                  cell.getContext()
                               )}
-                              {{
-                                    asc:
-                                        <div className={`flex flex-col justify-center items-center`}>
-                                          <ChevronUpIcon className={`h-2.5 text-white bg-blue-600 rounded-full`}/>
-                                          <ChevronDownIcon className={`h-2.5`}/>
-                                        </div>,
-                                    desc:
-                                        <div className={`flex flex-col justify-center items-center`}>
-                                          <ChevronUpIcon className={`h-2.5`}/>
-                                          <ChevronDownIcon className={`h-2.5 text-white bg-blue-600 rounded-full`}/>
-                                        </div>,
-                                  }[header.column.getIsSorted() as string] ??
-                                  (header.column.getCanSort() ?
-                                      <div className={`flex flex-col justify-center items-center`}>
-                                        <ChevronUpIcon className={`h-2.5`}/>
-                                        <ChevronDownIcon className={`h-2.5`}/>
-                                      </div>
-                                      : '')
-                              }
-                            </div>
-                          </th>
-                    ))}
-                    { actions &&
-                    <th className={`px-5 py-3 bg-gray-200 select-none font-bold text-gray-500 text-start text-theme-lg dark:text-gray-400`}>
-                      عملیات
-                    </th>
-                    }
-                  </tr>
-              ))}
-              </thead>
-
-              {/* Table Body */}
-              <tbody className="divide-y divide-gray-100 dark:divide-white/[0.05]">
-              {table.getRowModel().rows.map((row) => (
-                  <tr key={row.id}>
-                    {row.getVisibleCells().map((cell) => (
-                          <td
-                              key={cell.id}
-                              className={`px-5 py-2 sm:px-6 text-start text-gray-500 text-theme-sm dark:text-gray-400  border-l-1 border-gray-100 
-                            ${
-                                  cell.column.id === "id" ? "w-4 !text-center " : "" // Apply fixed-width class to the ID column
-                              }`}
-                          >
-                            {flexRender(
-                                cell.column.columnDef.cell,
-                                cell.getContext()
-                            )}
-                          </td>
-                    ))}
-                    { actions &&
-                    <td className={`px-5 py-2 sm:px-6 text-start text-gray-500 text-theme-sm dark:text-gray-400  border-l-1 border-gray-100`}>
-                      <div className={`flex gap-3 items-center`}>
-                        <Button
-                            className={`!rounded-full !p-4 !h-6 !w-6  !items-center !justify-center !flex !shadow-[0px_2px_4px_#aaa]`}>
-                          <span><PlusIcon className={` !p-0 h-6 w-6 text-white`}/></span>
-                        </Button>
-                        <ViewCategoryDialog category={data[row.id]}/>
-                        <UpdateCategoryDialog category={data[row.id]} _parents={parents} />
-                        <DeleteCategoryDialog category={data[row.id]} />
-                      </div>
-                    </td>
-                    }
-                  </tr>
-              ))}
-              </tbody>
-            </table>
+                            </TableCell>
+                        ))}
+                      </TableRow>
+                  ))
+              ) : (
+                  <TableRow>
+                    <TableCell
+                        colSpan={columns.length}
+                        className="h-24 text-center"
+                    >
+                      نتیجه ای یافت نشد...
+                    </TableCell>
+                  </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
+        <div className="flex items-center justify-end space-x-2 py-4">
+          <div className="space-x-2">
+            <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.previousPage()}
+                disabled={!table.getCanPreviousPage()}
+            >
+              قبلی
+            </Button>
+            <Button
+                variant="outline"
+                size="sm"
+                onClick={() => table.nextPage()}
+                disabled={!table.getCanNextPage()}
+            >
+              بعدی
+            </Button>
           </div>
         </div>
       </div>
-  );
+  )
 }

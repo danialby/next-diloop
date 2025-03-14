@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import React from "react";
-import UsersList from "@/components/admin-panel/UsersList";
+import UsersList from "@/components/admin-panel/UsersList/UsersList";
 
 
 
