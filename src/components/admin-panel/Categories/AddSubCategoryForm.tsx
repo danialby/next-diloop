@@ -65,7 +65,7 @@ export function AddSubCategoryForm({closeDialog, category_id}) {
 
     const mutateNewCategory = useMutation(
         {
-            mutationFn: (data) => addNewCategory(
+            mutationFn: (data: object) => addNewCategory(
                 {
                     name_en:data?.['name_en'],
                     name_fa:data?.['name_fa'],
@@ -181,8 +181,8 @@ export function AddSubCategoryForm({closeDialog, category_id}) {
                     {apiError && <FormMessage>
                         <div className={`space-x-2`}>
                             <span className={`font-bold`}>خطای سرور :</span>
-                            <span className={`text-xs`}>{apiError?.response.data.message}</span><br/>
-                            <span className={`text-xs`}>{apiError?.response.data.errors}</span>
+                            <span className={`text-xs`}>{apiError?.['response']?.data.message}</span><br/>
+                            <span className={`text-xs`}>{apiError?.['response']?.data.errors}</span>
                         </div>
                     </FormMessage>
                     }

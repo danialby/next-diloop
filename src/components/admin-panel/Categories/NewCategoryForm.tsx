@@ -16,8 +16,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import {Textarea} from "@/components/ui/textarea";
-import React, {useMemo, useState} from "react";
-import {ParentsComboBox} from "@/components/admin-panel/Categories/ParentsComboBox";
+import React, {useState} from "react";
 import useAdminStore from "@/store/adminStore";
 import {useAdminPanelRoutes} from "@/app/api/admin-panel/routes";
 import {useMutation} from "@tanstack/react-query";
@@ -44,7 +43,7 @@ const FormSchema = z.object({
 
 export function NewCategoryForm({closeDialog}) {
     const { addNewCategory } = useAdminPanelRoutes();
-    const { categories_data, addStoreCategory } = useAdminStore()
+    const { addStoreCategory } = useAdminStore()
     const [apiError, setApiError] = useState<Error | null>(null);
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -65,7 +64,7 @@ export function NewCategoryForm({closeDialog}) {
 
     const mutateNewCategory = useMutation(
         {
-            mutationFn: (data) => addNewCategory(
+            mutationFn: (data: object) => addNewCategory(
                 {
                     name_en:data?.['name_en'],
                     name_fa:data?.['name_fa'],
@@ -94,11 +93,7 @@ export function NewCategoryForm({closeDialog}) {
         mutateNewCategory.mutate(data)
         console.log("Form submitted:");
         console.log(JSON.stringify(data, null, 2))
-    }
-
-    const parents = useMemo(() => {
-        return categories_data.filter(item => item?.['parent_id'] === null);
-    }, [categories_data]);
+    };
 
     return (
         <Form {...form}>
@@ -183,9 +178,9 @@ export function NewCategoryForm({closeDialog}) {
                         تایید</Button>
                     {apiError && <FormMessage>
                         <div className={`space-x-2`}>
-                        <span className={`font-bold`}>خطای سرور :</span>
-                        <span className={`text-xs`}>{apiError?.response.data.message}</span><br />
-                        <span className={`text-xs`}>{apiError?.response.data.errors}</span>
+                            <span className={`font-bold`}>خطای سرور :</span>
+                            <span className={`text-xs`}>{apiError?.['response']?.data.message}</span><br/>
+                            <span className={`text-xs`}>{apiError?.['response']?.data.errors}</span>
                         </div>
                     </FormMessage>
                     }

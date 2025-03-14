@@ -1,16 +1,12 @@
 import React, {useState} from "react";
 import {
-    Dialog, DialogClose,
+    Dialog,
     DialogContent,
-    DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {CloseIcon, Details, ListIcon} from "@/icons";
+import {ListIcon} from "@/icons";
 import {Button} from "@/components/ui/button";
 import {toPersianDate, toPersianTime} from "@/utils/dateUtils";
 import {
@@ -18,7 +14,6 @@ import {
     Aperture,
     CalendarCheck2,
     Network,
-    Pencil,
     ReceiptText,
     SpellCheck,
     Type,

@@ -17,7 +17,7 @@ export default function CategoriesPanel() {
     const {getCategoriesList} = useAdminPanelRoutes();
     const {categories_data, setCategoriesData} = useAdminStore()
 
-    const {mutate: getCategoriesMutation, error, isPending, isSuccess} = useMutation({
+    const {mutate: getCategoriesMutation, error, isPending} = useMutation({
         mutationFn: () => getCategoriesList(),
         onSuccess: ((response) => {
             setCategoriesData(response?.['data']?.categories)

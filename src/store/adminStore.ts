@@ -6,7 +6,7 @@ interface AdminStoreState {
     setCategoriesData: (data: Array<object>) => void;
     updateStoreCategory: (index: number, category: object) => void;
     addStoreCategory: (category: object) => void;
-    deleteCategory: (index: number) => void;
+    deleteStoreCategory: (index: number) => void;
 }
 
 export const useAdminStore = create<AdminStoreState>()((set) => ({

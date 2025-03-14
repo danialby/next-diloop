@@ -65,7 +65,7 @@ export function UpdateCategoryForm({category, closeDialog}) {
 
     const mutateUpdateCategory = useMutation(
         {
-            mutationFn: (data) => updateCategory(
+            mutationFn: (data: object) => updateCategory(
                 {
                     id: category?.id,
                     name_en:data?.['name_en'],
