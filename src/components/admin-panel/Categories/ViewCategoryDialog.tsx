@@ -13,7 +13,17 @@ import { Label } from "@/components/ui/label"
 import {CloseIcon, Details, ListIcon} from "@/icons";
 import {Button} from "@/components/ui/button";
 import {toPersianDate, toPersianTime} from "@/utils/dateUtils";
-import {AlignRight, Aperture, CalendarCheck2, Network, ReceiptText, SpellCheck, Type} from "lucide-react";
+import {
+    AlignRight,
+    Aperture,
+    CalendarCheck2,
+    Network,
+    Pencil,
+    ReceiptText,
+    SpellCheck,
+    Type,
+    XIcon
+} from "lucide-react";
 
 
 
@@ -22,20 +32,27 @@ function ViewCategoryDialog({category}) {
 
     return (
         <>
-            <Dialog>
+            <Dialog open={isOpen}>
                 <DialogTrigger asChild>
-                    <Button size={'icon'}
+                    <Button size={'icon'}  onClick={() => setIsOpen(true)}
                             className={`!rounded-full !bg-cyan-500 hover:!bg-cyan-600`}>
                         <ReceiptText/>
                     </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px] font-vazir">
                     <DialogHeader>
-                        <DialogTitle>
-                            <div className="flex items-center gap-2 font-bold -mt-2 mb-2 justify-center">
-                            <ListIcon className={`w-6 h-6`}/><span>جزییات کامل دسته بندی</span>
-                        </div>
-                        </DialogTitle>
+                        <DialogHeader>
+                            <DialogTitle>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center gap-1.5">
+                                        <ListIcon className={`w-6 h-6`}/><span> جزییات دسته بندی</span>
+                                    </div>
+                                    <Button type="button" variant="ghost" onClick={() => setIsOpen(false)}>
+                                        <XIcon/>
+                                    </Button>
+                                </div>
+                            </DialogTitle>
+                        </DialogHeader>
                     </DialogHeader>
                     <div className={`grid grid-cols-3`}>
                         <div className={`flex flex-col col-span-2 gap-y-3`}>

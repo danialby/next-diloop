@@ -1,20 +1,10 @@
 import React, { useState } from 'react';
-import SearchBar from "@/components/skills/SearchBar";
-import NewCategoryDialog from "@/components/admin-panel/NewCategoryDialog";
-
 
 const CategoryTabs = ({ children, tabs }) => {
     const [activeTab, setActiveTab] = useState(0);
-    const parents = [
-        { value: "1", text: "همه" },
-        { value: "2", text: "کسب و کار بزرگ" },
-        { value: "3", text: "متوسط" },
-        { value: "4", text: "کوچک" },
-        { value: "5", text: "خانگی" },
-    ];
 
     return (
-        <div className="mx-auto px-4 md:px-12 py-6 h-full sticky-top">
+        <div className="mx-auto p-4 py-0 h-full sticky-top">
             {/* Tabs Navigation */}
             <div className="relative">
                 <div className="flex flex-row-reverse space-x-4 border-b border-gray-200">
@@ -42,7 +32,7 @@ const CategoryTabs = ({ children, tabs }) => {
                 />
             </div>
             {/* Tab Content */}
-            <div className="mt-4 overflow-x-hidden relative min-h-[calc(100vh_-_320px)] no-scrollbar  shadow-[inset_0_0_10px_rgba(0,0,0,0.1)] rounded-xl">
+            <div className="mt-4 overflow-x-hidden relative min-h-[calc(100vh_-_180px)] no-scrollbar  shadow-[inset_0_0_10px_rgba(0,0,0,0.1)] rounded-xl">
                 {React.Children.map(children, (child, index) => (
                     <div
                         key={index}

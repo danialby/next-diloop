@@ -29,7 +29,6 @@ useAxios.interceptors.request.use(
 
 useAxios.interceptors.response.use(
     (response) => {
-        console.log(response.data?.data?.result)
         if(response.data?.data?.result !== undefined && response.data?.data?.result === false) {
             throw new AxiosError(response.data?.message, response.data?.statusText, response.data?.data, response.request, response);
         }
@@ -37,7 +36,6 @@ useAxios.interceptors.response.use(
     },
     (error) => {
         if (error.response.status === 422){
-            console.log(error.response)
             return Promise.reject(error)
         }
         if (error?.response?.status === 401) {

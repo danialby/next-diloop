@@ -8,9 +8,9 @@ import {
 } from "@tanstack/react-table";
 import {ChevronDownIcon, ChevronUpIcon, PlusIcon} from "@/icons";
 import Button from "@/components/ui/button/Button";
-import ViewCategoryDialog from "@/components/admin-panel/ViewCategoryDialog";
-import UpdateCategoryDialog from "@/components/admin-panel/UpdateCategoryDialog";
-import DeleteCategoryDialog from "@/components/admin-panel/DeleteCategoryDialog";
+import ViewCategoryDialog from "@/components/admin-panel/Categories/ViewCategoryDialog";
+import UpdateCategoryDialog from "@/components/admin-panel/Categories/UpdateCategoryDialog";
+import DeleteCategoryDialog from "@/components/admin-panel/Categories/DeleteCategoryDialog";
 
 
 export default function SortableTable({data, columns, actions = false}) {

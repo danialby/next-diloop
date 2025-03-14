@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import React from "react";
-import CategoriesPanel from "@/components/admin-panel/CategoriesPanel";
+import CategoriesPanel from "@/components/admin-panel/Categories/CategoriesPanel";
 
 
 

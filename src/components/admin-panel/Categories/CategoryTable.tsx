@@ -32,45 +32,12 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import {toPersianDate, toPersianTime} from "@/utils/dateUtils";
-import ViewCategoryDialog from "@/components/admin-panel/ViewCategoryDialog";
-import UpdateCategoryDialog from "@/components/admin-panel/UpdateCategoryDialog";
-import DeleteCategoryDialog from "@/components/admin-panel/DeleteCategoryDialog";
-import NewCategoryDialog from "@/components/admin-panel/NewCategoryDialog";
-import {useEffect, useMemo} from "react";
-import TestCategoryDialog from "@/components/admin-panel/TestCategoryDialog";
-
-// const data: Payment[] = [
-//     {
-//         id: "m5gr84i9",
-//         amount: 316,
-//         status: "success",
-//         email: "ken99@example.com",
-//     },
-//     {
-//         id: "3u1reuv4",
-//         amount: 242,
-//         status: "success",
-//         email: "Abe45@example.com",
-//     },
-//     {
-//         id: "derv1ws0",
-//         amount: 837,
-//         status: "processing",
-//         email: "Monserrat44@example.com",
-//     },
-//     {
-//         id: "5kma53ae",
-//         amount: 874,
-//         status: "success",
-//         email: "Silas22@example.com",
-//     },
-//     {
-//         id: "bhqecj4p",
-//         amount: 721,
-//         status: "failed",
-//         email: "carmella@example.com",
-//     },
-// ]
+import ViewCategoryDialog from "@/components/admin-panel/Categories/ViewCategoryDialog";
+import UpdateCategoryDialog from "@/components/admin-panel/Categories/UpdateCategoryDialog";
+import DeleteCategoryDialog from "@/components/admin-panel/Categories/DeleteCategoryDialog";
+import NewCategoryDialog from "@/components/admin-panel/Categories/NewCategoryDialog";
+import {useMemo} from "react";
+import TestCategoryDialog from "@/components/admin-panel/Categories/TestCategoryDialog";
 
 export type CategoryRow = {
     id: number
@@ -156,30 +123,10 @@ export const columns: ColumnDef<CategoryRow>[] = [
         cell: ({ row }) => {
             return (
                 <div className={'flex gap-1'}>
-                    <ViewCategoryDialog category={row}/>
-                    <TestCategoryDialog category={row}/>
-                    <UpdateCategoryDialog category={row} />
-                    <DeleteCategoryDialog category={row} />
+                    <ViewCategoryDialog category={row.original}/>
+                    <UpdateCategoryDialog category={row.original} />
+                    <DeleteCategoryDialog category={row.original} />
                 </div>
-                // <DropdownMenu>
-                //     <DropdownMenuTrigger asChild>
-                //         <Button variant="ghost" className="h-8 w-8 p-0">
-                //             <span className="sr-only">Open menu</span>
-                //             <MoreHorizontal />
-                //         </Button>
-                //     </DropdownMenuTrigger>
-                //     <DropdownMenuContent align="end">
-                //         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                //         <DropdownMenuItem
-                //             onClick={() => navigator.clipboard.writeText(payment.id)}
-                //         >
-                //             Copy payment ID
-                //         </DropdownMenuItem>
-                //         <DropdownMenuSeparator />
-                //         <DropdownMenuItem>View customer</DropdownMenuItem>
-                //         <DropdownMenuItem>View payment details</DropdownMenuItem>
-                //     </DropdownMenuContent>
-                // </DropdownMenu>
             )
         },
     },
@@ -255,7 +202,6 @@ export function CategoryTable({data}) {
                             })}
                     </DropdownMenuContent>
                 </DropdownMenu>
-                <NewCategoryDialog _parents={parents} />
             </div>
             <div className="rounded-md border">
                 <Table>
@@ -300,7 +246,7 @@ export function CategoryTable({data}) {
                                     colSpan={columns.length}
                                     className="h-24 text-center"
                                 >
-                                    No results.
+                                    نتیجه ای یافت نشد...
                                 </TableCell>
                             </TableRow>
                         )}
@@ -315,7 +261,7 @@ export function CategoryTable({data}) {
                         onClick={() => table.previousPage()}
                         disabled={!table.getCanPreviousPage()}
                     >
-                        Previous
+                        قبلی
                     </Button>
                     <Button
                         variant="outline"
@@ -323,7 +269,7 @@ export function CategoryTable({data}) {
                         onClick={() => table.nextPage()}
                         disabled={!table.getCanNextPage()}
                     >
-                        Next
+                        بعدی
                     </Button>
                 </div>
             </div>
