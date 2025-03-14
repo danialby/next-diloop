@@ -774,3 +774,32 @@ layer(base);
     @apply bg-background text-foreground;
   }
 }
+
+
+@keyframes spin {
+  to {
+    transform: rotate(1turn)
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite
+}
+
+.animate-spinner-ease-spin {
+  animation: spinner-spin .8s ease infinite
+}
+
+@keyframes spinner-spin {
+  0% {
+    transform: rotate(0deg)
+  }
+
+  to {
+    transform: rotate(1turn)
+  }
+}
+
+.animate-spinner-linear-spin {
+  animation: spinner-spin .8s linear infinite
+}

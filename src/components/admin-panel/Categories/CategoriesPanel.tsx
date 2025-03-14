@@ -48,19 +48,18 @@ export default function CategoriesPanel() {
     }, [categories_data, selectedParent]);
 
     if (error) return <div>Error: {error.message}</div>;
-    if(isSuccess) {
             return (
                 <div className={` font-vazir`}>
                     <div className={`space-y-2`}>
                     <NewCategoryDialog />
                     <hr />
                     </div>
-                    <div className={`py-2 grid grid-cols-4 font-vazir text-sm py-4 gap-x-8`}>
-                        <div className={`grid grid-cols-2 xl:grid-cols-3 gap-2 col-span-2 divide-x`}>
+                    <div className={`py-2 md:grid grid-cols-4 font-vazir text-sm gap-x-8`}>
+                        <div className={`grid grid-cols-2 xl:grid-cols-3 md:gap-2 col-span-2 py-4`}>
                         {parents.map(item => {
                             return (
-                                <div>
-                                <Button key={item?.['id']} variant={selectedParent === item?.['id'] ? `default` : `ghost`} className={`rounded-full`}  onClick={() => setSelectedParent(item?.['id'])}>
+                                <div key={item?.['id']} >
+                                <Button variant={selectedParent === item?.['id'] ? `default` : `ghost`} className={`rounded-full`}  onClick={() => setSelectedParent(item?.['id'])}>
                                     <div className="flex items-center space-x-2">
                                         {item?.['name_fa']}
                                     </div>
@@ -72,13 +71,13 @@ export default function CategoriesPanel() {
                         }
                         </div>
                         <div className={`border rounded-lg col-span-2 bg-gray-50 overflow-hidden`}>
-                            <div className={`w-full border-b-1 justify-center py-3 px-4 flex gap-2 bg-blue-100`}>
+                            <div className={`w-full border-b-1 justify-center py-2 md:py-3 px-4 flex gap-2 bg-blue-100`}>
                                 <AddSubCategoryDialog category={selectedParentData}/>
                                 <UpdateCategoryDialog category={selectedParentData}/>
                                 <DeleteCategoryDialog category={selectedParentData}/>
                             </div>
                             <div className={`flex flex-col gap-4 p-4`}>
-                                <div className={`flex flex-col col-span-2 gap-y-3`}>
+                                <div className={`flex flex-col col-span-2 gap-y-1 md:gap-y-3`}>
                             <span className={`flex items-center`}>
                                 <div className={`flex gap-2`}>
                                 <span className={`flex text-nowrap font-semibold`}> <Type className={`w-6 h-6 ml-2`}/>عنوان :</span>
@@ -112,7 +111,7 @@ export default function CategoriesPanel() {
                                 </div>
                                 <hr />
                                 <div className={`flex flex-col items-center col-span-1`}>
-                                    <div className={`flex flex-col gap-2`}>
+                                    <div className={`flex gap-2`}>
                                         <span className={`flex text-nowrap font-semibold`}> <Aperture
                                             className={`w-6 h-6 ml-2`}/>آیکون :</span>
                                         <span className={` text-nowrap`}>{selectedParentData?.['icon_name'] || 'آیکون ندارد'}</span>
@@ -130,6 +129,5 @@ export default function CategoriesPanel() {
                     </div>
                 </div>
             )
-    }
 }
 
