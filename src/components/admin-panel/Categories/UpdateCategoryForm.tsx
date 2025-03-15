@@ -22,6 +22,7 @@ import useAdminStore from "@/store/adminStore";
 import {useAdminPanelRoutes} from "@/app/api/admin-panel/routes";
 import {useMutation} from "@tanstack/react-query";
 import {Loader2} from "lucide-react";
+import {NewParentsComboBox} from "@/components/admin-panel/Categories/NewParentsComboBox";
 
 
 
@@ -44,7 +45,7 @@ const FormSchema = z.object({
 
 export function UpdateCategoryForm({category, closeDialog}) {
     const { updateCategory } = useAdminPanelRoutes();
-    const { categories_data, updateStoreCategory } = useAdminStore()
+    const { selectedMainCategory, categories_data, updateStoreCategory } = useAdminStore()
 
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -96,8 +97,12 @@ export function UpdateCategoryForm({category, closeDialog}) {
         console.log(JSON.stringify(data, null, 2))
     }
 
-    const parents = useMemo(() => {
-        return categories_data.filter(item => item?.['parent_id'] === null);
+    const JoblessParents = useMemo(() => {
+        return categories_data.filter(item => item?.['parent_id'] === null && item?.['tags']?.includes('بیکار'));
+    }, [categories_data]);
+
+    const EmployeeParents = useMemo(() => {
+        return categories_data.filter(item => item?.['parent_id'] === null && item?.['tags']?.includes('شاغل'));
     }, [categories_data]);
 
     return (
@@ -135,18 +140,22 @@ export function UpdateCategoryForm({category, closeDialog}) {
                     name="parent_id"
                     render={({field}) => (
                         <div className={'col-span-2 w-full gap-x-3'}>
+                            {selectedMainCategory?.id === 1 &&
                             <FormItem>
                                 <FormLabel>دسته بندی والد</FormLabel>
                                 <FormControl>
-
-                                    <ParentsComboBox data={parents} field={field} category_id={null}
-                                                     onSelect={(value) => form.setValue("parent_id", value)}/>
-
+                                        <NewParentsComboBox data={JoblessParents} field={field} onSelect={(value) => form.setValue("parent_id", value)}/>
                                 </FormControl>
-                                <FormDescription>
-                                    درصورت خالی گذاشتن، این دسته‌بندی به عنوان دسته‌بندی اصلی در نظر گرفته میشود. در غیر این صورت، دسته‌بندی والد را انتخاب کنید
-                                </FormDescription>
                             </FormItem>
+                                }
+                            {selectedMainCategory?.id === 2 &&
+                                <FormItem>
+                                    <FormLabel>دسته بندی والد</FormLabel>
+                                <FormControl>
+                                        <NewParentsComboBox data={EmployeeParents} field={field} onSelect={(value) => form.setValue("parent_id", value)}/>
+                                </FormControl>
+                                </FormItem>
+                            }
                         </div>
                     )}
                 />

@@ -43,7 +43,7 @@ const FormSchema = z.object({
 
 export function NewCategoryForm({closeDialog}) {
     const { addNewCategory } = useAdminPanelRoutes();
-    const { addStoreCategory } = useAdminStore()
+    const { selectedMainCategory, addStoreCategory } = useAdminStore()
     const [apiError, setApiError] = useState<Error | null>(null);
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -71,7 +71,7 @@ export function NewCategoryForm({closeDialog}) {
                     description:data?.['description'],
                     is_active: 1,
                     parent_id: data?.['parent_id'],
-                    tags: null,
+                    tags: selectedMainCategory?.id === 1 ? ['بیکار'] : ['شاغل'],
                     poster_image:null
                 }),
             onSuccess: (response ) => {

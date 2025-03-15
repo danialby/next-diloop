@@ -16,12 +16,13 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import {Textarea} from "@/components/ui/textarea";
-import React, {useMemo, useState} from "react";
-import {ParentsComboBox} from "@/components/admin-panel/Categories/ParentsComboBox";
+import React, {useState} from "react";
+// import {ParentsComboBox} from "@/components/admin-panel/Categories/ParentsComboBox";
 import useAdminStore from "@/store/adminStore";
 import {useAdminPanelRoutes} from "@/app/api/admin-panel/routes";
 import {useMutation} from "@tanstack/react-query";
 import {Loader2} from "lucide-react";
+// import {NewParentsComboBox} from "@/components/admin-panel/Categories/NewParentsComboBox";
 
 
 
@@ -44,7 +45,7 @@ const FormSchema = z.object({
 
 export function AddSubCategoryForm({closeDialog, category_id}) {
     const { addNewCategory } = useAdminPanelRoutes();
-    const { categories_data, addStoreCategory } = useAdminStore()
+    const { addStoreCategory } = useAdminStore()
     const [apiError, setApiError] = useState<Error | null>(null);
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -71,7 +72,7 @@ export function AddSubCategoryForm({closeDialog, category_id}) {
                     name_fa:data?.['name_fa'],
                     description:data?.['description'],
                     is_active: 1,
-                    parent_id: data?.['parent_id'],
+                    parent_id: category_id,
                     tags: null,
                     poster_image:null
                 }),
@@ -96,9 +97,9 @@ export function AddSubCategoryForm({closeDialog, category_id}) {
         console.log(JSON.stringify(data, null, 2))
     }
 
-    const parents = useMemo(() => {
-        return categories_data.filter(item => item?.['parent_id'] === null);
-    }, [categories_data]);
+    // const parents = useMemo(() => {
+    //     return categories_data.filter(item => item?.['parent_id'] === null);
+    // }, [categories_data]);
 
     return (
         <Form {...form}>
@@ -129,23 +130,23 @@ export function AddSubCategoryForm({closeDialog, category_id}) {
                         </FormItem>
                     )}
                 />
-                <FormField
-                    control={form.control}
-                    name="parent_id"
-                    render={({field}) => (
-                        <div className={'col-span-2 w-full gap-x-3'}>
-                            <FormItem>
-                                <FormLabel>دسته بندی والد</FormLabel>
-                                <FormControl>
+                {/*<FormField*/}
+                {/*    control={form.control}*/}
+                {/*    name="parent_id"*/}
+                {/*    render={({field}) => (*/}
+                {/*        <div className={'col-span-2 w-full gap-x-3'}>*/}
+                {/*            <FormItem>*/}
+                {/*                <FormLabel>دسته بندی والد</FormLabel>*/}
+                {/*                <FormControl>*/}
 
-                                    <ParentsComboBox data={parents} field={field} category_id={category_id}
-                                                     onSelect={(value) => form.setValue("parent_id", value)}/>
+                {/*                    <NewParentsComboBox data={parents} field={field}*/}
+                {/*                                     onSelect={(value) => form.setValue("parent_id", value?.id)}/>*/}
 
-                                </FormControl>
-                            </FormItem>
-                        </div>
-                    )}
-                />
+                {/*                </FormControl>*/}
+                {/*            </FormItem>*/}
+                {/*        </div>*/}
+                {/*    )}*/}
+                {/*/>*/}
 
                 <FormField
                     control={form.control}

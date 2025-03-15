@@ -5,6 +5,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "@/context/SidebarContext";
 import {ChevronDown, Grid2X2Icon, TagIcon, UsersIcon} from "lucide-react";
+import {Switch} from "@/components/ui/switch";
+import {Label} from "recharts";
+import {Menubar} from "@/components/ui/menubar";
+import {MainCategoryMenuBar} from "@/components/admin-panel/MainCategoryMenuBar";
 
 type NavItem = {
     name: string;
@@ -250,7 +254,7 @@ const AdminPanelSidebar: React.FC = () => {
             onMouseEnter={() => !isExpanded}
         >
             <div className="flex flex-col duration-300 ease-linear no-scrollbar py-6 gap-6">
-                <nav className="mb-6 font-vazir">
+                <nav className="font-vazir">
                     <div className="flex flex-col">
                         <div>
                             {renderAdminPanelNavItems(AdminPanelNavItems, "main")}

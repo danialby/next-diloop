@@ -11,18 +11,20 @@ import {
 } from "@/components/ui/dialog"
 import {Plus, XIcon, ListXIcon} from "lucide-react";
 import {NewCategoryForm} from "@/components/admin-panel/Categories/NewCategoryForm";
+import useAdminStore from "@/store/adminStore";
 
 
 function NewCategoryDialog() {
-
+    const {selectedMainCategory} = useAdminStore()
     const [isOpen, setIsOpen] = useState(false)
     return (
         <>
             <Dialog open={isOpen}>
                 <DialogTrigger asChild>
                     <Button onClick={() => setIsOpen(true)}
-                            className={`!rounded-full !p-3 !shadow-md shadow-gray-400`}>
-                            <Plus />                        ایجاد دسته بندی جدید
+                            className={`!rounded-full !p-3 !shadow-md transition transition-all shadow-gray-400 bg-cyan-700 hover:bg-cyan-600`}>
+                            <Plus />                        ایجاد دسته بندی جدید در
+                        <span className={`font-bold text-orange-300`}>{selectedMainCategory?.title}</span>
                     </Button>
                 </DialogTrigger>
                 <DialogPortal>
@@ -32,7 +34,8 @@ function NewCategoryDialog() {
                                 <DialogTitle>
                                     <div className="flex items-center gap-2 font-bold -mt-2 mb-2 justify-between">
                                         <div className="flex items-center gap-1.5">
-                                            <ListXIcon className={`w-6 h-6`}/><span> ویرایش دسته بندی</span>
+                                            <Plus />                        ایجاد دسته بندی جدید در
+                                            <span className={`font-bold text-orange-300`}>{selectedMainCategory?.title}</span>
                                         </div>
                                         <Button type="button" variant="ghost" onClick={()=>setIsOpen(false)}>
                                             <XIcon />

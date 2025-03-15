@@ -1,7 +1,14 @@
 // stores/adminStore.ts
 import { create } from 'zustand';
 
+type MainCategory = {
+    id: number;
+    title: string;
+}
+
 interface AdminStoreState {
+    selectedMainCategory: MainCategory;
+    setSelectedMainCategory: (data: MainCategory) => void;
     categories_data: Array<object>;
     setCategoriesData: (data: Array<object>) => void;
     updateStoreCategory: (index: number, category: object) => void;
@@ -10,6 +17,13 @@ interface AdminStoreState {
 }
 
 export const useAdminStore = create<AdminStoreState>()((set) => ({
+    selectedMainCategory: {
+        id: 1,
+        title: 'بیکار'
+    },
+    setSelectedMainCategory: (selectedMainCategory: MainCategory) =>
+        set(state => ({ ...state, selectedMainCategory })),
+
     categories_data: [],
     setCategoriesData: (categories_data: Array<object>) =>
         set(state => ({ ...state, categories_data })),
