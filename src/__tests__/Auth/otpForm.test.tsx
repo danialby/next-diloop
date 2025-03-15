@@ -1,7 +1,6 @@
-import { render, screen, fireEvent, waitFor } from '@/__tests__/testUtils/utils'
-import userEvent from '@testing-library/user-event'
+import { render, screen } from '@/__tests__/testUtils/utils'
 import { describe, expect, vi, it, beforeAll } from 'vitest'
-import axiosInstance from '@/lib/axiosInstance'
+ 
 // Mock all SVG imports
  
 import OtpForm from '@/app/(full-width-pages)/(auth)/login/input-code/page'
