@@ -21,6 +21,7 @@ jobs:
         key: ${{ secrets.DILOOPSERVERKEY }}
         source: "."
         target: ${{ vars.DILOOP_TARGET_DIR }}
+        rm: true
 
     - name: Executing remote command via ssh
       uses: appleboy/ssh-action@master
