@@ -5,10 +5,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "@/context/SidebarContext";
 import {ChevronDown, Grid2X2Icon, TagIcon, UsersIcon} from "lucide-react";
-import {Switch} from "@/components/ui/switch";
-import {Label} from "recharts";
-import {Menubar} from "@/components/ui/menubar";
-import {MainCategoryMenuBar} from "@/components/admin-panel/MainCategoryMenuBar";
 
 type NavItem = {
     name: string;

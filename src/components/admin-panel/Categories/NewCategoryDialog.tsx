@@ -9,7 +9,7 @@ import {
     DialogHeader,
     DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog"
-import {Plus, XIcon, ListXIcon} from "lucide-react";
+import {Plus, XIcon} from "lucide-react";
 import {NewCategoryForm} from "@/components/admin-panel/Categories/NewCategoryForm";
 import useAdminStore from "@/store/adminStore";
 

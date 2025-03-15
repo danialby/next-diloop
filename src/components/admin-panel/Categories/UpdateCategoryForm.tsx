@@ -17,7 +17,6 @@ import {
 import { Input } from "@/components/ui/input"
 import {Textarea} from "@/components/ui/textarea";
 import React, {useMemo} from "react";
-import {ParentsComboBox} from "@/components/admin-panel/Categories/ParentsComboBox";
 import useAdminStore from "@/store/adminStore";
 import {useAdminPanelRoutes} from "@/app/api/admin-panel/routes";
 import {useMutation} from "@tanstack/react-query";
