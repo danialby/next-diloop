@@ -1,22 +1,18 @@
 "use client";
-import React, {FormEvent, useState} from "react";
+import React, {useState} from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from '@/store/authStore';
-import { OtpInput } from 'reactjs-otp-input';
 import Countdown, { zeroPad  } from 'react-countdown';
 import Link from "next/link";
-import {Button} from "@/components/ui/button/";
+import {Button} from "@/components/ui/button";
 import Logo from '/public/images/logo/diloop-logo.png'
 import {useMutation} from "@tanstack/react-query";
 import { useApiRoutes } from "@/app/api/auth/routes";
 import {Loader2, Pencil, SendIcon} from "lucide-react";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
-import {Input} from "@/components/ui/input";
-import {z} from "zod";
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel} from "@/components/ui/form";
 import {useForm} from "react-hook-form";
-import {zodResolver} from "@hookform/resolvers/zod";
-import {InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot} from "@/components/ui/input-otp";
+import {InputOTP, InputOTPGroup, InputOTPSlot} from "@/components/ui/input-otp";
 export default function InputCodeForm() {
 
     const router = useRouter();
@@ -43,12 +39,9 @@ export default function InputCodeForm() {
 
 
     const { userLoginNumber } = useAuthStore()
-    const [otp, setOtp] = useState('');
-    const handleChange = (otp) => setOtp(otp);
-
 
     const VerifyMutate= useMutation({
-        mutationFn: (data: object) => VerifyOtp({mobile: userLoginNumber,  otp:data?.otp_code,  page: 'login'}),
+        mutationFn: (data: object) => VerifyOtp({mobile: userLoginNumber,  otp:data?.['otp_code'],  page: 'login'}),
         onSuccess: (response ) => {
             // send code to number
             setAuthToken(response?.['data'].token);
@@ -106,11 +99,15 @@ export default function InputCodeForm() {
 
                             {countCompleted ?
                                 (
-                                <Button startIcon={<SendIcon className={`w-5`} />} loading={ResendMutate.isPending} onClick={handleResend} className={`flex items-center !px-2 !py-1 text-xs bg-blue-700 !rounded-full text-white gap-1 dark:text-gray-400 cursor-pointer ${countCompleted ? '' : 'disabled'}`}
+                                <Button onClick={handleResend}
+                                        className={`flex items-center !px-2 !py-1 text-xs bg-blue-700 !rounded-full text-white gap-1 dark:text-gray-400 cursor-pointer ${countCompleted ? '' : 'disabled'}`}
                                 >
-                                    <span>
-                                               ارسال مجدد کد
+                                    {ResendMutate.isPending ? <Loader2 /> :
+                                        (
+                                            <span>
+                                            <SendIcon className={`w-5`} />   ارسال مجدد کد
                                             </span>
+                                        )}
                                 </Button>
                                 ) :
                                 (
@@ -165,7 +162,7 @@ export default function InputCodeForm() {
                                             </FormItem>
                                         )}
                                     />
-                                    <Button type="submit" testId="login-btn" disabled={VerifyMutate?.isPending}  className="w-full rounded-xl h-10" >
+                                    <Button type="submit" disabled={VerifyMutate?.isPending}  className="w-full rounded-xl h-10" >
                                         {VerifyMutate.isPending && <Loader2 />}
                                         ورود
                                     </Button>

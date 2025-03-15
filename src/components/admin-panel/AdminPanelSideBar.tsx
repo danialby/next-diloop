@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "@/context/SidebarContext";
-import {Grid2X2Icon, TagIcon, UsersIcon} from "lucide-react";
+import {ChevronDown, Grid2X2Icon, TagIcon, UsersIcon} from "lucide-react";
 
 type NavItem = {
     name: string;
@@ -80,7 +80,7 @@ const AdminPanelSidebar: React.FC = () => {
                                         <span className={`menu-item-text`}>{nav.name}</span>
                                     )}
                                     {(isExpanded || isMobileOpen) && (
-                                        <ChevronDownIcon
+                                        <ChevronDown
                                             className={`ml-auto w-5 h-5 transition-transform duration-200  ${
                                                 openSubmenu?.type === menuType &&
                                                 openSubmenu?.index === index

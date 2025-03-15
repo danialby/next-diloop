@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 import { useSidebar } from "@/context/SidebarContext";
 import KnowledgeCard from "@/components/sidebar/KnowledgeCard";
 import Button from "@/components/ui/button/Button";
-import {Grid2X2Icon, CalendarXIcon, ListXIcon, UserCircleIcon} from "lucide-react";
+import {Grid2X2Icon, CalendarXIcon, ListXIcon, UserCircleIcon, ChevronDown} from "lucide-react";
 
 type NavItem = {
   name: string;
@@ -93,7 +93,7 @@ const AppSidebar: React.FC = () => {
                             <span className={`menu-item-text`}>{nav.name}</span>
                         )}
                         {(isExpanded || isMobileOpen) && (
-                            <ChevronDownIcon
+                            <ChevronDown
                                 className={`ml-auto w-5 h-5 transition-transform duration-200  ${
                                     openSubmenu?.type === menuType &&
                                     openSubmenu?.index === index
