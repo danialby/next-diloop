@@ -1,8 +1,6 @@
 "use client";
-import {
-    GridIcon
-} from "../../icons/index";
 import { JSX } from 'react'
+import {Grid2X2Icon} from "lucide-react";
 
 const knowledgeItems: ({
     icon: JSX.Element;
@@ -13,13 +11,13 @@ const knowledgeItems: ({
     {
         title: 'دانش شما',
         key: 'UserKnowledge',
-        icon: <GridIcon />,
+        icon: <Grid2X2Icon />,
         percent: 25,
     },
     {
         title: "دانش سایت",
         key: "SiteKnowledge",
-        icon: <GridIcon />,
+        icon: <Grid2X2Icon />,
         percent: 50,
     },
 ]

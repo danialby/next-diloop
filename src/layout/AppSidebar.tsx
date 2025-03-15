@@ -5,21 +5,9 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "@/context/SidebarContext";
-import {
-  BoxCubeIcon,
-  CalenderIcon,
-  ChevronDownIcon,
-  GridIcon,
-  ListIcon,
-  PageIcon,
-  PieChartIcon,
-  PlugInIcon,
-  TableIcon,
-  UserCircleIcon,
-} from "@/icons/index";
 import KnowledgeCard from "@/components/sidebar/KnowledgeCard";
 import Button from "@/components/ui/button/Button";
-// import SidebarWidget from "./SidebarWidget";
+import {Grid2X2Icon, CalendarXIcon, ListXIcon, UserCircleIcon} from "lucide-react";
 
 type NavItem = {
   name: string;
@@ -31,12 +19,12 @@ type NavItem = {
 
 const diloopNavItems: NavItem[] = [
   {
-    icon: <GridIcon />,
+    icon: <Grid2X2Icon />,
     name: "پیشخوان",
     path: "/skills/skills-home",
   },
   {
-    icon: <CalenderIcon />,
+    icon: <CalendarXIcon />,
     name: "کسب و کار آنلاین",
     path: "/skills/business",
   },
@@ -48,81 +36,11 @@ const diloopNavItems: NavItem[] = [
 
   {
     name: "کارآفرینی و استارتاپ ها",
-    icon: <ListIcon />,
+    icon: <ListXIcon />,
     path: "/skills/startup",
   },
 ];
 
-
-
-const navItems: NavItem[] = [
-  {
-    icon: <GridIcon />,
-    name: "Dashboard",
-    path:'',
-    subItems: [{ name: "Ecommerce", path: "/", pro: false }],
-  },
-  {
-    icon: <CalenderIcon />,
-    name: "Calendar",
-    path: "/calendar",
-  },
-  {
-    icon: <UserCircleIcon />,
-    name: "User Profile",
-    path: "/profile",
-  },
-
-  {
-    name: "Forms",
-    icon: <ListIcon />,
-    subItems: [{ name: "Form Elements", path: "/form-elements", pro: false }],
-  },
-  {
-    name: "Tables",
-    icon: <TableIcon />,
-    subItems: [{ name: "Basic Tables", path: "/basic-tables", pro: false }],
-  },
-  {
-    name: "Pages",
-    icon: <PageIcon />,
-    subItems: [
-      { name: "Blank Page", path: "/blank", pro: false },
-      { name: "404 Error", path: "/error-404", pro: false },
-    ],
-  },
-];
-
-const othersItems: NavItem[] = [
-  {
-    icon: <PieChartIcon />,
-    name: "Charts",
-    subItems: [
-      { name: "Line Chart", path: "/line-chart", pro: false },
-      { name: "Bar Chart", path: "/bar-chart", pro: false },
-    ],
-  },
-  {
-    icon: <BoxCubeIcon />,
-    name: "UI Elements",
-    subItems: [
-      { name: "Alerts", path: "/alerts", pro: false },
-      { name: "Avatar", path: "/avatars", pro: false },
-      { name: "Badge", path: "/badge", pro: false },
-      { name: "Buttons", path: "/buttons", pro: false },
-      { name: "Images", path: "/images", pro: false },
-      { name: "Videos", path: "/videos", pro: false },
-    ],
-  },
-  {
-    icon: <PlugInIcon />,
-    name: "Authentication",
-    subItems: [
-      { name: "Sign In", path: "/login", pro: false },
-      { name: "Sign Up", path: "/signup", pro: false },
-    ],
-  },
-];
 
 const AppSidebar: React.FC = () => {
   const router = useRouter()
@@ -138,134 +56,6 @@ const AppSidebar: React.FC = () => {
     }
   }
 
-  // const renderMenuItems = (
-  //   navItems: NavItem[],
-  //   menuType: "main" | "others"
-  // ) => (
-  //     <>
-  //
-  //   <ul className="flex flex-col">
-  //     {navItems.map((nav, index) => (
-  //       <li key={nav.name}>
-  //         {nav.subItems ? (
-  //           <button
-  //             onClick={() => handleSubmenuToggle(index, menuType)}
-  //             className={`menu-item group  ${
-  //               openSubmenu?.type === menuType && openSubmenu?.index === index
-  //                 ? "menu-item-active"
-  //                 : "menu-item-inactive"
-  //             } cursor-pointer ${
-  //               !isExpanded
-  //                 ? "lg:justify-center"
-  //                 : "lg:justify-start"
-  //             }`}
-  //           >
-  //             <span
-  //               className={` ${
-  //                 openSubmenu?.type === menuType && openSubmenu?.index === index
-  //                   ? "menu-item-icon-active"
-  //                   : "menu-item-icon-inactive"
-  //               }`}
-  //             >
-  //               {nav.icon}
-  //             </span>
-  //             {(isExpanded || isMobileOpen) && (
-  //               <span className={`menu-item-text`}>{nav.name}</span>
-  //             )}
-  //             {(isExpanded || isMobileOpen) && (
-  //               <ChevronDownIcon
-  //                 className={`ml-auto w-5 h-5 transition-transform duration-200  ${
-  //                   openSubmenu?.type === menuType &&
-  //                   openSubmenu?.index === index
-  //                     ? "rotate-180 text-brand-500"
-  //                     : ""
-  //                 }`}
-  //               />
-  //             )}
-  //           </button>
-  //         ) : (
-  //           nav.path && (
-  //             <Link
-  //               href={nav.path}
-  //               className={`menu-item group ${
-  //                 isActive(nav.path) ? "menu-item-active" : "menu-item-inactive"
-  //               }`}
-  //             >
-  //               <span
-  //                 className={`${
-  //                   isActive(nav.path)
-  //                     ? "menu-item-icon-active"
-  //                     : "menu-item-icon-inactive"
-  //                 }`}
-  //               >
-  //                 {nav.icon}
-  //               </span>
-  //               {(isExpanded || isMobileOpen) && (
-  //                 <span className={`menu-item-text`}>{nav.name}</span>
-  //               )}
-  //             </Link>
-  //           )
-  //         )}
-  //         {nav.subItems && (isExpanded || isMobileOpen) && (
-  //           <div
-  //             ref={(el) => {
-  //               subMenuRefs.current[`${menuType}-${index}`] = el;
-  //             }}
-  //             className="overflow-hidden transition-all duration-300"
-  //             style={{
-  //               height:
-  //                 openSubmenu?.type === menuType && openSubmenu?.index === index
-  //                   ? `${subMenuHeight[`${menuType}-${index}`]}px`
-  //                   : "0px",
-  //             }}
-  //           >
-  //             <ul className="mt-2 space-y-1 ml-9">
-  //               {nav.subItems.map((subItem) => (
-  //                 <li key={subItem.name}>
-  //                   <Link
-  //                     href={subItem.path}
-  //                     className={`menu-dropdown-item ${
-  //                       isActive(subItem.path)
-  //                         ? "menu-dropdown-item-active"
-  //                         : "menu-dropdown-item-inactive"
-  //                     }`}
-  //                   >
-  //                     {subItem.name}
-  //                     <span className="flex items-center gap-1 ml-auto">
-  //                       {subItem.new && (
-  //                         <span
-  //                           className={`ml-auto ${
-  //                             isActive(subItem.path)
-  //                               ? "menu-dropdown-badge-active"
-  //                               : "menu-dropdown-badge-inactive"
-  //                           } menu-dropdown-badge `}
-  //                         >
-  //                           new
-  //                         </span>
-  //                       )}
-  //                       {subItem.pro && (
-  //                         <span
-  //                           className={`ml-auto ${
-  //                             isActive(subItem.path)
-  //                               ? "menu-dropdown-badge-active"
-  //                               : "menu-dropdown-badge-inactive"
-  //                           } menu-dropdown-badge `}
-  //                         >
-  //                           pro
-  //                         </span>
-  //                       )}
-  //                     </span>
-  //                   </Link>
-  //                 </li>
-  //               ))}
-  //             </ul>
-  //           </div>
-  //         )}
-  //       </li>
-  //     ))}
-  //   </ul>
-  //     </>
-  // );
 
   const renderCustomMenuItems = (
       navItems: NavItem[],
@@ -274,7 +64,7 @@ const AppSidebar: React.FC = () => {
       <>
         <ul className="rounded-2xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] shadow shadow-md flex flex-col duration-300 ease-linear no-scrollbar font-vazir text-sm">
           <div className={`rounded-2xl overflow-hidden`}>
-            {navItems.map((nav, index) => (
+            {diloopNavItems.map((nav, index) => (
 
                 <li key={nav.name}>
                   {nav.subItems ? (
@@ -414,14 +204,13 @@ const AppSidebar: React.FC = () => {
   useEffect(() => {
     // Check if the current path matches any submenu item
     let submenuMatched = false;
-    ["main", "others"].forEach((menuType) => {
-      const items = menuType === "main" ? navItems : othersItems;
+      const items = diloopNavItems;
       items.forEach((nav, index) => {
         if (nav.subItems) {
           nav.subItems.forEach((subItem) => {
             if (isActive(subItem.path)) {
               setOpenSubmenu({
-                type: menuType as "main" | "others",
+                type: "main",
                 index,
               });
               submenuMatched = true;
@@ -429,7 +218,6 @@ const AppSidebar: React.FC = () => {
           });
         }
       });
-    });
 
     // If no submenu item matches, close the open submenu
     if (!submenuMatched) {

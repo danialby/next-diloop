@@ -9,8 +9,7 @@ import {
     DialogHeader,
     DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog"
-import {Plus, XIcon} from "lucide-react";
-import {ListIcon} from "@/icons";
+import {Plus, XIcon, ListXIcon} from "lucide-react";
 import {NewCategoryForm} from "@/components/admin-panel/Categories/NewCategoryForm";
 
 
@@ -33,7 +32,7 @@ function NewCategoryDialog() {
                                 <DialogTitle>
                                     <div className="flex items-center gap-2 font-bold -mt-2 mb-2 justify-between">
                                         <div className="flex items-center gap-1.5">
-                                            <ListIcon className={`w-6 h-6`}/><span> ویرایش دسته بندی</span>
+                                            <ListXIcon className={`w-6 h-6`}/><span> ویرایش دسته بندی</span>
                                         </div>
                                         <Button type="button" variant="ghost" onClick={()=>setIsOpen(false)}>
                                             <XIcon />
@@ -49,6 +48,6 @@ function NewCategoryDialog() {
             </Dialog>
         </>
     );
-};
+}
 
 export default NewCategoryDialog;

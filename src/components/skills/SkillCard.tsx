@@ -1,6 +1,6 @@
 import Image from "next/image";
-import {HorizontalDots} from "@/icons";
 import React from "react";
+import {DotSquare} from "lucide-react";
 
 type SkillItem = {
     name: string;
@@ -29,7 +29,7 @@ return (
         />
         <div className={`flex flex-row justify-between items-center px-3 py-4 w-full`}>
             <span className={`text-xs`}>{cardData.title}</span>
-            <HorizontalDots />
+            <DotSquare />
         </div>
     </div>
 </div>

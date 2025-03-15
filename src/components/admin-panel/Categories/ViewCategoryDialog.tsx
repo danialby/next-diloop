@@ -6,7 +6,6 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
-import {ListIcon} from "@/icons";
 import {Button} from "@/components/ui/button";
 import {toPersianDate, toPersianTime} from "@/utils/dateUtils";
 import {
@@ -17,7 +16,8 @@ import {
     ReceiptText,
     SpellCheck,
     Type,
-    XIcon
+    XIcon,
+    ListXIcon
 } from "lucide-react";
 
 
@@ -40,7 +40,7 @@ function ViewCategoryDialog({category}) {
                             <DialogTitle>
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-1.5">
-                                        <ListIcon className={`w-6 h-6`}/><span> جزییات دسته بندی</span>
+                                        <ListXIcon className={`w-6 h-6`}/><span> جزییات دسته بندی</span>
                                     </div>
                                     <Button type="button" variant="ghost" onClick={() => setIsOpen(false)}>
                                         <XIcon/>
@@ -96,6 +96,6 @@ function ViewCategoryDialog({category}) {
             </Dialog>
         </>
     );
-};
+}
 
 export default ViewCategoryDialog;

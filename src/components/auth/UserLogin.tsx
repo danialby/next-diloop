@@ -1,47 +1,68 @@
 "use client";
-import React, {FormEvent, useState} from "react";
-import Button from "@/components/ui/button/Button";
+import React, {useState} from "react";
 import Link from "next/link";
 import Image from "next/image";
-import CustomInput from "@/components/custom/CustomInput";
 import {useRouter} from "next/navigation";
 import {useAuthStore} from '@/store/authStore';
-import Label from "@/components/form/Label";
 import Logo from '/public/images/logo/diloop-logo.png'
 import { useApiRoutes } from "@/app/api/auth/routes";
 
 import {useMutation} from "@tanstack/react-query";
 
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { z } from "zod"
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import {Loader2} from "lucide-react";
+
 
 export default function UserLogin() {
 
   const router = useRouter();
-  const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
   const { setUserLoginNumber } = useAuthStore()
   const { Login } = useApiRoutes();
 
+    const FormSchema = z.object({
+        mobile: z.string()
+            .nonempty('شماره موبایل را وارد کنید')
+            .length(11, { message: "شماره موبایل باید 11 کاراکتر باشد."})
+            .regex(/^09[0-9]{9}$/, 'شماره موبایل باید با 09 شروع شود')
+    })
+    const form = useForm<z.infer<typeof FormSchema>>({
+        resolver: zodResolver(FormSchema),
+        defaultValues: {
+            mobile: "",
+        },
+    })
+
   const mutateLogin = useMutation(
       {
-        mutationFn: () => Login({mobile: phone, method: 'otp'}),
+        mutationFn: (data: object) => Login({mobile: data?.mobile, method: 'otp'}),
         onSuccess: (response ) => {
           // send code to number
           console.log(response)
-          setUserLoginNumber(phone)
           router.push('/login/input-code')
         },
         onError: (error) => {
           console.log(error)
           setError(error?.['response']?.data?.message);
-        }
+        },
   })
 
-
-
-
-  const handleLogin = (evt: FormEvent) => {
-    evt.preventDefault();
-    mutateLogin.mutate();
+  const handleLogin = (data: z.infer<typeof FormSchema>) => {
+    mutateLogin.mutate(data);
+      setUserLoginNumber(data?.mobile)
     }
 
   // Dependency array ensures this runs when `data` changes
@@ -68,32 +89,60 @@ export default function UserLogin() {
             </div>
             <div className={`w-5 h-1 bg-white/30 rounded-full my-6`} />
             <div>
-              <form onSubmit={handleLogin}>
-                <div className="space-y-6 flex flex-col justify-center items-center w-full`">
-                  <div className={`flex flex-1 flex-col  m-0 w-full`}>
-                    <Label>شماره موبایل</Label>
-                  <CustomInput
-                        testId='mobile-input'
-                        type="text"
-                        defaultValue={phone}
-                        error={error?.length > 0}
-                        onChange={(e) => {
-                          setPhone(e.target.value)
-                        }}
-                        floatingLabel={false}
-                        placeholder="09123456789"
-                        hint={error || ""}
-                        className={`rounded-xl font-outfit tracking-[2px] mt-1`}
-                    />
-                  </div>
-                  <div className={`my-4`}/>
-                  <div className={`flex flex-1  m-0 w-full`}>
-                    <Button testId="login-btn" loading={mutateLogin?.isPending}  className="w-full rounded-xl"  size="sm">
-                      ورود
+                <div className={`flex flex-1 flex-col  m-0 w-full`}>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(handleLogin)} className="w-full space-y-6">
+                  <FormField
+                      control={form.control}
+                      name="mobile"
+                      render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>شماره موبایل</FormLabel>
+                            <FormControl>
+                              <Input testId='mobile-input' placeholder="09123456789" {...field}
+                                     className={`rounded-xl font-outfit tracking-[2px] h-10 mt-1`}
+                              />
+                            </FormControl>
+                            <FormDescription>
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                      )}
+                  />
+                    <Button type="submit" testId="login-btn" disabled={mutateLogin?.isPending}  className="w-full rounded-xl h-10" >
+                        {mutateLogin.isPending && <Loader2 />}
+                        ورود
                     </Button>
-                  </div>
+                </form>
+              </Form>
                 </div>
-              </form>
+              {/*<form onSubmit={handleLogin}>*/}
+              {/*  <div className="space-y-6 flex flex-col justify-center items-center w-full`">*/}
+              {/*    <div className={`flex flex-1 flex-col  m-0 w-full`}>*/}
+              {/*      <Label>شماره موبایل</Label>*/}
+              {/*    <Input*/}
+              {/*          testId='mobile-input'*/}
+              {/*          type="text"*/}
+              {/*          value={phone}*/}
+              {/*          error={error?.length > 0}*/}
+              {/*          onChange={(e) => {*/}
+              {/*            setPhone(e.target.value)*/}
+              {/*          }}*/}
+              {/*          floatingLabel={false}*/}
+              {/*          placeholder="09123456789"*/}
+              {/*          hint={error || ""}*/}
+              {/*          className={`rounded-xl font-outfit tracking-[2px] mt-1`}*/}
+              {/*      />*/}
+              {/*    </div>*/}
+              {/*    <div className={`my-4`}/>*/}
+              {/*    <div className={`flex flex-1  m-0 w-full`}>*/}
+              {/*      <Button testId="login-btn" loading={mutateLogin?.isPending}  className="w-full rounded-xl"  size="sm">*/}
+              {/*        {mutateLogin.isPending && <Loader2 />}*/}
+              {/*        ورود*/}
+              {/*      </Button>*/}
+              {/*    </div>*/}
+              {/*  </div>*/}
+              {/*</form>*/}
               <div>
                 <p className="text-xs font-normal text-center sm:text-start py-4">
                   <span className={`text-gray-700 dark:text-gray-400 `}>ورود یا ثبت نام شما به منزله پذیرش </span>
@@ -105,6 +154,9 @@ export default function UserLogin() {
                   </Link>
                   <span className={`text-gray-700 dark:text-gray-400 `}> می باشد</span>
                 </p>
+                  <p className={`text-rose-600`}>
+                      {error}
+                  </p>
               </div>
             </div>
           </div>

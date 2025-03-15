@@ -4,12 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "@/context/SidebarContext";
-import {
-    ChevronDownIcon,
-    GridIcon,
-    TagLeft,
-    Users,
-} from "@/icons/index";
+import {Grid2X2Icon, TagIcon, UsersIcon} from "lucide-react";
 
 type NavItem = {
     name: string;
@@ -21,17 +16,17 @@ type NavItem = {
 
 const AdminPanelNavItems: NavItem[] = [
     {
-        icon: <GridIcon />,
+        icon: <Grid2X2Icon />,
         name: "داشبورد",
         path: "/admin-panel",
     },
     {
-        icon: <Users />,
+        icon: <UsersIcon />,
         name: "لیست کاربران",
         path: "/admin-panel/users",
     },
     {
-        icon: <TagLeft />,
+        icon: <TagIcon />,
         name: "مدیریت دسته بندی ها",
         path: "/admin-panel/categories",
     },
