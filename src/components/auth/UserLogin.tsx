@@ -72,7 +72,8 @@ export default function UserLogin() {
                 <div className="space-y-6 flex flex-col justify-center items-center w-full`">
                   <div className={`flex flex-1 flex-col  m-0 w-full`}>
                     <Label>شماره موبایل</Label>
-                    <CustomInput
+                  <CustomInput
+                        testId='mobile-input'
                         type="text"
                         defaultValue={phone}
                         error={error?.length > 0}
@@ -87,7 +88,7 @@ export default function UserLogin() {
                   </div>
                   <div className={`my-4`}/>
                   <div className={`flex flex-1  m-0 w-full`}>
-                    <Button loading={mutateLogin?.isPending} className="w-full rounded-xl" size="sm">
+                    <Button testId="login-btn" loading={mutateLogin?.isPending}  className="w-full rounded-xl"  size="sm">
                       ورود
                     </Button>
                   </div>

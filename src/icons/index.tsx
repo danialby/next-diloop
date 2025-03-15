@@ -1,61 +1,61 @@
-import PlusIcon from "./plus.svg";
-import CloseIcon from "./close.svg";
-import BoxIcon from "./box.svg";
-import CheckCircleIcon from "./check-circle.svg";
-import AlertIcon from "./alert.svg";
-import InfoIcon from "./info.svg";
-import ErrorIcon from "./info-hexa.svg";
-import BoltIcon from "./bolt.svg";
-import ArrowUpIcon from "./arrow-up.svg";
-import ArrowDownIcon from "./arrow-down.svg";
-import FolderIcon from "./folder.svg";
-import VideoIcon from "./videos.svg";
-import AudioIcon from "./audio.svg";
-import GridIcon from "./grid.svg";
-import FileIcon from "./file.svg";
-import DownloadIcon from "./download.svg";
-import ArrowRightIcon from "./arrow-right.svg";
-import GroupIcon from "./group.svg";
-import BoxIconLine from "./box-line.svg";
-import ShootingStarIcon from "./shooting-star.svg";
-import DollarLineIcon from "./dollar-line.svg";
-import TrashBinIcon from "./trash.svg";
-import AngleUpIcon from "./angle-up.svg";
-import AngleDownIcon from "./angle-down.svg";
-import PencilIcon from "./pencil.svg";
-import CheckLineIcon from "./check-line.svg";
-import CloseLineIcon from "./close-line.svg";
-import ChevronDownIcon from "./chevron-down.svg";
-import ChevronUpIcon from "./chevron-up.svg";
-import PaperPlaneIcon from "./paper-plane.svg";
-import LockIcon from "./lock.svg";
-import EnvelopeIcon from "./envelope.svg";
-import UserIcon from "./user-line.svg";
-import CalenderIcon from "./calender-line.svg";
-import EyeIcon from "./eye.svg";
-import EyeCloseIcon from "./eye-close.svg";
-import TimeIcon from "./time.svg";
-import CopyIcon from "./copy.svg";
-import ChevronLeftIcon from "./chevron-left.svg";
-import UserCircleIcon from "./user-circle.svg";
-import TaskIcon from "./task-icon.svg";
-import ListIcon from "./list.svg";
-import TableIcon from "./table.svg";
-import PageIcon from "./page.svg";
-import PieChartIcon from "./pie-chart.svg";
-import BoxCubeIcon from "./box-cube.svg";
-import PlugInIcon from "./plug-in.svg";
-import DocsIcon from "./docs.svg";
-import MailIcon from "./mail-line.svg";
-import HorizontalDots from "./horizontal-dots.svg";
-import ChatIcon from "./chat.svg";
-import MoreDotIcon from "./more-dot.svg";
-import BellIcon from "./bell.svg";
-import ResendIcon from "./resend.svg"
-import Users from "./users.svg"
-import Categories from "./categories.svg"
-import TagLeft from "./tag-left.svg"
-import Details from "./details.svg"
+import { ReactComponent as PlusIcon} from "@/icons/plus.svg";
+import { ReactComponent as CloseIcon} from "@/icons/close.svg";
+import { ReactComponent as BoxIcon} from "@/icons/box.svg";
+import { ReactComponent as CheckCircleIcon} from "@/icons/check-circle.svg";
+import { ReactComponent as AlertIcon} from "@/icons/alert.svg";
+import { ReactComponent as InfoIcon} from "@/icons/info.svg";
+import { ReactComponent as ErrorIcon} from "@/icons/info-hexa.svg";
+import { ReactComponent as BoltIcon} from "@/icons/bolt.svg";
+import { ReactComponent as ArrowUpIcon} from "@/icons/arrow-up.svg";
+import { ReactComponent as ArrowDownIcon} from "@/icons/arrow-down.svg";
+import { ReactComponent as FolderIcon} from "@/icons/folder.svg";
+import { ReactComponent as VideoIcon} from "@/icons/videos.svg";
+import { ReactComponent as AudioIcon} from "@/icons/audio.svg";
+import { ReactComponent as GridIcon} from "@/icons/grid.svg";
+import { ReactComponent as FileIcon} from "@/icons/file.svg";
+import { ReactComponent as DownloadIcon} from "@/icons/download.svg";
+import { ReactComponent as ArrowRightIcon} from "@/icons/arrow-right.svg";
+import { ReactComponent as GroupIcon} from "@/icons/group.svg";
+import { ReactComponent as BoxIconLine} from "@/icons/box-line.svg";
+import { ReactComponent as ShootingStarIcon} from "@/icons/shooting-star.svg";
+import { ReactComponent as DollarLineIcon} from "@/icons/dollar-line.svg";
+import { ReactComponent as TrashBinIcon} from "@/icons/trash.svg";
+import { ReactComponent as AngleUpIcon} from "@/icons/angle-up.svg";
+import { ReactComponent as AngleDownIcon} from "@/icons/angle-down.svg";
+import { ReactComponent as PencilIcon} from "@/icons/pencil.svg";
+import { ReactComponent as CheckLineIcon} from "@/icons/check-line.svg";
+import { ReactComponent as CloseLineIcon} from "@/icons/close-line.svg";
+import { ReactComponent as ChevronDownIcon} from "@/icons/chevron-down.svg";
+import { ReactComponent as ChevronUpIcon} from "@/icons/chevron-up.svg";
+import { ReactComponent as PaperPlaneIcon} from "@/icons/paper-plane.svg";
+import { ReactComponent as LockIcon} from "@/icons/lock.svg";
+import { ReactComponent as EnvelopeIcon} from "@/icons/envelope.svg";
+import { ReactComponent as UserIcon} from "@/icons/user-line.svg";
+import { ReactComponent as CalenderIcon} from "@/icons/calender-line.svg";
+import { ReactComponent as EyeIcon} from "@/icons/eye.svg";
+import { ReactComponent as EyeCloseIcon} from "@/icons/eye-close.svg";
+import { ReactComponent as TimeIcon} from "@/icons/time.svg";
+import { ReactComponent as CopyIcon} from "@/icons/copy.svg";
+import { ReactComponent as ChevronLeftIcon} from "@/icons/chevron-left.svg";
+import { ReactComponent as UserCircleIcon} from "@/icons/user-circle.svg";
+import { ReactComponent as TaskIcon} from "@/icons/task-icon.svg";
+import { ReactComponent as ListIcon} from "@/icons/list.svg";
+import { ReactComponent as TableIcon} from "@/icons/table.svg";
+import { ReactComponent as PageIcon} from "@/icons/page.svg";
+import { ReactComponent as PieChartIcon} from "@/icons/pie-chart.svg";
+import { ReactComponent as BoxCubeIcon} from "@/icons/box-cube.svg";
+import { ReactComponent as PlugInIcon} from "@/icons/plug-in.svg";
+import { ReactComponent as DocsIcon} from "@/icons/docs.svg";
+import { ReactComponent as MailIcon} from "@/icons/mail-line.svg";
+import { ReactComponent as HorizontalDots} from "@/icons/horizontal-dots.svg";
+import { ReactComponent as ChatIcon} from "@/icons/chat.svg";
+import { ReactComponent as MoreDotIcon} from "@/icons/more-dot.svg";
+import { ReactComponent as BellIcon} from "@/icons/bell.svg";
+import { ReactComponent as ResendIcon} from "@/icons/resend.svg"
+import { ReactComponent as Users} from "@/icons/users.svg"
+import { ReactComponent as Categories} from "@/icons/categories.svg"
+import { ReactComponent as TagLeft} from "@/icons/tag-left.svg"
+import { ReactComponent as Details} from "@/icons/details.svg"
 
 export {
   DownloadIcon,

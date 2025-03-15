@@ -16,6 +16,7 @@ interface InputProps {
     error?: boolean;
     hint?: string; // Optional hint text
     floatingLabel?: boolean; // Optional hint text
+    testId?: string;
 }
 
 const CustomInput: FC<InputProps> = ({
@@ -34,6 +35,7 @@ const CustomInput: FC<InputProps> = ({
                                    error = false,
                                    hint,
                                    floatingLabel = false,
+                                   testId=''
                                }) => {
     // Determine input styles based on state (disabled, success, error)
     let inputClasses = `h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3 dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-brand-800 ${className}`;
@@ -88,6 +90,7 @@ const CustomInput: FC<InputProps> = ({
                 onBlur={handleOnBlur}
                 onChange={onChange}
                 onInput={(e) => handleOnInput(e)}
+                data-testid={testId}
             />
 
             {floatingLabel && <span className={`absolute transition-all duration-300 right-4 top-2.5  scale-100 -z-1 text-gray-400  ${(isFocused || hasValue) && '  !text-blue-500 p-0.75 px-0.5 z-10 !right-0 !-top-5.5 text-xs'}`}>{placeholder}</span>}

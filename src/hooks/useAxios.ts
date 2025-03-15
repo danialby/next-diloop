@@ -13,6 +13,8 @@ const useAxios = () => {
     const post = async <T>(url: string, data?: object | never, config?: never): Promise<T> => {
         try {
             const response = await axiosInstance.post<T>(url, data, config);
+            // console.log(response);
+            
             return response.data;
         } catch (error) {
             throw error;

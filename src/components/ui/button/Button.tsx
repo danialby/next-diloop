@@ -11,6 +11,7 @@ interface ButtonProps {
   disabled?: boolean; // Disabled state
   loading?: boolean; // Disabled state
   className?: string; // Disabled state
+  testId?: string;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -23,6 +24,7 @@ const Button: React.FC<ButtonProps> = ({
   className = "",
   disabled = false,
   loading = false,
+  testId="",
 }) => {
   // Size Classes
   const sizeClasses = {
@@ -40,6 +42,7 @@ const Button: React.FC<ButtonProps> = ({
 
   return (
     <button
+      data-testid={testId}
       className={`inline-flex items-center justify-center font-medium gap-2 rounded-lg transition ${
         sizeClasses[size]
       } ${variantClasses[variant]} 
