@@ -56,12 +56,14 @@ export default function UserLogin() {
         },
         onError: (error) => {
           console.log(error)
+            // form.setError('mobile', error)
           setError(error?.['response']?.data?.message);
         },
   })
 
   const handleLogin = (data: z.infer<typeof FormSchema>) => {
-    mutateLogin.mutate(data);
+        setError('')
+        mutateLogin.mutate(data);
       setUserLoginNumber(data?.mobile)
     }
 
@@ -106,6 +108,9 @@ export default function UserLogin() {
                             <FormDescription>
                             </FormDescription>
                             <FormMessage />
+                              <p className={`text-red-600 text-xs`}>
+                                  {error}
+                              </p>
                           </FormItem>
                       )}
                   />
@@ -154,9 +159,7 @@ export default function UserLogin() {
                   </Link>
                   <span className={`text-gray-700 dark:text-gray-400 `}> می باشد</span>
                 </p>
-                  <p className={`text-rose-600`}>
-                      {error}
-                  </p>
+
               </div>
             </div>
           </div>

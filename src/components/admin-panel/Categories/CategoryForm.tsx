@@ -106,7 +106,7 @@ const columns: ColumnDef<CategoryRow>[] = [
 export default function CategoryForm({data, isLoading, tag}) {
 
     const DataBasedOnTag = useMemo(() => {
-        return data?.filter(item => item?.['tags'].includes(tag));
+        return data?.filter(item => item?.['tags']?.includes(tag));
     }, [data, tag]);
 
     return (

@@ -1,22 +1,37 @@
 "use client";
 import React, {FormEvent, useState} from "react";
 import Image from "next/image";
-import {PencilIcon, ResendIcon} from "@/icons";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from '@/store/authStore';
 import { OtpInput } from 'reactjs-otp-input';
 import Countdown, { zeroPad  } from 'react-countdown';
 import Link from "next/link";
-import Button from "@/components/ui/button/Button";
+import {Button} from "@/components/ui/button/";
 import Logo from '/public/images/logo/diloop-logo.png'
 import {useMutation} from "@tanstack/react-query";
 import { useApiRoutes } from "@/app/api/auth/routes";
+import {Loader2, Pencil, SendIcon} from "lucide-react";
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage} from "@/components/ui/form";
+import {Input} from "@/components/ui/input";
+import {z} from "zod";
+import {useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot} from "@/components/ui/input-otp";
 export default function InputCodeForm() {
 
     const router = useRouter();
     const [error, setError] = useState('');
     const { setAuthToken } = useAuthStore()
     const { VerifyOtp, Login } = useApiRoutes();
+
+    const form = useForm({
+        defaultValues: {
+            otp_code: "",
+        },
+    })
+
+
+
     // Custom renderer for minutes:seconds format
     const [countCompleted, setCountCompleted] = useState(false);
     const handleTimerReset = () => {
@@ -33,7 +48,7 @@ export default function InputCodeForm() {
 
 
     const VerifyMutate= useMutation({
-        mutationFn: () => VerifyOtp({mobile: userLoginNumber, otp, page: 'login'}),
+        mutationFn: (data: object) => VerifyOtp({mobile: userLoginNumber,  otp:data?.otp_code,  page: 'login'}),
         onSuccess: (response ) => {
             // send code to number
             setAuthToken(response?.['data'].token);
@@ -46,9 +61,9 @@ export default function InputCodeForm() {
         }
     });
 
-    const handleVerify = (evt: FormEvent) => {
-        evt.preventDefault();
-        VerifyMutate.mutate();
+    const handleVerify = (data) => {
+        console.log(data)
+        VerifyMutate.mutate(data);
     }
 
     const ResendMutate= useMutation({
@@ -91,7 +106,7 @@ export default function InputCodeForm() {
 
                             {countCompleted ?
                                 (
-                                <Button startIcon={<ResendIcon className={`w-5`} />} loading={ResendMutate.isPending} onClick={handleResend} className={`flex items-center !px-2 !py-1 text-xs bg-blue-700 !rounded-full text-white gap-1 dark:text-gray-400 cursor-pointer ${countCompleted ? '' : 'disabled'}`}
+                                <Button startIcon={<SendIcon className={`w-5`} />} loading={ResendMutate.isPending} onClick={handleResend} className={`flex items-center !px-2 !py-1 text-xs bg-blue-700 !rounded-full text-white gap-1 dark:text-gray-400 cursor-pointer ${countCompleted ? '' : 'disabled'}`}
                                 >
                                     <span>
                                                ارسال مجدد کد
@@ -110,37 +125,78 @@ export default function InputCodeForm() {
                         </h1>
                     </div>
                     <div>
-                        <form onSubmit={handleVerify}>
-                            <div className="space-y-6 flex flex-col justify-center items-center w-full`">
-                                {/*<Label className={`self-start`}>کد تایید</Label>*/}
-                                <div className={`flex flex-1 flex-col  m-0 w-full dir-ltr`}>
-                                    <div className={`flex justify-between flex-row-reverse text-xs`}>
-                                        <Link className={`flex items-center gap-1 dark:text-gray-400`} href={`/login`}>
-                                            <PencilIcon className={`w-5`} />
-                                            <span>
+                        <div className={`flex flex-1 flex-col  m-0 w-full`}>
+                            <div className={`flex justify-between flex-row-reverse text-xs`}>
+                                <Link className={`flex items-center gap-1 dark:text-gray-400`} href={`/login`}>
+                                    <Pencil className={`w-5`} />
+                                    <span>
                                                 ویرایش شماره
                                             </span>
-                                        </Link>
-                                    </div>
-                                    <OtpInput className={`text-black dark:text-white w-full justify-between gap-4 mt-4`} isInputNum={true} shouldAutoFocus={true} inputStyle={`border-b-3 border-blue-400  !w-8 h-10 focus-visible:outline-none`}
-                                              value={otp}
-                                              onChange={handleChange}
-                                              numInputs={6}
-                                              separator={<span></span>} />
-                                    <span className={`relative text-xs text-rose-400 top-2 `} style={{direction: 'rtl'}}>
-                                        {error}
-                                    </span>
-                                    <div className={`flex flex-1  mt-6 w-full`}>
-                                        <Button loading={VerifyMutate.isPending} className={`w-full rounded-xl`} disabled={otp.length < 6} size="sm">
-                                            ورود
-                                        </Button>
-                                    </div>
-                                </div>
+                                </Link>
                             </div>
-                        </form>
-                    </div>
+                            <Form {...form}>
+                                <form onSubmit={form.handleSubmit(handleVerify)} className="w-full space-y-6">
+                                    <FormField
+                                        control={form.control}
+                                        name="otp_code"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel>کد تایید</FormLabel>
+                                                <FormControl>
+                                                    {/*<Input testId='mobile-input' placeholder="09123456789" {...field}*/}
+                                                    {/*       className={`rounded-xl font-outfit tracking-[2px] h-10 mt-1`}*/}
+                                                    {/*/>*/}
+                                                    <InputOTP onComplete={form.handleSubmit(handleVerify)} maxLength={6} {...field} containerClassName={`dir-ltr`}>
+                                                        <InputOTPGroup className={`space-x-2`}>
+                                                            <InputOTPSlot className={`!rounded-lg !border-1 !border-gray-400`} index={0} />
+                                                            <InputOTPSlot className={`!rounded-lg !border-1 !border-gray-400`} index={1} />
+                                                            <InputOTPSlot className={`!rounded-lg !border-1 !border-gray-400`} index={2} />
+                                                            <InputOTPSlot className={`!rounded-lg !border-1 !border-gray-400`} index={3} />
+                                                            <InputOTPSlot className={`!rounded-lg !border-1 !border-gray-400`} index={4} />
+                                                            <InputOTPSlot className={`!rounded-lg !border-1 !border-gray-400`} index={5} />
+                                                        </InputOTPGroup>
+                                                    </InputOTP>
+                                                </FormControl>
+                                                <FormDescription>
+                                                </FormDescription>
+                                                <p className={`text-rose-600 text-xs`}>
+                                                    {error}
+                                                </p>
+                                            </FormItem>
+                                        )}
+                                    />
+                                    <Button type="submit" testId="login-btn" disabled={VerifyMutate?.isPending}  className="w-full rounded-xl h-10" >
+                                        {VerifyMutate.isPending && <Loader2 />}
+                                        ورود
+                                    </Button>
+                                </form>
+                            </Form>
+                        </div>
+                    {/*<div>*/}
+                    {/*    <form onSubmit={handleVerify}>*/}
+                    {/*        <div className="space-y-6 flex flex-col justify-center items-center w-full`">*/}
+                    {/*            /!*<Label className={`self-start`}>کد تایید</Label>*!/*/}
+                    {/*            <div className={`flex flex-1 flex-col  m-0 w-full dir-ltr`}>*/}
+                    {/*                <div className={`flex justify-between flex-row-reverse text-xs`}>*/}
+                    {/*                    <Link className={`flex items-center gap-1 dark:text-gray-400`} href={`/login`}>*/}
+                    {/*                        <Pencil className={`w-5`} />*/}
+                    {/*                        <span>*/}
+                    {/*                            ویرایش شماره*/}
+                    {/*                        </span>*/}
+                    {/*                    </Link>*/}
+                    {/*                </div>*/}
+                    {/*                <OtpInput className={`text-black dark:text-white w-full justify-between gap-4 mt-4`} isInputNum={true} shouldAutoFocus={true} inputStyle={`border-b-3 border-blue-400  !w-8 h-10 focus-visible:outline-none`}*/}
+                    {/*                          value={otp}*/}
+                    {/*                          onChange={handleChange}*/}
+                    {/*                          numInputs={6}*/}
+                    {/*                          separator={<span></span>} />*/}
+                    {/*            </div>*/}
+                    {/*        </div>*/}
+                    {/*    </form>*/}
+                    {/*</div>*/}
                 </div>
             </div>
+        </div>
         </div>
     );
 }
