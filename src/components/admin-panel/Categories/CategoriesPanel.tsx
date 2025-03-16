@@ -55,19 +55,19 @@ export default function CategoriesPanel() {
             return (
                 <div className={` font-vazir`}>
                     <div className={`flex items-center justify-center w-full `}>
-                    <div className={`w-[300px] dir-ltr space-y-4`}>
-                        <MainCategoryMenuBar/>
+                    <div className={`w-[320px] dir-ltr space-y-4`}>
+                        <MainCategoryMenuBar />
                     </div>
                     </div>
                     <div className={`space-y-2 mt-4 flex w-full justify-center md:justify-start`}>
-                        <NewCategoryDialog/>
+                        <NewCategoryDialog />
                         <hr/>
                     </div>
                     <div className={`py-2 md:grid grid-cols-4 font-vazir text-sm gap-x-8`}>
                         <div className={`grid grid-cols-2 xl:grid-cols-3 md:gap-2 col-span-2 py-4`}>
                             {selectedMainCategory.id === 1 && JoblessParents.map(item =>
                                 <div key={item?.['id']}>
-                                    <Button variant={selectedJoblessParent === item?.['id'] ? `default` : `ghost`}
+                                    <Button variant={selectedJoblessParent === item?.['id'] ? `default` : `outline`}
                                             className={`rounded-full`}
                                             onClick={() => setSelectedJoblessParent(item?.['id'])}>
                                         <div className="flex items-center space-x-2">

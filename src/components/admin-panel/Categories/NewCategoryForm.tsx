@@ -21,6 +21,7 @@ import useAdminStore from "@/store/adminStore";
 import {useAdminPanelRoutes} from "@/app/api/admin-panel/routes";
 import {useMutation} from "@tanstack/react-query";
 import {Loader2} from "lucide-react";
+import {IconPicker} from "@/components/ui/icon-picker";
 
 
 
@@ -93,6 +94,11 @@ export function NewCategoryForm({closeDialog}) {
         mutateNewCategory.mutate(data)
         console.log("Form submitted:");
         console.log(JSON.stringify(data, null, 2))
+    }
+
+    const handleIconSelect = (iconName: string) => {
+        console.log(`Selected icon: ${iconName}`);
+        form.setValue('icon_name', iconName)
     };
 
     return (
@@ -148,11 +154,13 @@ export function NewCategoryForm({closeDialog}) {
                 <FormField
                     control={form.control}
                     name="icon_name"
-                    render={({field}) => (
-                        <FormItem>
+                    render={({}) => (
+                        <FormItem className={`col-span-2`}>
                             <FormLabel>نام آیکون</FormLabel>
                             <FormControl>
-                                <Input {...field} />
+                            <IconPicker
+                                onValueChange={handleIconSelect}
+                                searchPlaceholder={'جستجوی آیکون...'} />
                             </FormControl>
                             <FormDescription> با کلیک روی این لینک میتوانید لیست آیکون‌ها را ببینید و نام آیکون مورد نظر
                                 خود را اینجا وارد کنید</FormDescription>
