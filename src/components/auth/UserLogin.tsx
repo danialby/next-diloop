@@ -101,7 +101,7 @@ export default function UserLogin() {
                           <FormItem>
                             <FormLabel>شماره موبایل</FormLabel>
                             <FormControl>
-                              <Input placeholder="09123456789" {...field}
+                              <Input data-testid='mobile-input' placeholder="09123456789" {...field}
                                      className={`rounded-xl font-outfit tracking-[2px] h-10 mt-1`}
                               />
                             </FormControl>
@@ -114,7 +114,7 @@ export default function UserLogin() {
                           </FormItem>
                       )}
                   />
-                    <Button type="submit" disabled={mutateLogin?.isPending}  className="w-full rounded-xl h-10" >
+                    <Button type="submit" data-testid="login-btn" disabled={mutateLogin?.isPending}  className="w-full rounded-xl h-10" >
                         {mutateLogin.isPending && <Loader2 />}
                         ورود
                     </Button>
