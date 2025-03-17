@@ -8,6 +8,7 @@ import {Button} from "@/components/ui/button";
 import NewCategoryDialog from "@/components/admin-panel/Categories/NewCategoryDialog";
 import { DetailsCard } from "@/components/admin-panel/Categories/DetailsCard";
 import {MainCategoryMenuBar} from "@/components/admin-panel/MainCategoryMenuBar";
+import {IconRenderer} from "@/components/ui/icon-picker";
 
 export default function CategoriesPanel() {
     const {getCategoriesList} = useAdminPanelRoutes();
@@ -70,6 +71,7 @@ export default function CategoriesPanel() {
                                     <Button variant={selectedJoblessParent === item?.['id'] ? `default` : `outline`}
                                             className={`rounded-full`}
                                             onClick={() => setSelectedJoblessParent(item?.['id'])}>
+                                        <IconRenderer name={item?.['icon_name']} />
                                         <div className="flex items-center space-x-2">
                                             {item?.['name_fa']}
                                         </div>
