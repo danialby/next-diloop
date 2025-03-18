@@ -40,13 +40,13 @@ function AddSubCategoryDialog({category}) {
 
                                 </DialogTitle>
                             </DialogHeader>
-                            <AddSubCategoryForm closeDialog={() => setIsOpen(false)} category_id={category?.id}/>
+                            <AddSubCategoryForm closeDialog={() => setIsOpen(false)} category={category}/>
                         </DialogContent>
                     </DialogOverlay>
                 </DialogPortal>
             </Dialog>
         </>
     );
-};
+}
 
 export default AddSubCategoryDialog;

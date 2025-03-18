@@ -19,28 +19,15 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import { useState } from "react"
-
-export interface ParentItem {
-    id: string
-    name_fa: string
-}
-
-export interface ParentsComboBoxProps {
-    data: ParentItem[]
-    field?: {
-        value?: string // Changed back to single value
-    }
-    onSelect?: (value: string) => void
-}
+import {useState} from "react"
 
 export function NewParentsComboBox({ data, field, onSelect }) {
     const [open, setOpen] = useState(false)
-    const [selectedValue, setSelectedValue] = useState(field.value || '')
+    const [selectedValue, setSelectedValue] = useState(data.filter(item => item?.id === field)[0])
 
     const handleSelect = (value: object) => {
         setSelectedValue(value)
-        onSelect?.(value)
+        onSelect(value)
         setOpen(false)
     }
 
@@ -84,7 +71,7 @@ export function NewParentsComboBox({ data, field, onSelect }) {
                                         onSelect={() => handleSelect(item)}
                                     >
                                         {item.name_fa}
-                                        {selectedValue === item.id && <Check className="ml-auto"/>}
+                                        {selectedValue?.id === item.id && <Check className="ml-auto"/>}
                                     </CommandItem>
                                 ))}
                             </CommandGroup>
