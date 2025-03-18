@@ -9,18 +9,22 @@ import {
     DialogHeader,
     DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog"
-import {Grid2X2Plus, Plus, XIcon} from "lucide-react";
-import {AddSubCategoryForm} from "@/components/admin-panel/Categories/AddSubCategoryForm";
+import {Plus, XIcon} from "lucide-react";
+import {NewCategoryForm} from "@/components/admin-panel/Categories/NewCategory/NewCategoryForm";
+import useAdminStore from "@/store/adminStore";
 
 
-function AddSubCategoryDialog({category}) {
+function NewCategoryDialog() {
+    const {selectedMainCategory} = useAdminStore()
     const [isOpen, setIsOpen] = useState(false)
     return (
         <>
             <Dialog open={isOpen}>
                 <DialogTrigger asChild>
-                    <Button onClick={() => setIsOpen(true)} size={`icon`} className={`rounded-full`}>
-                        <Grid2X2Plus />
+                    <Button onClick={() => setIsOpen(true)}
+                            className={`!rounded-full !p-3 !shadow-md transition transition-all shadow-gray-400 bg-cyan-700 hover:bg-cyan-600`}>
+                            <Plus />                        ایجاد دسته بندی جدید در
+                        <span className={`font-bold text-orange-300`}>{selectedMainCategory?.title}</span>
                     </Button>
                 </DialogTrigger>
                 <DialogPortal>
@@ -28,10 +32,10 @@ function AddSubCategoryDialog({category}) {
                         <DialogContent className="sm:max-w-[680px] font-vazir">
                             <DialogHeader>
                                 <DialogTitle>
-                                    <div className="flex items-center gap-2  text-sm -mt-2 mb-2 justify-between">
+                                    <div className="flex items-center gap-2 font-bold -mt-2 mb-2 justify-between">
                                         <div className="flex items-center gap-1.5">
-                                            <Plus className={`w-6 h-6`}/>
-                                            <span> افزودن زیرشاخه به دستبندی</span><span className={`text-base font-bold text-rose-500`}>{category?.name_fa}</span>
+                                            <Plus />                        ایجاد دسته بندی جدید در
+                                            <span className={`font-bold text-orange-300`}>{selectedMainCategory?.title}</span>
                                         </div>
                                         <Button type="button" variant="ghost" onClick={()=>setIsOpen(false)}>
                                             <XIcon />
@@ -40,7 +44,7 @@ function AddSubCategoryDialog({category}) {
 
                                 </DialogTitle>
                             </DialogHeader>
-                            <AddSubCategoryForm closeDialog={() => setIsOpen(false)} category={category}/>
+                            <NewCategoryForm closeDialog={() => setIsOpen(false)} />
                         </DialogContent>
                     </DialogOverlay>
                 </DialogPortal>
@@ -49,4 +53,4 @@ function AddSubCategoryDialog({category}) {
     );
 }
 
-export default AddSubCategoryDialog;
+export default NewCategoryDialog;

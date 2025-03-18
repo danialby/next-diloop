@@ -6,8 +6,8 @@ import {Button} from "@/components/ui/button";
 import {ArrowUpDown} from "lucide-react";
 import {toPersianDate, toPersianTime} from "@/utils/dateUtils";
 import ViewCategoryDialog from "@/components/admin-panel/Categories/ViewCategoryDialog";
-import UpdateCategoryDialog from "@/components/admin-panel/Categories/UpdateCategoryDialog";
-import DeleteCategoryDialog from "@/components/admin-panel/Categories/DeleteCategoryDialog";
+import UpdateCategoryDialog from "@/components/admin-panel/Categories/UpdateCategory/UpdateCategoryDialog";
+import DeleteCategoryDialog from "@/components/admin-panel/Categories/DeleteCategory/DeleteCategoryDialog";
 import LoadingIndicator from "@/components/ui/loading";
 
 export type CategoryRow = {

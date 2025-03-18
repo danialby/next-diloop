@@ -5,7 +5,7 @@ import {useMutation} from "@tanstack/react-query";
 import CategoryForm from "@/components/admin-panel/Categories/CategoryForm";
 import useAdminStore from "@/store/adminStore";
 import {Button} from "@/components/ui/button";
-import NewCategoryDialog from "@/components/admin-panel/Categories/NewCategoryDialog";
+import NewCategoryDialog from "@/components/admin-panel/Categories/NewCategory/NewCategoryDialog";
 import { DetailsCard } from "@/components/admin-panel/Categories/DetailsCard";
 import {MainCategoryMenuBar} from "@/components/admin-panel/MainCategoryMenuBar";
 

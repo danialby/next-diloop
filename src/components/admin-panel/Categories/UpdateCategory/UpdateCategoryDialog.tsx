@@ -9,7 +9,7 @@ import {
     DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog"
 import {Pencil, XIcon, ListXIcon} from "lucide-react";
-import {UpdateCategoryForm} from "@/components/admin-panel/Categories/UpdateCategoryForm";
+import {UpdateCategoryForm} from "@/components/admin-panel/Categories/UpdateCategory/UpdateCategoryForm";
 
 
 function TestCategoryDialog({category}) {

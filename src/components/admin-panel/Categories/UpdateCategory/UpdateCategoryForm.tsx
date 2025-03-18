@@ -21,7 +21,7 @@ import useAdminStore from "@/store/adminStore";
 import {useAdminPanelRoutes} from "@/app/api/admin-panel/routes";
 import {useMutation} from "@tanstack/react-query";
 import {Loader2} from "lucide-react";
-import {NewParentsComboBox} from "@/components/admin-panel/Categories/NewParentsComboBox";
+import {ParentsComboBox} from "@/components/admin-panel/Categories/ParentsComboBox";
 import {ImageUploader} from "@/components/ui/image-uploader";
 
 
@@ -159,7 +159,7 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
                             <FormItem>
                                 <FormLabel>دسته بندی والد</FormLabel>
                                 <FormControl>
-                                        <NewParentsComboBox data={JoblessParents} field={category?.parent_id} onSelect={(value) => form.setValue("parent_id", value?.id)}/>
+                                        <ParentsComboBox data={JoblessParents} field={category?.parent_id} onSelect={(value) => form.setValue("parent_id", value?.id)}/>
                                 </FormControl>
                             </FormItem>
                                 }
@@ -167,7 +167,7 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
                                 <FormItem>
                                     <FormLabel>دسته بندی والد</FormLabel>
                                 <FormControl>
-                                        <NewParentsComboBox data={EmployeeParents} field={category?.parent_id} onSelect={(value) => form.setValue("parent_id", value?.id)}/>
+                                        <ParentsComboBox data={EmployeeParents} field={category?.parent_id} onSelect={(value) => form.setValue("parent_id", value?.id)}/>
                                 </FormControl>
                                 </FormItem>
                             }

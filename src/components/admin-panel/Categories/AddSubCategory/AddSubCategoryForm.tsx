@@ -142,23 +142,6 @@ export function AddSubCategoryForm({closeDialog, category}: AddCategoryFormProps
                         </FormItem>
                     )}
                 />
-                {/*<FormField*/}
-                {/*    control={form.control}*/}
-                {/*    name="parent_id"*/}
-                {/*    render={({field}) => (*/}
-                {/*        <div className={'col-span-2 w-full gap-x-3'}>*/}
-                {/*            <FormItem>*/}
-                {/*                <FormLabel>دسته بندی والد</FormLabel>*/}
-                {/*                <FormControl>*/}
-
-                {/*                    <NewParentsComboBox data={parents} field={field}*/}
-                {/*                                     onSelect={(value) => form.setValue("parent_id", value?.id)}/>*/}
-
-                {/*                </FormControl>*/}
-                {/*            </FormItem>*/}
-                {/*        </div>*/}
-                {/*    )}*/}
-                {/*/>*/}
                 <FormField
                     control={form.control}
                     name="poster_image"
