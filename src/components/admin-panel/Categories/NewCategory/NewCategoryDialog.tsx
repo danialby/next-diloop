@@ -22,7 +22,7 @@ function NewCategoryDialog() {
             <Dialog open={isOpen}>
                 <DialogTrigger asChild>
                     <Button onClick={() => setIsOpen(true)}
-                            className={`!rounded-full !p-3 !shadow-md transition transition-all shadow-gray-400 bg-cyan-700 hover:bg-cyan-600`}>
+                            className={`!rounded-full !p-3 !shadow-md transition transition-all shadow-gray-400 bg-cyan-700 hover:bg-cyan-600 !text-white`}>
                             <Plus />                        ایجاد دسته بندی جدید در
                         <span className={`font-bold text-orange-300`}>{selectedMainCategory?.title}</span>
                     </Button>
