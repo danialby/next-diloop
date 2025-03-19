@@ -14,7 +14,7 @@ export function DetailsCard({data}) {
             <span className={`font-bold`}>یک دسته بندی را انتخاب کنید...</span>
         </div>
         }
-        <div className={`w-full border-b-1 justify-center py-2 md:py-3 px-4 flex gap-2 bg-cyan-800 dark:bg-cyan-800`}>
+        <div className={`w-full border-b-1 justify-center py-2 md:py-3 px-4 flex gap-2 bg-cyan-800 dark:bg-cyan-800 ${!data && '!bg-gray-200'}`}>
             <AddSubCategoryDialog category={data}/>
             <UpdateCategoryDialog category={data}/>
             <DeleteCategoryDialog category={data}/>

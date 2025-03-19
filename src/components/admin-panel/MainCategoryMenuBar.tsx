@@ -5,7 +5,7 @@ type MainCategory = {
 }
 
 export function MainCategoryMenuBar() {
-    const { selectedMainCategory, setSelectedMainCategory } = useAdminStore()
+    const { selectedMainCategory,setSelectedMainCategory } = useAdminStore()
     const handleSelectMainCategory = (selectedMainCategory: MainCategory) => {
         setSelectedMainCategory(selectedMainCategory)
     }

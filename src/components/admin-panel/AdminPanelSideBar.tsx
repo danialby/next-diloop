@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "@/context/SidebarContext";
-import {ChevronDown, Grid2X2Icon, TagIcon, UsersIcon} from "lucide-react";
+import {Book, ChevronDown, Grid2X2Icon, TagIcon, UsersIcon} from "lucide-react";
 
 type NavItem = {
     name: string;
@@ -29,6 +29,11 @@ const AdminPanelNavItems: NavItem[] = [
         icon: <TagIcon />,
         name: "مدیریت دسته بندی ها",
         path: "/admin-panel/categories",
+    },
+    {
+        icon: <Book />,
+        name: "مدیریت کتاب ها",
+        path: "/admin-panel/books",
     },
 ];
 
