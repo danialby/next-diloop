@@ -5,7 +5,7 @@ import {useMutation} from "@tanstack/react-query";
 import CategoryForm from "@/components/admin-panel/Categories/CategoryForm";
 import useAdminStore from "@/store/adminStore";
 import {Button} from "@/components/ui/button";
-import NewCategoryDialog from "@/components/admin-panel/Categories/NewCategoryDialog";
+import NewCategoryDialog from "@/components/admin-panel/Categories/NewCategory/NewCategoryDialog";
 import { DetailsCard } from "@/components/admin-panel/Categories/DetailsCard";
 import {MainCategoryMenuBar} from "@/components/admin-panel/MainCategoryMenuBar";
 import {IconRenderer} from "@/components/ui/icon-picker";
@@ -54,7 +54,7 @@ export default function CategoriesPanel() {
 
     if (error) return <div>Error: {error.message}</div>;
             return (
-                <div className={` font-vazir`}>
+                <div className={`font-vazir`}>
                     <div className={`flex items-center justify-center w-full `}>
                     <div className={`w-[320px] dir-ltr space-y-4`}>
                         <MainCategoryMenuBar />
@@ -64,7 +64,7 @@ export default function CategoriesPanel() {
                         <NewCategoryDialog />
                         <hr/>
                     </div>
-                    <div className={`py-2 md:grid grid-cols-4 font-vazir text-sm gap-x-8`}>
+                    <div className={`my-2 md:grid grid-cols-4 font-vazir text-sm gap-x-8`}>
                         <div className={`grid grid-cols-2 xl:grid-cols-3 md:gap-2 col-span-2 py-4`}>
                             {selectedMainCategory.id === 1 && JoblessParents.map(item =>
                                 <div key={item?.['id']}>
@@ -104,7 +104,7 @@ export default function CategoriesPanel() {
                         }
                     </div>
                     <div
-                        className="relative h-full rounded-lg border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03] font-vazir">
+                        className="relative h-full rounded-lg border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03] font-vazir  shadow shadow-lg">
                         {selectedMainCategory?.id === 1
                             ?
                             (<CategoryForm data={selectedJoblessParentList} tag={`بیکار`} isLoading={isPending}/>)

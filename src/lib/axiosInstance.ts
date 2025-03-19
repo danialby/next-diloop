@@ -18,7 +18,10 @@ useAxios.interceptors.request.use(
         if (config.headers["Content-Type"] === "multipart/form-data") {
             // Set the Content-Type header to multipart/form-data
             config.headers["Content-Type"] = "multipart/form-data";
-        } else {
+        } else if(config.headers["Content-Type"] === "application/x-www-form-urlencoded") {
+            config.headers["Content-Type"] = "application/x-www-form-urlencoded";
+        }
+        else {
             config.headers["Content-Type"] = "application/json";
         }
         return config;

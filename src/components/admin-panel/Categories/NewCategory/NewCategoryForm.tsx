@@ -188,7 +188,7 @@ export function NewCategoryForm({closeDialog}) {
                         <div className={`space-x-2`}>
                             <span className={`font-bold`}>خطای سرور :</span>
                             <span className={`text-xs`}>{apiError?.['response']?.data.message}</span><br/>
-                            <span className={`text-xs`}>{apiError?.['response']?.data.errors}</span>
+                            <span className={`text-xs`}>{JSON.stringify(apiError?.['response']?.data.errors)}</span>
                         </div>
                     </FormMessage>
                     }

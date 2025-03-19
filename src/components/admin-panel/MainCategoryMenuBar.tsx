@@ -5,7 +5,7 @@ type MainCategory = {
 }
 
 export function MainCategoryMenuBar() {
-    const { selectedMainCategory, setSelectedMainCategory } = useAdminStore()
+    const { selectedMainCategory,setSelectedMainCategory } = useAdminStore()
     const handleSelectMainCategory = (selectedMainCategory: MainCategory) => {
         setSelectedMainCategory(selectedMainCategory)
     }
@@ -18,12 +18,12 @@ export function MainCategoryMenuBar() {
             <div className={`flex items-center justify-center my-0 w-1/2 rounded-none text-center cursor-pointer`}
                  onClick={() => handleSelectMainCategory({id: 2, title: 'شاغل'})}>
                 <span
-                    className={`${selectedMainCategory?.id === 2 && 'transition-color text-xl duration-300 font-black text-white'}`}>شاغل</span>
+                    className={`dark:text-black ${selectedMainCategory?.id === 2 && 'transition-color text-xl duration-300 font-black text-white dark:text-white '}`}>شاغل</span>
             </div>
             <div className={`flex items-center justify-center my-0 w-1/2 rounded-none text-center cursor-pointer`}
                  onClick={() => handleSelectMainCategory({id: 1, title: 'بیکار'})}>
                 <span
-                    className={`${selectedMainCategory?.id === 1 && 'transition-color text-xl duration-300 font-black text-white'}`}>بیکار</span>
+                    className={`dark:text-black ${selectedMainCategory?.id === 1 && 'transition-color text-xl duration-300 font-black text-white dark:text-white '}`}>بیکار</span>
             </div>
         </div>
     )

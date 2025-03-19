@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -17,12 +16,11 @@ import {
 import { Input } from "@/components/ui/input"
 import {Textarea} from "@/components/ui/textarea";
 import React, {useState} from "react";
-// import {ParentsComboBox} from "@/components/admin-panel/Categories/ParentsComboBox";
 import useAdminStore from "@/store/adminStore";
 import {useAdminPanelRoutes} from "@/app/api/admin-panel/routes";
 import {useMutation} from "@tanstack/react-query";
 import {Loader2} from "lucide-react";
-// import {NewParentsComboBox} from "@/components/admin-panel/Categories/NewParentsComboBox";
+import {ImageUploader} from "@/components/ui/image-uploader";
 
 
 
@@ -41,9 +39,23 @@ const FormSchema = z.object({
     poster_image: z.any(),
 })
 
+interface category {
+    name_fa: string,
+    name_en: string,
+    parent_id: number,
+    icon_name: string | undefined,
+    description: string | undefined,
+    is_active: number,
+    tags: [],
+    poster_image: File | string,
+}
 
+type AddCategoryFormProps = {
+    closeDialog: () => void;
+    category?: category | undefined;
+}
 
-export function AddSubCategoryForm({closeDialog, category_id}) {
+export function AddSubCategoryForm({closeDialog, category}: AddCategoryFormProps) {
     const { addNewCategory } = useAdminPanelRoutes();
     const { addStoreCategory } = useAdminStore()
     const [apiError, setApiError] = useState<Error | null>(null);
@@ -52,11 +64,11 @@ export function AddSubCategoryForm({closeDialog, category_id}) {
         defaultValues: {
             name_fa: '',
             name_en: '',
-            parent_id: '',
+            parent_id: category?.['id'],
             icon_name: '',
             description: '',
             is_active: 1,
-            tags: null,
+            tags: category?.tags,
             poster_image: null,
         },
     })
@@ -72,9 +84,9 @@ export function AddSubCategoryForm({closeDialog, category_id}) {
                     name_fa:data?.['name_fa'],
                     description:data?.['description'],
                     is_active: 1,
-                    parent_id: category_id,
-                    tags: null,
-                    poster_image:null
+                    parent_id: data?.['parent_id'],
+                    tags: category?.tags,
+                    poster_image:data?.['poster_image']
                 }),
             onSuccess: (response ) => {
                 // send code to number
@@ -85,8 +97,8 @@ export function AddSubCategoryForm({closeDialog, category_id}) {
                 closeDialog()
             },
             onError: (error) => {
-                console.log(error)
                 setApiError(error)
+                console.log(error)
             }
         })
 
@@ -130,36 +142,15 @@ export function AddSubCategoryForm({closeDialog, category_id}) {
                         </FormItem>
                     )}
                 />
-                {/*<FormField*/}
-                {/*    control={form.control}*/}
-                {/*    name="parent_id"*/}
-                {/*    render={({field}) => (*/}
-                {/*        <div className={'col-span-2 w-full gap-x-3'}>*/}
-                {/*            <FormItem>*/}
-                {/*                <FormLabel>دسته بندی والد</FormLabel>*/}
-                {/*                <FormControl>*/}
-
-                {/*                    <NewParentsComboBox data={parents} field={field}*/}
-                {/*                                     onSelect={(value) => form.setValue("parent_id", value?.id)}/>*/}
-
-                {/*                </FormControl>*/}
-                {/*            </FormItem>*/}
-                {/*        </div>*/}
-                {/*    )}*/}
-                {/*/>*/}
-
                 <FormField
                     control={form.control}
-                    name="icon_name"
-                    render={({field}) => (
-                        <FormItem>
-                            <FormLabel>نام آیکون</FormLabel>
+                    name="poster_image"
+                    render={() => (
+                        <FormItem className={`col-span-2`}>
+                            <FormLabel>تصویر</FormLabel>
                             <FormControl>
-                                <Input {...field} />
+                                <ImageUploader onSelectImage={(value) => form.setValue("poster_image", value)} />
                             </FormControl>
-                            <FormDescription> با کلیک روی این لینک میتوانید لیست آیکون‌ها را ببینید و نام آیکون مورد نظر
-                                خود را اینجا وارد کنید</FormDescription>
-                            <FormMessage className={`text-xs`} />
                         </FormItem>
                     )}
                 />
@@ -180,11 +171,11 @@ export function AddSubCategoryForm({closeDialog, category_id}) {
                         {mutateNewCategory.isPending && <Loader2 className="animate-spin" />}
                         تایید</Button>
                     {apiError && <FormMessage>
-                        <div className={`space-x-2`}>
+                        <span className={`space-x-2`}>
                             <span className={`font-bold`}>خطای سرور :</span>
-                            <span className={`text-xs`}>{apiError?.['response']?.data.message}</span><br/>
-                            <span className={`text-xs`}>{apiError?.['response']?.data.errors}</span>
-                        </div>
+                            <span className={`text-xs`}>{apiError?.['response']?.data?.message}</span><br/>
+                            <span className={`text-xs`}>{JSON.stringify(apiError?.['response']?.data?.errors)}</span>
+                        </span>
                     </FormMessage>
                     }
                 </div>

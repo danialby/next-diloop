@@ -1,7 +1,7 @@
 import axiosInstance from '@/lib/axiosInstance';
 
 const useAxios = () => {
-    const get = async <T>(url: string, _data?: object | never, config?: never): Promise<T> => {
+    const get = async <T>(url: string, _data?: object | never, config?: object | never): Promise<T> => {
         try {
             const response = await axiosInstance.get<T>(url, config);
             return response.data;
@@ -10,18 +10,18 @@ const useAxios = () => {
         }
     };
 
-    const post = async <T>(url: string, data?: object | never, config?: never): Promise<T> => {
+    const post = async <T>(url: string, data?: object | never, config?: object | never): Promise<T> => {
         try {
             const response = await axiosInstance.post<T>(url, data, config);
             // console.log(response);
-            
+
             return response.data;
         } catch (error) {
             throw error;
         }
     };
 
-    const put = async <T>(url: string, data?: object | never, config?: never): Promise<T> => {
+    const put = async <T>(url: string, data?: object | never, config?: object | never): Promise<T> => {
         try {
             const response = await axiosInstance.put<T>(url, data, config);
             return response.data;
@@ -30,7 +30,7 @@ const useAxios = () => {
         }
     };
 
-    const _delete = async <T>(url: string, data?: object | never, config?: never): Promise<T> => {
+    const _delete = async <T>(url: string, data?: object | never, config?: object | never): Promise<T> => {
         try {
             const response = await axiosInstance.delete<T>(url, config);
             return response.data;
