@@ -3,11 +3,11 @@
 import React from "react";
 import { useDropzone } from "react-dropzone";
 import { Input } from "@/components/ui/input";
-import { ImagePlus } from "lucide-react";
+import {ImagePlus, XCircleIcon} from "lucide-react";
 
 type ImageUploaderProps = {
     image?: File | string;
-    onSelectImage: (image: File) => void;
+    onSelectImage: (image: File | string) => void;
 }
 
 export const ImageUploader=({onSelectImage, image}:ImageUploaderProps) => {
@@ -35,19 +35,28 @@ export const ImageUploader=({onSelectImage, image}:ImageUploaderProps) => {
             accept: { "image/png": [], "image/jpg": [], "image/jpeg": [] },
         });
 
+    function clearImage(e: React.MouseEvent<SVGSVGElement, MouseEvent>) {
+        e.stopPropagation()
+        setPreview(null);
+        onSelectImage('')
+    }
     return (
         <div className={`flex flex-row items-center justify-start gap-3`}>
                                 <div
                                     {...getRootProps()}
-                                    className="flex cursor-pointer items-center justify-center gap-y-2 rounded-lg p-0.5 shadow-md shadow-foreground/20"
+                                    className="relative flex cursor-pointer items-center justify-center gap-y-2 rounded-lg p-0.5 shadow-md shadow-foreground/20"
                                 >
-                                    {(image || preview) && (
+                                    {(preview || image) && (
                                         <img
-                                            src={image as string || preview as string}
+                                            src={preview as string || image as string }
                                             alt="Uploaded image"
                                             className="max-h-[150px] rounded-lg"
                                         />
                                     )}
+                                    {(preview || image)  &&
+                                        <XCircleIcon className={`bg-white rounded-full text-rose-500 absolute top-2 left-1`}
+                                    onClick={clearImage}/>
+                                    }
                                     {/*{(image && !preview) && (*/}
                                     {/*    <img*/}
                                     {/*        src={image as string}*/}

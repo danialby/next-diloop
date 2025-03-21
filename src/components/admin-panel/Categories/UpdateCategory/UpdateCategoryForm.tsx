@@ -41,7 +41,7 @@ const FormSchema = z.object({
     tags: z.any(),
     poster_image: z.any(),
 })
-interface category {
+interface Category {
     id: number,
     name_fa: string,
     name_en: string,
@@ -55,24 +55,25 @@ interface category {
 
 type UpdateCategoryFormProps = {
     closeDialog: () => void;
-    category?: category;
+    category: Category;
 }
 
 export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormProps) {
     const { updateCategory } = useAdminPanelRoutes();
+    const [currentCategory, setCurrentCategory] = useState<Category>(category)
     const { selectedMainCategory, categories_data, updateStoreCategory } = useAdminStore()
     const [apiError, setApiError] = useState<Error | null>(null);
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
         defaultValues: {
-            name_fa: category?.name_fa,
-            name_en: category?.name_en,
-            parent_id: category?.parent_id,
-            settings: category?.settings && category?.settings[0]?.['icon_name'],
-            description: category?.description || '',
+            name_fa: currentCategory?.name_fa,
+            name_en: currentCategory?.name_en,
+            parent_id: currentCategory?.parent_id,
+            settings: currentCategory?.settings && currentCategory?.settings[0]?.['icon_name'],
+            description: currentCategory?.description || '',
             is_active: 1,
-            tags: category?.tags,
-            poster_image: category?.poster_image || '',
+            tags: currentCategory?.tags,
+            poster_image: currentCategory?.poster_image || '',
         },
     })
 
@@ -83,14 +84,14 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
         {
             mutationFn: (data: object) => updateCategory(
                 {
-                    id: category?.id,
+                    id: currentCategory?.id,
                     name_en: data?.['name_en'],
                     name_fa: data?.['name_fa'],
                     description: data?.['description'],
                     is_active: 1,
                     parent_id: data?.['parent_id'],
-                    tags: category?.tags,
-                    poster_image: category?.poster_image || data?.['poster_image'],
+                    tags: currentCategory?.tags,
+                    poster_image: currentCategory?.poster_image ,
                     settings: data?.['settings'],
                 }),
             onSuccess: (response ) => {
@@ -110,6 +111,12 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
     const handleIconSelect = (icon_name: string) => {
         console.log(`Selected icon: ${icon_name}`);
         form.setValue('settings', [{ icon_name: icon_name }])
+    };
+    const handleImageSelect = (image: File | string) => {
+        console.log(`Selected image: ${image}`);
+        setCurrentCategory(prevState => ({
+            ...prevState, poster_image: image}))
+        form.setValue('poster_image', image)
     };
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -165,7 +172,7 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
                             <FormItem>
                                 <FormLabel>دسته بندی والد</FormLabel>
                                 <FormControl>
-                                        <ParentsComboBox data={JoblessParents} field={category?.parent_id} onSelect={(value) => form.setValue("parent_id", value?.id)}/>
+                                        <ParentsComboBox data={JoblessParents} field={currentCategory?.parent_id} onSelect={(value) => form.setValue("parent_id", value?.id)}/>
                                 </FormControl>
                             </FormItem>
                                 }
@@ -173,7 +180,7 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
                                 <FormItem>
                                     <FormLabel>دسته بندی والد</FormLabel>
                                 <FormControl>
-                                        <ParentsComboBox data={EmployeeParents} field={category?.parent_id} onSelect={(value) => form.setValue("parent_id", value?.id)}/>
+                                        <ParentsComboBox data={EmployeeParents} field={currentCategory?.parent_id} onSelect={(value) => form.setValue("parent_id", value?.id)}/>
                                 </FormControl>
                                 </FormItem>
                             }
@@ -186,11 +193,11 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
                         <FormField
                             control={form.control}
                             name="poster_image"
-                            render={() => (
-                                <FormItem className={`col-span-2 pointer-events-none`}>
+                            render={({field}) => (
+                                <FormItem className={`col-span-2`}>
                                     <FormLabel>تصویر</FormLabel>
                                     <FormControl >
-                                        <ImageUploader image={category?.poster_image} onSelectImage={(value) => form.setValue("poster_image", value)} />
+                                        <ImageUploader image={field.value || currentCategory?.poster_image} onSelectImage={handleImageSelect} />
                                     </FormControl>
                                 </FormItem>
                             )}

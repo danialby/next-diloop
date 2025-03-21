@@ -89,7 +89,7 @@ function ViewCategoryDialog({category}) {
                             <div className={`flex flex-col gap-2 rounded-lg bg-gray-200 p-2`}>
                                 <span className={`flex text-nowrap font-semibold`}> تصویر :</span>
                                 { category?.poster_image ? ( <img className={`max-h-40 rounded-lg`} src={category?.poster_image}  alt={''} /> )
-                                    : (<span>آیکون ندارد</span>)
+                                    : (<span>تصویر ندارد</span>)
                                 }
                             </div>
                         </div>

@@ -37,6 +37,7 @@ const FormSchema = z.object({
     is_active: z.any(),
     tags: z.any(),
     poster_image: z.any(),
+    settings: z.any()
 })
 
 interface category {
@@ -48,6 +49,7 @@ interface category {
     is_active: number,
     tags: [],
     poster_image: File | string,
+
 }
 
 type AddCategoryFormProps = {
@@ -67,6 +69,7 @@ export function AddSubCategoryForm({closeDialog, category}: AddCategoryFormProps
             parent_id: category?.['id'],
             icon_name: '',
             description: '',
+            settings: {},
             is_active: 1,
             tags: category?.tags,
             poster_image: null,
@@ -86,7 +89,8 @@ export function AddSubCategoryForm({closeDialog, category}: AddCategoryFormProps
                     is_active: 1,
                     parent_id: data?.['parent_id'],
                     tags: category?.tags,
-                    poster_image:data?.['poster_image']
+                    poster_image:data?.['poster_image'],
+                    settings: {},
                 }),
             onSuccess: (response ) => {
                 // send code to number
