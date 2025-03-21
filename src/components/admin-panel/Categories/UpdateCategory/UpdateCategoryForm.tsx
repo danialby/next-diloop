@@ -23,6 +23,7 @@ import {useMutation} from "@tanstack/react-query";
 import {Loader2} from "lucide-react";
 import {ParentsComboBox} from "@/components/admin-panel/Categories/ParentsComboBox";
 import {ImageUploader} from "@/components/ui/image-uploader";
+import {IconPicker} from "@/components/ui/icon-picker";
 
 
 
@@ -34,7 +35,7 @@ const FormSchema = z.object({
         message: "نام انگلیسی حداقل باید ۲ کاراکتر باشد",
     }),
     parent_id: z.any(),
-    icon_name: z.any(),
+    settings: z.any(),
     description: z.any(),
     is_active: z.any(),
     tags: z.any(),
@@ -45,7 +46,7 @@ interface category {
     name_fa: string,
     name_en: string,
     parent_id: number | undefined,
-    icon_name: string | undefined,
+    settings: Array<object> | null,
     description: string | undefined,
     is_active: number,
     tags: [],
@@ -67,7 +68,7 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
             name_fa: category?.name_fa,
             name_en: category?.name_en,
             parent_id: category?.parent_id,
-            icon_name: category?.icon_name,
+            settings: category?.settings && category?.settings[0]?.['icon_name'],
             description: category?.description || '',
             is_active: 1,
             tags: category?.tags,
@@ -83,13 +84,14 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
             mutationFn: (data: object) => updateCategory(
                 {
                     id: category?.id,
-                    name_en:data?.['name_en'],
-                    name_fa:data?.['name_fa'],
-                    description:data?.['description'],
+                    name_en: data?.['name_en'],
+                    name_fa: data?.['name_fa'],
+                    description: data?.['description'],
                     is_active: 1,
                     parent_id: data?.['parent_id'],
                     tags: category?.tags,
-                    poster_image: category?.poster_image || data?.['poster_image']
+                    poster_image: category?.poster_image || data?.['poster_image'],
+                    settings: data?.['settings'],
                 }),
             onSuccess: (response ) => {
                 // send code to number
@@ -105,6 +107,10 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
             }
         })
 
+    const handleIconSelect = (icon_name: string) => {
+        console.log(`Selected icon: ${icon_name}`);
+        form.setValue('settings', [{ icon_name: icon_name }])
+    };
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
         mutateUpdateCategory.mutate(data)
@@ -194,15 +200,17 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
                     :
                     ( <FormField
                         control={form.control}
-                        name="icon_name"
+                        name="settings"
                         render={({field}) => (
                             <FormItem>
                                 <FormLabel>نام آیکون</FormLabel>
                                 <FormControl>
-                                    <Input {...field} />
+                                    <IconPicker defaultValue={category?.settings?.[0]?.['icon_name']}
+                                                onValueChange={handleIconSelect}
+                                                categorized={false}
+                                                searchPlaceholder={'جستجوی نام آیکون'}
+                                                triggerPlaceholder={'انتخاب آیکون...'}/>
                                 </FormControl>
-                                <FormDescription> با کلیک روی این لینک میتوانید لیست آیکون‌ها را ببینید و نام آیکون مورد نظر
-                                    خود را اینجا وارد کنید</FormDescription>
                                 <FormMessage/>
                             </FormItem>
                         )}

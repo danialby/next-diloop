@@ -4,6 +4,7 @@ import UpdateCategoryDialog from "@/components/admin-panel/Categories/UpdateCate
 import DeleteCategoryDialog from "@/components/admin-panel/Categories/DeleteCategory/DeleteCategoryDialog";
 import {AlignRight, Aperture, CalendarCheck2, SpellCheck, Type} from "lucide-react";
 import {toPersianDate, toPersianTime} from "@/utils/dateUtils";
+import {IconRenderer} from "@/components/ui/icon-picker";
 
 
 export function DetailsCard({data}) {
@@ -53,11 +54,17 @@ export function DetailsCard({data}) {
                             </span>
             </div>
             <hr className={`dark:border-secondary-foreground`}/>
-            <div className={`flex flex-col items-center col-span-1`}>
-                <div className={`flex gap-2`}>
-                                        <span className={`flex text-nowrap font-semibold`}> <Aperture
-                                            className={`w-6 h-6 ml-2`}/>آیکون :</span>
-                    <span className={` text-nowrap`}>{data?.['icon_name'] || 'آیکون ندارد'}</span>
+            <div className={`flex flex-col col-span-1`}>
+                <div className={`flex gap-2 items-center `}>
+                                        <span className={`flex text-nowrap font-semibold`}>آیکون :</span>
+                    <span className={` text-nowrap`}>
+                        { data?.settings && data?.settings[0]?.['icon_name'] ?
+                            <div className={`p-2 rounded-lg bg-blue-600 text-white`}>
+                                <IconRenderer name={data?.settings[0]?.['icon_name']} />
+                            </div>
+                            :
+                            'آیکون ندارد'}
+                    </span>
                 </div>
             </div>
         </div>

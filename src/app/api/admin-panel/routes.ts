@@ -13,7 +13,7 @@ export function useAdminPanelRoutes() {
         return await axiosInstance.get('/admin/api/v1/skill-teach/category', {});
     }
 
-    const addNewCategory = async ({name_en, name_fa, description, is_active, parent_id, tags, poster_image}) => {
+    const addNewCategory = async ({name_en, name_fa, description, is_active, parent_id, tags, poster_image, settings}) => {
         const formData = new FormData();
         formData.append('name_en', name_en);
         formData.append('name_fa', name_fa);
@@ -21,6 +21,7 @@ export function useAdminPanelRoutes() {
         formData.append('is_active', is_active);
         formData.append('parent_id', parent_id);
         formData.append('tags[]', tags);
+        formData.append('settings', JSON.stringify(settings));
 
         if (poster_image) {
             // Ensure proper file handling
@@ -38,9 +39,9 @@ export function useAdminPanelRoutes() {
         });
     }
 
-    const updateCategory = async ({id, name_en, name_fa, description, is_active, parent_id, tags, poster_image}) => {
+    const updateCategory = async ({id, name_en, name_fa, description, is_active, parent_id, tags, poster_image, settings}) => {
         return await axiosInstance.put(`/admin/api/v1/skill-teach/category/${ id }`, {
-            name_en, name_fa, description, is_active, parent_id, tags, poster_image
+            name_en, name_fa, description, is_active, parent_id, tags, poster_image, settings
         });
     }
 

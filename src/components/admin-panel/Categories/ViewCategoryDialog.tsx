@@ -34,7 +34,7 @@ function ViewCategoryDialog({category}) {
                         <ReceiptText/>
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px] font-vazir">
+                <DialogContent className="sm:max-w-[550px] font-vazir">
                     <DialogHeader>
                         <DialogHeader>
                             <DialogTitle>
@@ -86,9 +86,11 @@ function ViewCategoryDialog({category}) {
                             </span>
                         </div>
                         <div className={`flex flex-col items-center col-span-1`}>
-                            <div className={`flex flex-col gap-2`}>
-                                <span className={`flex text-nowrap font-semibold`}> <Aperture className={`w-6 h-6 ml-2`}/>آیکون :</span>
-                                <span className={` text-nowrap`}>{category?.icon_name || 'آیکون ندارد'}</span>
+                            <div className={`flex flex-col gap-2 rounded-lg bg-gray-200 p-2`}>
+                                <span className={`flex text-nowrap font-semibold`}> تصویر :</span>
+                                { category?.poster_image ? ( <img className={`max-h-40 rounded-lg`} src={category?.poster_image}  alt={''} /> )
+                                    : (<span>آیکون ندارد</span>)
+                                }
                             </div>
                         </div>
                     </div>

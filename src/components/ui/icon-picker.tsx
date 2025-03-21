@@ -125,7 +125,7 @@ const IconPicker = React.forwardRef<
 
   const categorizedIcons = useMemo(() => {
     if (!categorized || search.trim() !== "") {
-      return [{ name: "All Icons", icons: filteredIcons }];
+      return [{ name: "همه آیکون ها", icons: filteredIcons }];
     }
 
     const categories = new Map<string, IconData[]>();
@@ -392,7 +392,7 @@ const IconPicker = React.forwardRef<
           </Button>
         )}
       </PopoverTrigger>
-      <PopoverContent className="w-64 p-2">
+      <PopoverContent className="w-64 p-2 font-vazir">
         {searchable && (
           <Input
             placeholder={searchPlaceholder}

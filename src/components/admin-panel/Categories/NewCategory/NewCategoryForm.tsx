@@ -38,6 +38,7 @@ const FormSchema = z.object({
     is_active: z.any(),
     tags: z.any(),
     poster_image: z.any(),
+    settings: z.any()
 })
 
 
@@ -52,6 +53,7 @@ export function NewCategoryForm({closeDialog}) {
             name_fa: '',
             name_en: '',
             parent_id: '',
+            settings: {},
             icon_name: '',
             description: '',
             is_active: 1,
@@ -71,6 +73,7 @@ export function NewCategoryForm({closeDialog}) {
                     name_fa:data?.['name_fa'],
                     description:data?.['description'],
                     is_active: 1,
+                    settings: data?.['settings'],
                     parent_id: data?.['parent_id'],
                     tags: selectedMainCategory?.id === 1 ? ['بیکار'] : ['شاغل'],
                     poster_image:null
@@ -96,9 +99,9 @@ export function NewCategoryForm({closeDialog}) {
         console.log(JSON.stringify(data, null, 2))
     }
 
-    const handleIconSelect = (iconName: string) => {
-        console.log(`Selected icon: ${iconName}`);
-        form.setValue('icon_name', iconName)
+    const handleIconSelect = (icon_name: string) => {
+        console.log(`Selected icon: ${icon_name}`);
+        form.setValue('settings', [{ icon_name: icon_name }])
     };
 
     return (
@@ -155,12 +158,14 @@ export function NewCategoryForm({closeDialog}) {
                     control={form.control}
                     name="icon_name"
                     render={({}) => (
-                        <FormItem className={`col-span-2`}>
+                        <FormItem className={`col-span-1`}>
                             <FormLabel>نام آیکون</FormLabel>
                             <FormControl>
                             <IconPicker
+                                searchPlaceholder={'جستجوی نام آیکون'}
+                                triggerPlaceholder={'انتخاب آیکون...'}
                                 onValueChange={handleIconSelect}
-                                searchPlaceholder={'جستجوی آیکون...'} />
+                                categorized={false}/>
                             </FormControl>
                             <FormDescription> با کلیک روی این لینک میتوانید لیست آیکون‌ها را ببینید و نام آیکون مورد نظر
                                 خود را اینجا وارد کنید</FormDescription>

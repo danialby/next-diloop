@@ -18,6 +18,8 @@ export type CategoryRow = {
     created_at: string
 }
 
+
+
 const columns: ColumnDef<CategoryRow>[] = [
     {
         accessorKey: "id",
@@ -34,14 +36,20 @@ const columns: ColumnDef<CategoryRow>[] = [
             )
         },
         cell: ({ row }) => (
-            <div className={'text-center'}>{row.getValue("id")}</div>
+            <div className={'text-right pr-4'}>{row.getValue("id")}</div>
         ),
     },
     {
-        accessorKey: "icon_name",
+        accessorKey: "poster_image",
         header: () => <div className="text-right">آیکون</div>,
         cell: ({ row }) => (
-            <div className="text-right">{row.getValue("icon_name") || 'ندارد'}</div>
+            <div className="text-right">
+                { row.getValue("poster_image") ?
+                    ( <img src={row.getValue("poster_image")} className={`h-14 rounded-lg`} alt={''} /> )
+                    :
+                    ( <span>تصویر ندارد</span> )
+                }
+            </div>
         ),
     },
     {
