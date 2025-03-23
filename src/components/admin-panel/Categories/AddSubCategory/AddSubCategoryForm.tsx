@@ -119,7 +119,7 @@ export function AddSubCategoryForm({closeDialog, category}: AddCategoryFormProps
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full gap-x-3 grid grid-cols-2 space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full gap-x-3 grid grid-cols-2 space-y-4">
                 <FormField
                     control={form.control}
                     name="name_fa"
@@ -165,7 +165,7 @@ export function AddSubCategoryForm({closeDialog, category}: AddCategoryFormProps
                         <FormItem className={`col-span-2`}>
                             <FormLabel>توضیحات</FormLabel>
                             <FormControl>
-                                <Textarea {...field} />
+                                <Textarea {...field} rows={5} className={`h-[150px] pb-[100px] overflow-y-scroll`} />
                             </FormControl>
                         </FormItem>
                     )}

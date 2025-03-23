@@ -134,7 +134,7 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full gap-x-3 grid grid-cols-2 space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full gap-x-3 grid grid-cols-2 space-y-4">
                 <FormField
                     control={form.control}
                     name="name_fa"
@@ -166,7 +166,7 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
                     control={form.control}
                     name="parent_id"
                     render={() => (
-                        <div className={'col-span-2 w-full gap-x-3'}>
+                        <div className={'col-span-1 w-full gap-x-3'}>
                             {selectedMainCategory?.id === 1 &&
                             <FormItem>
                                 <FormLabel>دسته بندی والد</FormLabel>
@@ -193,7 +193,7 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
                             control={form.control}
                             name="poster_image"
                             render={({field}) => (
-                                <FormItem className={`col-span-2`}>
+                                <FormItem className={`col-span-1`}>
                                     <FormLabel>تصویر</FormLabel>
                                     <FormControl >
                                         <ImageUploader image={field.value || currentCategory?.poster_image} onSelectImage={handleImageSelect} />
@@ -229,7 +229,7 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
                         <FormItem className={`col-span-2`}>
                             <FormLabel>توضیحات</FormLabel>
                             <FormControl>
-                                <Textarea {...field} />
+                                <Textarea {...field} rows={5} className={`h-[150px] pb-[100px] overflow-y-scroll`} />
                             </FormControl>
                             <FormMessage/>
                         </FormItem>
