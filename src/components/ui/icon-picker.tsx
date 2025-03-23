@@ -164,8 +164,9 @@ const IconPicker = React.forwardRef<
       items.push({ type: 'category', categoryIndex });
 
       const rows = [];
-      for (let i = 0; i < category.icons.length; i += 5) {
-        rows.push(category.icons.slice(i, i + 5));
+      for (let i = 0; i < category?.icons.length; i += 5) {
+        // rows.push(category?.icons.slice(i, i + 5));
+        //TODO icon-picker categories should fix
       }
 
 

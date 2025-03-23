@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -208,7 +207,7 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
                     ( <FormField
                         control={form.control}
                         name="settings"
-                        render={({field}) => (
+                        render={() => (
                             <FormItem>
                                 <FormLabel>نام آیکون</FormLabel>
                                 <FormControl>

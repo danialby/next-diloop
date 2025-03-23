@@ -9,6 +9,7 @@ import ViewCategoryDialog from "@/components/admin-panel/Categories/ViewCategory
 import UpdateCategoryDialog from "@/components/admin-panel/Categories/UpdateCategory/UpdateCategoryDialog";
 import DeleteCategoryDialog from "@/components/admin-panel/Categories/DeleteCategory/DeleteCategoryDialog";
 import LoadingIndicator from "@/components/ui/loading";
+import Image from "next/image";
 
 export type CategoryRow = {
     id: number
@@ -45,7 +46,7 @@ const columns: ColumnDef<CategoryRow>[] = [
         cell: ({ row }) => (
             <div className="text-right">
                 { row.getValue("poster_image") ?
-                    ( <img src={row.getValue("poster_image")} className={`h-14 rounded-lg`} alt={''} /> )
+                    ( <Image src={row.getValue("poster_image")} width={100} height={56} className={`w-full h-14 rounded-lg`} alt={''} /> )
                     :
                     ( <span>تصویر ندارد</span> )
                 }
