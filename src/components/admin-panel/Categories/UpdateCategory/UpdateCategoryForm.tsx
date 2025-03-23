@@ -89,7 +89,7 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
                     name_fa: data?.['name_fa'],
                     description: data?.['description'],
                     is_active: 1,
-                    parent_id: data?.['parent_id'],
+                    parent_id: data?.['parent_id'] || '',
                     tags: currentCategory?.tags,
                     poster_image: currentCategory?.poster_image ,
                     settings: data?.['settings'],
