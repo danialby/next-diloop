@@ -50,15 +50,12 @@ export function useAdminPanelRoutes() {
         updateFormData.append('_method', 'PUT');
         updateFormData.append('settings', JSON.stringify(settings));
 
-        if (poster_image !== "") {
+        if (poster_image && poster_image instanceof File) {
             // Ensure proper file handling
             const file = new File([poster_image], poster_image.name, {
                 type: poster_image.type || 'image/png',
             });
             updateFormData.append('poster_image', file);
-        }
-        else {
-            updateFormData.append('poster_image', "");
         }
         return await axiosInstance.post(`/admin/api/v1/skill-teach/category/${ id }`, updateFormData, {
             headers: {
