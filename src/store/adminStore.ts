@@ -1,6 +1,6 @@
 // stores/adminStore.ts
 import { create } from 'zustand';
-
+import { devtools } from 'zustand/middleware'
 type MainCategory = {
     id: number;
     title: string;
@@ -16,7 +16,8 @@ interface AdminStoreState {
     deleteStoreCategory: (index: number) => void;
 }
 
-export const useAdminStore = create<AdminStoreState>()((set) => ({
+export const useAdminStore = create<AdminStoreState>()(
+    devtools((set) => ({
     selectedMainCategory: {
         id: 1,
         title: 'بیکار'
@@ -46,6 +47,6 @@ export const useAdminStore = create<AdminStoreState>()((set) => ({
             ...state,
             categories_data: state.categories_data.filter((item) => item?.['id'] !== id)
         }))
-}));
+})));
 
 export default useAdminStore;

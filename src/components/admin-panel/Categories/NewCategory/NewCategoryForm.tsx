@@ -21,6 +21,7 @@ import useAdminStore from "@/store/adminStore";
 import {useAdminPanelRoutes} from "@/app/api/admin-panel/routes";
 import {useMutation} from "@tanstack/react-query";
 import {Loader2} from "lucide-react";
+import {IconPicker} from "@/components/ui/icon-picker";
 
 
 
@@ -37,6 +38,7 @@ const FormSchema = z.object({
     is_active: z.any(),
     tags: z.any(),
     poster_image: z.any(),
+    settings: z.any()
 })
 
 
@@ -51,6 +53,7 @@ export function NewCategoryForm({closeDialog}) {
             name_fa: '',
             name_en: '',
             parent_id: '',
+            settings: {},
             icon_name: '',
             description: '',
             is_active: 1,
@@ -70,6 +73,7 @@ export function NewCategoryForm({closeDialog}) {
                     name_fa:data?.['name_fa'],
                     description:data?.['description'],
                     is_active: 1,
+                    settings: data?.['settings'],
                     parent_id: data?.['parent_id'],
                     tags: selectedMainCategory?.id === 1 ? ['بیکار'] : ['شاغل'],
                     poster_image:null
@@ -93,11 +97,16 @@ export function NewCategoryForm({closeDialog}) {
         mutateNewCategory.mutate(data)
         console.log("Form submitted:");
         console.log(JSON.stringify(data, null, 2))
+    }
+
+    const handleIconSelect = (icon_name: string) => {
+        console.log(`Selected icon: ${icon_name}`);
+        form.setValue('settings', [{ icon_name: icon_name }])
     };
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full gap-x-3 grid grid-cols-2 space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full gap-x-3 grid grid-cols-2 space-y-4">
                 <FormField
                     control={form.control}
                     name="name_fa"
@@ -148,14 +157,16 @@ export function NewCategoryForm({closeDialog}) {
                 <FormField
                     control={form.control}
                     name="icon_name"
-                    render={({field}) => (
-                        <FormItem>
+                    render={({}) => (
+                        <FormItem className={`col-span-1`}>
                             <FormLabel>نام آیکون</FormLabel>
                             <FormControl>
-                                <Input {...field} />
+                            <IconPicker
+                                searchPlaceholder={'جستجوی نام آیکون'}
+                                triggerPlaceholder={'انتخاب آیکون...'}
+                                onValueChange={handleIconSelect}
+                                categorized={false}/>
                             </FormControl>
-                            <FormDescription> با کلیک روی این لینک میتوانید لیست آیکون‌ها را ببینید و نام آیکون مورد نظر
-                                خود را اینجا وارد کنید</FormDescription>
                             <FormMessage className={`text-xs`} />
                         </FormItem>
                     )}
@@ -167,7 +178,7 @@ export function NewCategoryForm({closeDialog}) {
                         <FormItem className={`col-span-2`}>
                             <FormLabel>توضیحات</FormLabel>
                             <FormControl>
-                                <Textarea {...field} />
+                                <Textarea {...field} rows={5} className={`h-[150px] pb-[100px] overflow-y-scroll`} />
                             </FormControl>
                         </FormItem>
                     )}
@@ -180,7 +191,7 @@ export function NewCategoryForm({closeDialog}) {
                         <div className={`space-x-2`}>
                             <span className={`font-bold`}>خطای سرور :</span>
                             <span className={`text-xs`}>{apiError?.['response']?.data.message}</span><br/>
-                            <span className={`text-xs`}>{apiError?.['response']?.data.errors}</span>
+                            <span className={`text-xs`}>{JSON.stringify(apiError?.['response']?.data.errors)}</span>
                         </div>
                     </FormMessage>
                     }

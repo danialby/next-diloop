@@ -82,6 +82,7 @@ export function SortableTable({data, columns, inputPlaceHolder, searchColumn}) {
                   .getAllColumns()
                   .filter((column) => column.getCanHide())
                   .map((column) => {
+
                     return (
                         <DropdownMenuCheckboxItem
                             key={column.id}
@@ -91,7 +92,7 @@ export function SortableTable({data, columns, inputPlaceHolder, searchColumn}) {
                                 column.toggleVisibility(!!value)
                             }
                         >
-                          {column.id}
+                          { column.id }
                         </DropdownMenuCheckboxItem>
                     )
                   })}

@@ -10,7 +10,6 @@ import {Button} from "@/components/ui/button";
 import {toPersianDate, toPersianTime} from "@/utils/dateUtils";
 import {
     AlignRight,
-    Aperture,
     CalendarCheck2,
     Network,
     ReceiptText,
@@ -19,6 +18,7 @@ import {
     XIcon,
     ListXIcon
 } from "lucide-react";
+import Image from "next/image";
 
 
 
@@ -34,7 +34,7 @@ function ViewCategoryDialog({category}) {
                         <ReceiptText/>
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="sm:max-w-[425px] font-vazir">
+                <DialogContent className="sm:max-w-[550px] font-vazir">
                     <DialogHeader>
                         <DialogHeader>
                             <DialogTitle>
@@ -52,43 +52,45 @@ function ViewCategoryDialog({category}) {
                     <div className={`grid grid-cols-3`}>
                         <div className={`flex flex-col col-span-2 gap-y-3`}>
                             <span className={`flex items-center`}>
-                                <div className={`flex gap-2`}>
-                                <span className={`flex text-nowrap font-semibold`}> <Type className={`w-6 h-6 ml-2`}/>عنوان :</span>
-                                <span className={` text-nowrap`}>{category?.name_fa}</span>
+                                <div className={`flex gap-2 items-center`}>
+                                <span className={`flex text-sm text-nowrap font-semibold`}> <Type className={`w-6 h-6 ml-2`}/>عنوان :</span>
+                                <span className={`text-xs text-nowrap`}>{category?.name_fa}</span>
                                 </div>
                             </span>
                             <span className={`flex items-center`}>
-                                <div className={`flex gap-2`}>
-                                <span className={`flex text-nowrap font-semibold`}> <SpellCheck className={`w-6 h-6 ml-2`}/>نام انگلیسی :</span>
-                                <span className={` text-nowrap`}>{category?.name_en}</span>
+                                <div className={`flex gap-2 items-center`}>
+                                <span className={`flex text-sm text-nowrap font-semibold`}> <SpellCheck className={`w-6 h-6 ml-2`}/>نام انگلیسی :</span>
+                                <span className={`text-xs text-nowrap`}>{category?.name_en}</span>
                                 </div>
                             </span>
                             <span className={`flex items-center`}>
-                                <div className={`flex gap-2`}>
-                                <span className={`flex text-nowrap font-semibold`}> <Network className={`w-6 h-6 ml-2`}/>نوع :</span>
-                                <span className={` text-nowrap`}>{category?.parent_id || 'دسته بندی اصلی'}</span>
+                                <div className={`flex gap-2 items-center`}>
+                                <span className={`flex text-sm text-nowrap font-semibold`}> <Network className={`w-6 h-6 ml-2`}/>نوع :</span>
+                                <span className={`text-xs text-nowrap`}>{category?.parent_id || 'دسته بندی اصلی'}</span>
                                 </div>
                             </span>
                             <span className={`flex items-center`}>
 
-                                <div className={`flex gap-2`}>
-                                <span className={`flex text-nowrap font-semibold`}> <CalendarCheck2 className={`w-6 h-6 ml-2`}/> تاریخ و ساعت :</span>
-                                <span className={` text-nowrap`}>
+                                <div className={`flex gap-2 items-center`}>
+                                <span className={`flex  text-sm text-nowrap font-semibold`}> <CalendarCheck2 className={`w-6 h-6 ml-2`}/> تاریخ و ساعت :</span>
+                                <span className={`text-xs text-nowrap`}>
                                     {toPersianDate(category?.created_at)} - {toPersianTime(category?.created_at)}
                                 </span>
                                     </div>
                             </span>
                             <span className={`flex items-center`}>
-                                <div className={`flex gap-2`}>
-                                <span className={`flex text-nowrap font-semibold`}> <AlignRight className={`w-6 h-6 ml-2`}/>توضیحات :</span>
-                                <span className={` text-nowrap`}>{category?.description}</span>
+                                <div className={`flex gap-2 items-center`}>
+                                <span className={`flex text-sm text-nowrap font-semibold`}> <AlignRight className={`w-6 h-6 ml-2`}/>توضیحات :</span>
+                                <span className={`text-xs text-nowrap`}>{category?.description || 'بدون توضیحات'}</span>
                                 </div>
                             </span>
                         </div>
                         <div className={`flex flex-col items-center col-span-1`}>
-                            <div className={`flex flex-col gap-2`}>
-                                <span className={`flex text-nowrap font-semibold`}> <Aperture className={`w-6 h-6 ml-2`}/>آیکون :</span>
-                                <span className={` text-nowrap`}>{category?.icon_name || 'آیکون ندارد'}</span>
+                            <div className={`flex flex-col gap-2 rounded-lg bg-gray-200 p-2`}>
+                                <span className={`flex text-nowrap font-semibold`}> تصویر :</span>
+                                { category?.poster_image ? ( <Image className={`max-h-40 rounded-lg`} width={100} height={56} src={category?.poster_image}  alt={''} /> )
+                                    : (<span>تصویر ندارد</span>)
+                                }
                             </div>
                         </div>
                     </div>

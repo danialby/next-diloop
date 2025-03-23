@@ -6,9 +6,10 @@ import {Button} from "@/components/ui/button";
 import {ArrowUpDown} from "lucide-react";
 import {toPersianDate, toPersianTime} from "@/utils/dateUtils";
 import ViewCategoryDialog from "@/components/admin-panel/Categories/ViewCategoryDialog";
-import UpdateCategoryDialog from "@/components/admin-panel/Categories/UpdateCategoryDialog";
-import DeleteCategoryDialog from "@/components/admin-panel/Categories/DeleteCategoryDialog";
+import UpdateCategoryDialog from "@/components/admin-panel/Categories/UpdateCategory/UpdateCategoryDialog";
+import DeleteCategoryDialog from "@/components/admin-panel/Categories/DeleteCategory/DeleteCategoryDialog";
 import LoadingIndicator from "@/components/ui/loading";
+import Image from "next/image";
 
 export type CategoryRow = {
     id: number
@@ -17,6 +18,8 @@ export type CategoryRow = {
     description: string
     created_at: string
 }
+
+
 
 const columns: ColumnDef<CategoryRow>[] = [
     {
@@ -34,14 +37,20 @@ const columns: ColumnDef<CategoryRow>[] = [
             )
         },
         cell: ({ row }) => (
-            <div className={'text-center'}>{row.getValue("id")}</div>
+            <div className={'text-right pr-4'}>{row.getValue("id")}</div>
         ),
     },
     {
-        accessorKey: "icon_name",
+        accessorKey: "poster_image",
         header: () => <div className="text-right">آیکون</div>,
         cell: ({ row }) => (
-            <div className="text-right">{row.getValue("icon_name") || 'ندارد'}</div>
+            <div className="text-right">
+                { row.getValue("poster_image") ?
+                    ( <Image src={row.getValue("poster_image")} width={100} height={56} className={`w-full h-14 rounded-lg`} alt={''} /> )
+                    :
+                    ( <span>تصویر ندارد</span> )
+                }
+            </div>
         ),
     },
     {

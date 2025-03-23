@@ -1,20 +1,21 @@
 import React from "react";
-import AddSubCategoryDialog from "@/components/admin-panel/Categories/AddSubCategoryDialog";
-import UpdateCategoryDialog from "@/components/admin-panel/Categories/UpdateCategoryDialog";
-import DeleteCategoryDialog from "@/components/admin-panel/Categories/DeleteCategoryDialog";
-import {AlignRight, Aperture, CalendarCheck2, SpellCheck, Type} from "lucide-react";
+import AddSubCategoryDialog from "@/components/admin-panel/Categories/AddSubCategory/AddSubCategoryDialog";
+import UpdateCategoryDialog from "@/components/admin-panel/Categories/UpdateCategory/UpdateCategoryDialog";
+import DeleteCategoryDialog from "@/components/admin-panel/Categories/DeleteCategory/DeleteCategoryDialog";
+import {AlignRight, CalendarCheck2, SpellCheck, Type} from "lucide-react";
 import {toPersianDate, toPersianTime} from "@/utils/dateUtils";
+import {IconRenderer} from "@/components/ui/icon-picker";
 
 
 export function DetailsCard({data}) {
    return (
-    <div className={`border rounded-lg col-span-2 bg-gray-50 overflow-hidden relative`}>
+    <div className={`border rounded-lg col-span-2 bg-gray-50 dark:bg-secondary overflow-hidden relative shadow shadow-lg`}>
         { !data &&
-            <div className={`absolute top-0 left-0 w-full h-full bg-white/80 backdrop-blur-[3px] rounded-lg flex items-center justify-center`}>
+            <div className={`absolute top-0 left-0 w-full h-full bg-white/80 dark:bg-secondary/80 backdrop-blur-[3px] rounded-lg flex items-center justify-center`}>
             <span className={`font-bold`}>یک دسته بندی را انتخاب کنید...</span>
         </div>
         }
-        <div className={`w-full border-b-1 justify-center py-2 md:py-3 px-4 flex gap-2 bg-blue-100`}>
+        <div className={`w-full border-b-1 justify-center py-2 md:py-3 px-4 flex gap-2 bg-cyan-800 dark:bg-cyan-800 ${!data && '!bg-gray-200'}`}>
             <AddSubCategoryDialog category={data}/>
             <UpdateCategoryDialog category={data}/>
             <DeleteCategoryDialog category={data}/>
@@ -52,12 +53,18 @@ export function DetailsCard({data}) {
                                 </div>
                             </span>
             </div>
-            <hr/>
-            <div className={`flex flex-col items-center col-span-1`}>
-                <div className={`flex gap-2`}>
-                                        <span className={`flex text-nowrap font-semibold`}> <Aperture
-                                            className={`w-6 h-6 ml-2`}/>آیکون :</span>
-                    <span className={` text-nowrap`}>{data?.['icon_name'] || 'آیکون ندارد'}</span>
+            <hr className={`dark:border-secondary-foreground`}/>
+            <div className={`flex flex-col col-span-1`}>
+                <div className={`flex gap-2 items-center `}>
+                                        <span className={`flex text-nowrap font-semibold`}>آیکون :</span>
+                    <span className={` text-nowrap`}>
+                        { data?.settings && data?.settings[0]?.['icon_name'] ?
+                            <div className={`p-2 rounded-lg bg-blue-600 text-white`}>
+                                <IconRenderer name={data?.settings[0]?.['icon_name']} />
+                            </div>
+                            :
+                            'آیکون ندارد'}
+                    </span>
                 </div>
             </div>
         </div>
