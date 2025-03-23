@@ -1,38 +1,8 @@
 import { render, screen, fireEvent, waitFor } from '@/__tests__/testUtils/utils'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, vi, it, beforeAll } from 'vitest'
-import axiosInstance from '@/lib/axiosInstance'
+import { describe, expect, it, beforeAll } from 'vitest'
+import { axiosMock, mockNavigationPush, setPostResponseData } from '@/__tests__/testUtils/Mocks'
 import UserLoginPage from '@/app/(full-width-pages)/(auth)/login/page'
-
-
-// The following mock ensures that the axios instance shape is correct.
-vi.mock('@/lib/axiosInstance', () => {
-  return {
-    __esModule: true,
-    default: {
-      interceptors: {
-        request: { use: vi.fn() },
-        response: { use: vi.fn() },
-      },
-      get: vi.fn(),
-      post: vi.fn(() => ({ data: { result: true } })),
-    },
-  }
-})
-
-const mockPush = vi.fn()
-vi.mock('next/navigation', async () => {
-  const actual = await vi.importActual('next/navigation')
-  return {
-    ...actual,
-    useRouter: vi.fn(() => ({
-      push: mockPush,
-      replace: vi.fn(),
-    })),
-    useSearchParams: vi.fn(() => ({})),
-    usePathname: vi.fn(),
-  }
-})
 
 describe('UserLoginPage', () => {
   beforeAll(() => {
@@ -62,7 +32,7 @@ describe('UserLoginPage', () => {
   })
 
   it('handles form submission when login button is clicked', async () => {
- 
+    setPostResponseData({ data: { result: true } })
     const loginButton = screen.getByTestId('login-btn')
     const mobileInput = screen.getByTestId('mobile-input')
 
@@ -70,20 +40,20 @@ describe('UserLoginPage', () => {
     await userEvent.clear(mobileInput)
     await userEvent.type(mobileInput, '09123456789')
 
-       fireEvent.click(loginButton)
+    fireEvent.click(loginButton)
     await waitFor(() => {
-       expect(axiosInstance.post).toHaveBeenCalledWith(
+      expect(axiosMock.post).toHaveBeenCalledWith(
         '/api/v1/login',
         {
           mobile: '09123456789',
-          method:'otp'
+          method: 'otp'
         },
         undefined
       )
     })
-      await waitFor(() => {
-          // Expect router.push to have been called with the OTP verification route.
-          expect(mockPush).toHaveBeenCalledWith('/login/input-code')
-        })
+    await waitFor(() => {
+      // Expect router.push to have been called with the OTP verification route.
+      expect(mockNavigationPush).toHaveBeenCalledWith('/login/input-code')
+    })
   })
 })

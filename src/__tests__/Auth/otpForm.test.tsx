@@ -1,38 +1,11 @@
-import { render, screen } from '@/__tests__/testUtils/utils'
-import { describe, expect, vi, it, beforeAll } from 'vitest'
- 
-// Mock all SVG imports
- 
+import { render, screen, waitFor } from '@/__tests__/testUtils/utils'
+import { describe, expect, it, beforeAll } from 'vitest'
+import { axiosMock, mockNavigationPush, setPostResponseData } from '@/__tests__/testUtils/Mocks'
 import OtpForm from '@/app/(full-width-pages)/(auth)/login/input-code/page'
+import userEvent from '@testing-library/user-event'
 
-// The following mock ensures that the axios instance shape is correct.
-vi.mock('@/lib/axiosInstance', () => {
-  return {
-    __esModule: true,
-    default: {
-      interceptors: {
-        request: { use: vi.fn() },
-        response: { use: vi.fn() },
-      },
-      get: vi.fn(),
-      post: vi.fn(() => ({ data: { result: true } })),
-    },
-  }
-})
 
-const mockPush = vi.fn()
-vi.mock('next/navigation', async () => {
-  const actual = await vi.importActual('next/navigation')
-  return {
-    ...actual,
-    useRouter: vi.fn(() => ({
-      push: mockPush,
-      replace: vi.fn(),
-    })),
-    useSearchParams: vi.fn(() => ({})),
-    usePathname: vi.fn(),
-  }
-})
+
 
 describe('OtpForm', () => {
   beforeAll(() => {
@@ -40,14 +13,39 @@ describe('OtpForm', () => {
   })
 
   it('renders the OTP input form', () => {
-    const otpInput = screen.getByPlaceholderText('کد تایید را وارد کنید')
+    const formText = screen.getByText('کد دریافت شده را در قسمت پایین وارد کنید')
+    expect(formText).toBeDefined()
+    const otpInput = screen.getByTestId('otp-input');
     expect(otpInput).toBeDefined()
   })
 
-  // it('allows user to enter OTP code', async () => {
-  //   const otpInput = screen.getByPlaceholderText('کد تایید را وارد کنید')
-  //   await userEvent.type(otpInput, '123456')
-  //   expect(otpInput.value).toBe('123456')
-  // })
+  it('allows user to set OTP and validate code', async () => {
+    setPostResponseData({ data: { result: false, token: 'token' } })
+    const otpInput = screen.getByTestId('otp-input')
+    await userEvent.type(otpInput, '123456')
+    expect(otpInput.value).toBe('123456')
+    await waitFor(() => {
+      expect(axiosMock.post).toHaveBeenCalledWith(
+        '/api/v1/verify-otp',
+        {
+          "mobile": "",
+          "otp": "123456",
+          "page": "login",
+        },
+        undefined
+      )
+    })
+
+    await waitFor(() => {
+      // Expect router.push to have been called with the OTP verification route.
+      expect(mockNavigationPush).toHaveBeenCalledWith('/admin-panel')
+    })
+    await waitFor(() => {
+      expect(document.cookie).toContain('auth_token=token');
+    });
+
+
+  })
+
 })
 

@@ -44,6 +44,8 @@ export default function InputCodeForm() {
         mutationFn: (data: object) => VerifyOtp({mobile: userLoginNumber,  otp:data?.['otp_code'],  page: 'login'}),
         onSuccess: (response ) => {
             // send code to number
+            console.log(response);
+            
             setAuthToken(response?.['data'].token);
             document.cookie = `auth_token=${response?.['data']['token']}`;
             router.push('/admin-panel')
@@ -143,9 +145,9 @@ export default function InputCodeForm() {
                                                     {/*<Input testId='mobile-input' placeholder="09123456789" {...field}*/}
                                                     {/*       className={`rounded-xl font-outfit tracking-[2px] h-10 mt-1`}*/}
                                                     {/*/>*/}
-                                                    <InputOTP onComplete={form.handleSubmit(handleVerify)} maxLength={6} {...field} containerClassName={`dir-ltr`}>
+                                                    <InputOTP data-testid='otp-input' onComplete={form.handleSubmit(handleVerify)} maxLength={6} {...field} containerClassName={`dir-ltr`}>
                                                         <InputOTPGroup className={`space-x-2`}>
-                                                            <InputOTPSlot className={`!rounded-lg !border-1 !border-gray-400`} index={0} />
+                                                            <InputOTPSlot  className={`!rounded-lg !border-1 !border-gray-400`} index={0} />
                                                             <InputOTPSlot className={`!rounded-lg !border-1 !border-gray-400`} index={1} />
                                                             <InputOTPSlot className={`!rounded-lg !border-1 !border-gray-400`} index={2} />
                                                             <InputOTPSlot className={`!rounded-lg !border-1 !border-gray-400`} index={3} />
