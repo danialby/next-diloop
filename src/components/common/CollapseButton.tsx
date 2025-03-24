@@ -1,15 +1,12 @@
-
-import {Button} from "@/components/ui/button";
 import React from "react";
 import {ChevronDownIcon} from "lucide-react";
 import {NewDetailsCard} from "@/components/admin-panel/Categories/NewDetailsCard";
 import {IconRenderer} from "@/components/ui/icon-picker";
 
 export function CollapseButton({data, setSelected, selectedParent}) {
-    const [collapsed, setCollapsed] = React.useState(false);
-    function handleSetSelected(value: any) {
+    function handleSetSelected(value) {
         if(selectedParent === data?.['id']) {
-            setSelected(null);
+            setSelected(0);
         }
         else {
         setSelected(value)
@@ -35,7 +32,6 @@ export function CollapseButton({data, setSelected, selectedParent}) {
                             <span className={`text-xs`}>{data?.['name_fa']}</span>
                         </div>
                 </div>
-                {/*{selectedParent === item?.['id'] &&  <Badge variant={'secondary'}>{selectedParentData?.length}</Badge> }*/}
                 <div className={`absolute h-full w-full pt-2 border-t-1 !bg-gray-50   ${selectedParent === data?.['id'] ? 'translate-y-10 opacity-100' : 'translate-y-18  opacity-0'} transition-all duration-200`}>
                 <NewDetailsCard data={data} />
                 </div>
