@@ -6,11 +6,10 @@ import useAdminStore from "@/store/adminStore";
 import NewCategoryDialog from "@/components/admin-panel/Categories/NewCategory/NewCategoryDialog";
 import {MainCategoryMenuBar} from "@/components/admin-panel/MainCategoryMenuBar";
 import {CollapseButton} from "@/components/common/CollapseButton";
-import {Loader2} from "lucide-react";
 import {useDebounceValue} from "usehooks-ts";
 import SearchInput from "@/components/common/SearchInput";
-import CategoryForm from "@/components/admin-panel/Categories/CategoryForm";
 import NewCategoryForm from "@/components/admin-panel/Categories/NewCategoryForm";
+import LoadingIndicator from "@/components/ui/loading";
 
 export default function NewCategoriesPanel() {
     const {getCategoriesList} = useAdminPanelRoutes();
@@ -81,7 +80,7 @@ export default function NewCategoriesPanel() {
                 <NewCategoryDialog />
                 <hr/>
             </div>
-            <div className={`my-2 md:grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 font-vazir text-sm gap-x-2`}>
+            <div className={`my-2 md:grid md:grid-cols-3 xl:grid-cols-4 font-vazir text-sm gap-x-2`}>
                 {selectedMainCategory.id === 1 &&
                     (
                         <div
@@ -95,7 +94,9 @@ export default function NewCategoriesPanel() {
                                 className={`rounded-t-md !bg-blue-100`}
                             />
                             {isPending ?
-                                <div className={`flex items-center justify-center h-30 w-full`}><Loader2/></div>
+                                <div className={`flex items-center justify-center w-full h-[300px]`}>
+                                    <LoadingIndicator/>
+                                </div>
                                 :
                                 filteredJoblessParents?.map(item =>
                                     <div key={item?.['id']}>
@@ -119,7 +120,9 @@ export default function NewCategoriesPanel() {
                                 className={`rounded-t-md !bg-blue-100`}
                             />
                             {isPending ?
-                                <div className={`flex items-center justify-center h-30 w-full`}><Loader2/></div>
+                                <div className={`flex items-center justify-center w-full h-[300px]`}>
+                                    <LoadingIndicator/>
+                                </div>
                                 :
                                 filteredEmployeeParents?.map(item =>
                                     <div key={item?.['id']}>
@@ -131,7 +134,7 @@ export default function NewCategoriesPanel() {
                     )}
 
                 <div
-                    className="relative h-full xl:col-span-3 rounded-lg border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03] font-vazir  shadow shadow-lg">
+                    className="relative h-full md:col-span-2 xl:col-span-3 rounded-lg border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03] font-vazir  shadow shadow-lg">
                     {selectedMainCategory?.id === 1
                         ?
                         (<NewCategoryForm data={selectedJoblessParentList} tag={`بیکار`} isLoading={isPending}/>)
