@@ -10,7 +10,6 @@ import {Button} from "@/components/ui/button";
 import {toPersianDate, toPersianTime} from "@/utils/dateUtils";
 import {
     AlignRight,
-    Aperture,
     CalendarCheck2,
     Network,
     ReceiptText,
@@ -19,6 +18,7 @@ import {
     XIcon,
     ListXIcon
 } from "lucide-react";
+import Image from "next/image";
 
 
 
@@ -88,7 +88,7 @@ function ViewCategoryDialog({category}) {
                         <div className={`flex flex-col items-center col-span-1`}>
                             <div className={`flex flex-col gap-2 rounded-lg bg-gray-200 p-2`}>
                                 <span className={`flex text-nowrap font-semibold`}> تصویر :</span>
-                                { category?.poster_image ? ( <img className={`max-h-40 rounded-lg`} src={category?.poster_image}  alt={''} /> )
+                                { category?.poster_image ? ( <Image className={`max-h-40 rounded-lg`} width={100} height={56} src={category?.poster_image}  alt={''} /> )
                                     : (<span>تصویر ندارد</span>)
                                 }
                             </div>

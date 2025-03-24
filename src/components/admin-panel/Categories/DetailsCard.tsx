@@ -2,7 +2,7 @@ import React from "react";
 import AddSubCategoryDialog from "@/components/admin-panel/Categories/AddSubCategory/AddSubCategoryDialog";
 import UpdateCategoryDialog from "@/components/admin-panel/Categories/UpdateCategory/UpdateCategoryDialog";
 import DeleteCategoryDialog from "@/components/admin-panel/Categories/DeleteCategory/DeleteCategoryDialog";
-import {AlignRight, Aperture, CalendarCheck2, SpellCheck, Type} from "lucide-react";
+import {AlignRight, CalendarCheck2, SpellCheck, Type} from "lucide-react";
 import {toPersianDate, toPersianTime} from "@/utils/dateUtils";
 import {IconRenderer} from "@/components/ui/icon-picker";
 

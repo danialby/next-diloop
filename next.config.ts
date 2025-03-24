@@ -9,6 +9,14 @@ const nextConfig: NextConfig = {
     });
     return config;
   },
+  images: {
+    remotePatterns: [{
+      protocol: 'https',
+      hostname: 'www.diloop.com',
+      port: '',
+      pathname: '/storage/**'
+    }]
+  },
 };
 
 export default nextConfig;

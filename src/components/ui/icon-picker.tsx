@@ -164,8 +164,10 @@ const IconPicker = React.forwardRef<
       items.push({ type: 'category', categoryIndex });
 
       const rows = [];
-      for (let i = 0; i < category.icons.length; i += 5) {
-        rows.push(category.icons.slice(i, i + 5));
+      for (let i = 0; i < category?.icons.length; i += 5) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        rows.push(category?.icons.slice(i, i + 5));
       }
 
 
