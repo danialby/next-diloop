@@ -15,12 +15,13 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import {Textarea} from "@/components/ui/textarea";
-import React, {useState} from "react";
+import React, {useMemo, useState} from "react";
 import useAdminStore from "@/store/adminStore";
 import {useAdminPanelRoutes} from "@/app/api/admin-panel/routes";
 import {useMutation} from "@tanstack/react-query";
 import {Loader2} from "lucide-react";
-import {IconPicker} from "@/components/ui/icon-picker";
+import {ParentsComboBox} from "@/components/admin-panel/Categories/ParentsComboBox";
+import {ImageUploader} from "@/components/ui/image-uploader";
 
 
 
@@ -32,7 +33,6 @@ const FormSchema = z.object({
         message: "نام انگلیسی حداقل باید ۲ کاراکتر باشد",
     }),
     parent_id: z.any(),
-    settings: z.any(),
     description: z.any(),
     is_active: z.any(),
     tags: z.any(),
@@ -42,8 +42,7 @@ interface Category {
     id: number,
     name_fa: string,
     name_en: string,
-    parent_id?: number | undefined,
-    settings: Array<object> | null,
+    parent_id: number | undefined,
     description: string | undefined,
     is_active: number,
     tags: [],
@@ -55,11 +54,10 @@ type UpdateCategoryFormProps = {
     category: Category;
 }
 
-export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormProps) {
-    const { updateCategory } = useAdminPanelRoutes();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function UpdateSubCategoryForm({closeDialog, category}: UpdateCategoryFormProps) {
+    const { updateSubCategory } = useAdminPanelRoutes();
     const [currentCategory, setCurrentCategory] = useState<Category>(category)
-    const { updateStoreCategory } = useAdminStore()
+    const { selectedMainCategory, categories_data, updateStoreCategory } = useAdminStore()
     const [apiError, setApiError] = useState<Error | null>(null);
     const form = useForm<z.infer<typeof FormSchema>>({
         resolver: zodResolver(FormSchema),
@@ -67,7 +65,6 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
             name_fa: currentCategory?.name_fa,
             name_en: currentCategory?.name_en,
             parent_id: currentCategory?.parent_id,
-            settings: currentCategory?.settings && currentCategory?.settings[0]?.['icon_name'] || [{}],
             description: currentCategory?.description || '',
             is_active: 1,
             tags: currentCategory?.tags,
@@ -78,16 +75,16 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
 
 
 
-    const mutateUpdateCategory = useMutation(
+    const mutateUpdateSubCategory = useMutation(
         {
-            mutationFn: (data: Category) => updateCategory(
+            mutationFn: (data: Category) => updateSubCategory(
                 data
-                ),
+            ),
             onSuccess: (response ) => {
                 // send code to number
                 console.log(response)
                 updateStoreCategory( response?.['data']?.category?.id,
-                   response?.['data']?.category
+                    response?.['data']?.category
                 );
                 closeDialog()
             },
@@ -96,26 +93,15 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
                 console.log(error)
             }
         })
-
-    const handleIconSelect = (icon_name: string) => {
-        console.log(`Selected icon: ${icon_name}`);
-        form.setValue('settings', [{ icon_name: icon_name }])
+    const handleImageSelect = (image: File | string) => {
+        console.log(`Selected image: ${image}`);
+        setCurrentCategory(prevState => ({
+            ...prevState, poster_image: image}))
+        form.setValue('poster_image', image)
     };
 
     function onSubmit(data: z.infer<typeof FormSchema>) {
-        const category_updateData: Category =
-            data?.parent_id === null ?
-                {
-                    id: currentCategory?.id,
-                    name_en: data?.['name_en'],
-                    name_fa: data?.['name_fa'],
-                    description: data?.['description'],
-                    is_active: 1,
-                    tags: currentCategory?.tags,
-                    poster_image: currentCategory?.poster_image ,
-                    settings: data?.['settings'],
-                }
-                :
+        const category_updateSubData: Category =
                 {
                     id: currentCategory?.id,
                     name_en: data?.['name_en'],
@@ -125,12 +111,19 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
                     parent_id: data?.['parent_id'],
                     tags: currentCategory?.tags,
                     poster_image: currentCategory?.poster_image ,
-                    settings: data?.['settings'],
                 }
-        mutateUpdateCategory.mutate(category_updateData)
+        mutateUpdateSubCategory.mutate(category_updateSubData)
         console.log("Form submitted:");
         console.log(JSON.stringify(data, null, 2))
     }
+
+    const JoblessParents = useMemo(() => {
+        return categories_data.filter(item => item?.['parent_id'] === null && item?.['tags']?.includes('بیکار'));
+    }, [categories_data]);
+
+    const EmployeeParents = useMemo(() => {
+        return categories_data.filter(item => item?.['parent_id'] === null && item?.['tags']?.includes('شاغل'));
+    }, [categories_data]);
 
     return (
         <Form {...form}>
@@ -161,23 +154,44 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
                         </FormItem>
                     )}
                 />
-                <FormField
+                { category?.parent_id &&
+                    <FormField
                         control={form.control}
-                        name="settings"
+                        name="parent_id"
                         render={() => (
-                            <FormItem>
-                                <FormLabel>نام آیکون</FormLabel>
-                                <FormControl>
-                                    <IconPicker defaultValue={category?.settings?.[0]?.['icon_name']}
-                                                onValueChange={handleIconSelect}
-                                                categorized={false}
-                                                searchPlaceholder={'جستجوی نام آیکون'}
-                                                triggerPlaceholder={'انتخاب آیکون...'}/>
-                                </FormControl>
-                                <FormMessage/>
-                            </FormItem>
+                            <div className={'col-span-2 w-full gap-x-3'}>
+                                {selectedMainCategory?.id === 1 &&
+                                    <FormItem>
+                                        <FormLabel>دسته بندی والد</FormLabel>
+                                        <FormControl>
+                                            <ParentsComboBox data={JoblessParents} field={currentCategory?.parent_id} onSelect={(value) => form.setValue("parent_id", value?.id)}/>
+                                        </FormControl>
+                                    </FormItem>
+                                }
+                                {selectedMainCategory?.id === 2 &&
+                                    <FormItem>
+                                        <FormLabel>دسته بندی والد</FormLabel>
+                                        <FormControl>
+                                            <ParentsComboBox data={EmployeeParents} field={currentCategory?.parent_id} onSelect={(value) => form.setValue("parent_id", value?.id)}/>
+                                        </FormControl>
+                                    </FormItem>
+                                }
+                            </div>
                         )}
                     />
+                }
+                        <FormField
+                            control={form.control}
+                            name="poster_image"
+                            render={({field}) => (
+                                <FormItem className={`col-span-2`}>
+                                    <FormLabel>تصویر</FormLabel>
+                                    <FormControl >
+                                        <ImageUploader image={field.value || currentCategory?.poster_image} onSelectImage={handleImageSelect} />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
                 <FormField
                     control={form.control}
                     name="description"
@@ -185,15 +199,15 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
                         <FormItem className={`col-span-2`}>
                             <FormLabel>توضیحات</FormLabel>
                             <FormControl>
-                                <Textarea {...field} rows={5} className={`h-[150px] pb-[100px] overflow-y-scroll`} />
+                                <Textarea {...field} />
                             </FormControl>
                             <FormMessage/>
                         </FormItem>
                     )}
                 />
                 <div className={`flex justify-center col-span-2`}>
-                    <Button disabled={mutateUpdateCategory.isPending} className={`w-[250px] justify-center`} type="submit">
-                        {mutateUpdateCategory.isPending && <Loader2 className="animate-spin" />}
+                    <Button disabled={mutateUpdateSubCategory.isPending} className={`w-[250px] justify-center`} type="submit">
+                        {mutateUpdateSubCategory.isPending && <Loader2 className="animate-spin" />}
                         تایید</Button>
                     {apiError && <FormMessage>
                         <span className={`space-x-2`}>

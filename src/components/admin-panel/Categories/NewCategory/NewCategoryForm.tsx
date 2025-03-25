@@ -53,7 +53,7 @@ export function NewCategoryForm({closeDialog}) {
             name_fa: '',
             name_en: '',
             parent_id: '',
-            settings: {},
+            settings: [{}],
             icon_name: '',
             description: '',
             is_active: 1,
@@ -73,7 +73,7 @@ export function NewCategoryForm({closeDialog}) {
                     name_fa:data?.['name_fa'],
                     description:data?.['description'],
                     is_active: 1,
-                    settings: data?.['settings'],
+                    settings: data?.['settings'] || [{}],
                     parent_id: data?.['parent_id'],
                     tags: selectedMainCategory?.id === 1 ? ['بیکار'] : ['شاغل'],
                     poster_image:null

@@ -6,10 +6,10 @@ import {Button} from "@/components/ui/button";
 import {ArrowUpDown} from "lucide-react";
 import {toPersianDate, toPersianTime} from "@/utils/dateUtils";
 import ViewCategoryDialog from "@/components/admin-panel/Categories/ViewCategoryDialog";
-import UpdateCategoryDialog from "@/components/admin-panel/Categories/UpdateCategory/UpdateCategoryDialog";
 import DeleteCategoryDialog from "@/components/admin-panel/Categories/DeleteCategory/DeleteCategoryDialog";
 import LoadingIndicator from "@/components/ui/loading";
 import Image from "next/image";
+import UpdateSubCategoryDialog from "@/components/admin-panel/Categories/UpdateCategory/UpdateSubCategoryDialog";
 
 export type CategoryRow = {
     id: number
@@ -104,7 +104,7 @@ const columns: ColumnDef<CategoryRow>[] = [
             return (
                 <div className={'flex gap-1'}>
                     <ViewCategoryDialog category={row.original}/>
-                    <UpdateCategoryDialog category={row.original} />
+                    <UpdateSubCategoryDialog category={row.original} />
                     <DeleteCategoryDialog category={row.original} />
                 </div>
             )

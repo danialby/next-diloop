@@ -165,8 +165,9 @@ const IconPicker = React.forwardRef<
 
       const rows = [];
       for (let i = 0; i < category?.icons.length; i += 5) {
-        // rows.push(category?.icons.slice(i, i + 5));
-        //TODO icon-picker categories should fix
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        rows.push(category?.icons.slice(i, i + 5));
       }
 
 
