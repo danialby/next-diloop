@@ -52,36 +52,36 @@ function ViewCategoryDialog({category}) {
                     <div className={`grid grid-cols-3`}>
                         <div className={`flex flex-col col-span-2 gap-y-3`}>
                             <span className={`flex items-center`}>
-                                <div className={`flex gap-2`}>
-                                <span className={`flex text-nowrap font-semibold`}> <Type className={`w-6 h-6 ml-2`}/>عنوان :</span>
-                                <span className={` text-nowrap`}>{category?.name_fa}</span>
+                                <div className={`flex gap-2 items-center`}>
+                                <span className={`flex text-sm text-nowrap font-semibold`}> <Type className={`w-6 h-6 ml-2`}/>عنوان :</span>
+                                <span className={`text-xs text-nowrap`}>{category?.name_fa}</span>
                                 </div>
                             </span>
                             <span className={`flex items-center`}>
-                                <div className={`flex gap-2`}>
-                                <span className={`flex text-nowrap font-semibold`}> <SpellCheck className={`w-6 h-6 ml-2`}/>نام انگلیسی :</span>
-                                <span className={` text-nowrap`}>{category?.name_en}</span>
+                                <div className={`flex gap-2 items-center`}>
+                                <span className={`flex text-sm text-nowrap font-semibold`}> <SpellCheck className={`w-6 h-6 ml-2`}/>نام انگلیسی :</span>
+                                <span className={`text-xs text-nowrap`}>{category?.name_en}</span>
                                 </div>
                             </span>
                             <span className={`flex items-center`}>
-                                <div className={`flex gap-2`}>
-                                <span className={`flex text-nowrap font-semibold`}> <Network className={`w-6 h-6 ml-2`}/>نوع :</span>
-                                <span className={` text-nowrap`}>{category?.parent_id || 'دسته بندی اصلی'}</span>
+                                <div className={`flex gap-2 items-center`}>
+                                <span className={`flex text-sm text-nowrap font-semibold`}> <Network className={`w-6 h-6 ml-2`}/>نوع :</span>
+                                <span className={`text-xs text-nowrap`}>{category?.parent_id || 'دسته بندی اصلی'}</span>
                                 </div>
                             </span>
                             <span className={`flex items-center`}>
 
-                                <div className={`flex gap-2`}>
-                                <span className={`flex text-nowrap font-semibold`}> <CalendarCheck2 className={`w-6 h-6 ml-2`}/> تاریخ و ساعت :</span>
-                                <span className={` text-nowrap`}>
+                                <div className={`flex gap-2 items-center`}>
+                                <span className={`flex  text-sm text-nowrap font-semibold`}> <CalendarCheck2 className={`w-6 h-6 ml-2`}/> تاریخ و ساعت :</span>
+                                <span className={`text-xs text-nowrap`}>
                                     {toPersianDate(category?.created_at)} - {toPersianTime(category?.created_at)}
                                 </span>
                                     </div>
                             </span>
                             <span className={`flex items-center`}>
-                                <div className={`flex gap-2`}>
-                                <span className={`flex text-nowrap font-semibold`}> <AlignRight className={`w-6 h-6 ml-2`}/>توضیحات :</span>
-                                <span className={` text-nowrap`}>{category?.description}</span>
+                                <div className={`flex gap-2 items-center`}>
+                                <span className={`flex text-sm text-nowrap font-semibold`}> <AlignRight className={`w-6 h-6 ml-2`}/>توضیحات :</span>
+                                <span className={`text-xs text-nowrap`}>{category?.description || 'بدون توضیحات'}</span>
                                 </div>
                             </span>
                         </div>

@@ -185,7 +185,7 @@ export function UpdateCategoryForm({closeDialog, category}: UpdateCategoryFormPr
                         <FormItem className={`col-span-2`}>
                             <FormLabel>توضیحات</FormLabel>
                             <FormControl>
-                                <Textarea {...field} />
+                                <Textarea {...field} rows={5} className={`h-[150px] pb-[100px] overflow-y-scroll`} />
                             </FormControl>
                             <FormMessage/>
                         </FormItem>

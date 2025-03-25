@@ -35,12 +35,12 @@ export function ParentsComboBox({ data, field, onSelect }) {
         <div className="flex flex-col md:flex-row gap-2 w-full">
             <Popover open={open}>
                 <PopoverTrigger asChild onClick={() => setOpen(!open)}>
-                    <FormControl className="col-span-1">
+                    <FormControl>
                         <Button
                             variant="outline"
                             role="combobox"
                             className={cn(
-                                "min-h-[40px] w-1/2",
+                                "min-h-[40px] w-full",
                                 "items-start",
                                 "justify-between",
                                 !selectedValue && "text-muted-foreground"

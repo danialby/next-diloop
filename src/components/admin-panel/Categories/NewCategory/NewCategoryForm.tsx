@@ -106,7 +106,7 @@ export function NewCategoryForm({closeDialog}) {
 
     return (
         <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full gap-x-3 grid grid-cols-2 space-y-6">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="w-full gap-x-3 grid grid-cols-2 space-y-4">
                 <FormField
                     control={form.control}
                     name="name_fa"
@@ -167,8 +167,6 @@ export function NewCategoryForm({closeDialog}) {
                                 onValueChange={handleIconSelect}
                                 categorized={false}/>
                             </FormControl>
-                            <FormDescription> با کلیک روی این لینک میتوانید لیست آیکون‌ها را ببینید و نام آیکون مورد نظر
-                                خود را اینجا وارد کنید</FormDescription>
                             <FormMessage className={`text-xs`} />
                         </FormItem>
                     )}
@@ -180,7 +178,7 @@ export function NewCategoryForm({closeDialog}) {
                         <FormItem className={`col-span-2`}>
                             <FormLabel>توضیحات</FormLabel>
                             <FormControl>
-                                <Textarea {...field} />
+                                <Textarea {...field} rows={5} className={`h-[150px] pb-[100px] overflow-y-scroll`} />
                             </FormControl>
                         </FormItem>
                     )}
