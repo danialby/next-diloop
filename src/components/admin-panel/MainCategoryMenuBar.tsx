@@ -10,7 +10,7 @@ export function MainCategoryMenuBar() {
         setSelectedMainCategory(selectedMainCategory)
     }
     return (
-        <div className={`relative flex justify-around font-vazir p-0 h-6 md:h-8 gap-0 rounded-full group`}>
+        <div className={`relative flex justify-around font-vazir p-0 h-6 md:h-8 gap-0 rounded-full group z-3`}>
             <div className={`absolute bg-red-500 group-hover:bg-red-600 top-0 left-0 w-1/2 rounded-full h-full -z-1 transition-all duration-300 scale-[1.1]  shadow shadow-lg shadow-black/50
                             ${selectedMainCategory?.id === 1 && 'translate-x-full'}`}></div>
             <div

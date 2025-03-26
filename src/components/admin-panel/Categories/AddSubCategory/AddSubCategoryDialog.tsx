@@ -15,11 +15,15 @@ import {AddSubCategoryForm} from "@/components/admin-panel/Categories/AddSubCate
 
 function AddSubCategoryDialog({category}) {
     const [isOpen, setIsOpen] = useState(false)
+    function handleOpen(e) {
+        e.stopPropagation()
+        setIsOpen(true)
+    }
     return (
         <>
             <Dialog open={isOpen}>
                 <DialogTrigger asChild>
-                    <Button onClick={() => setIsOpen(true)} size={`icon`} className={`rounded-full`}>
+                    <Button onClick={handleOpen} size={`icon`} className={`rounded-full`}>
                         <Grid2X2Plus />
                     </Button>
                 </DialogTrigger>

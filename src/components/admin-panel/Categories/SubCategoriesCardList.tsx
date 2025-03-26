@@ -91,7 +91,7 @@ const SubCategoriesCardList = ({ items = [] }: ListItemProps) => {
                 <SearchInput
                     placeholder={'جستجو در فصل ها...'}
                     onSearch={(value) => setSearchTerm(value)}
-                    inputClasses={`rounded-none w-full border-none !bg-transparent  !shadow-none !border-b-1 !border-blue-500 focus-visible:!bg-blue-200`}
+                    inputClasses={`rounded-none w-full border-none bg-transparent  !shadow-none !border-b-1 !border-blue-500 focus-visible:!bg-white`}
                 />
 
                 <div className="flex flex-wrap gap-4 justify-start items-center">
@@ -105,7 +105,7 @@ const SubCategoriesCardList = ({ items = [] }: ListItemProps) => {
                     <Card
                         key={item.id}
                         onClick={() => setSelectedSubCategory(item)}
-                        className={`group relative p-0 rounded-md w-full cursor-pointer w-[12.5%] !h-[200px] justify-end bg-contain bg-no-repeat bg-[top_center] ${selectedSubcategory?.id === item?.id && 'ring-1 ring-rose-600'}`}
+                        className={`group relative p-0 rounded-md w-full cursor-pointer min-w-[12.5%] w-[12.5%] !h-[200px] justify-end bg-contain bg-no-repeat bg-[top_center] ${selectedSubcategory?.id === item?.id && 'ring-1 ring-rose-600'}`}
                         style={{ backgroundImage: `url(${item.poster_image || '/placeholder.jpg'})` }}
                     >
                         <Card className={`absolute gap-1 p-0 pb-2 rounded-md !w-full !h-full justify-end bg-transparent border-none !shadow-none overflow-hidden `}>
@@ -142,12 +142,13 @@ const SubCategoriesCardList = ({ items = [] }: ListItemProps) => {
                     </Card>
                 ))}
             </div>
-
-            <CustomPagination
-                currentPage={currentPage}
-                totalPages={totalPages}
-                onPageChange={(page) => setCurrentPage(page)}
-            />
+            <div className={`flex w-full justify-end`}>
+                        <CustomPagination
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            onPageChange={(page) => setCurrentPage(page)}
+                        />
+            </div>
         </div>
     );
 };

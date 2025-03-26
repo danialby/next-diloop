@@ -36,12 +36,15 @@ function DeleteCategoryDialog({category}) {
                 console.log(error)
             }
         })
-
+    function handleOpen(e) {
+        e.stopPropagation()
+        setIsOpen(true)
+    }
     return (
         <>
             <Dialog open={isOpen}>
                 <DialogTrigger asChild>
-                    <Button size={'icon'} onClick={() => setIsOpen(true)}
+                    <Button onClick={handleOpen} size={`icon`}
                             className={`!rounded-full !bg-rose-400 hover:!bg-rose-500`}>
                         <Trash />
                     </Button>

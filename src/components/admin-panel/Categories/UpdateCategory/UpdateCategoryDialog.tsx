@@ -15,11 +15,15 @@ import {UpdateCategoryForm} from "@/components/admin-panel/Categories/UpdateCate
 function TestCategoryDialog({category}) {
 
     const [isOpen, setIsOpen] = useState(false)
+    function handleOpen(e) {
+        e.stopPropagation()
+        setIsOpen(true)
+    }
     return (
         <>
             <Dialog open={isOpen}>
                 <DialogTrigger asChild>
-                    <Button size={'icon'} onClick={() => setIsOpen(true)}
+                    <Button onClick={handleOpen} size={`icon`}
                             className={`!rounded-full !bg-green-500 hover:!bg-green-600`}>
                         <Pencil />
                     </Button>

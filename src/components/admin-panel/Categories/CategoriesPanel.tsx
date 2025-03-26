@@ -55,15 +55,6 @@ export default function CategoriesPanel() {
     if (error) return <div>Error: {error.message}</div>;
             return (
                 <div className={`font-vazir`}>
-                    <div className={`flex items-center justify-center w-full `}>
-                    <div className={`w-[320px] dir-ltr space-y-4`}>
-                        <MainCategoryMenuBar />
-                    </div>
-                    </div>
-                    <div className={`space-y-2 mt-4 flex w-full justify-center md:justify-start`}>
-                        <NewCategoryDialog />
-                        <hr/>
-                    </div>
                     <div className={`my-2 md:grid grid-cols-4 font-vazir text-sm gap-x-8`}>
                         <div className={`grid grid-cols-2 xl:grid-cols-3 md:gap-2 col-span-2 py-4`}>
                             {selectedMainCategory.id === 1 && JoblessParents.map(item =>
