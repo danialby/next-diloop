@@ -10,10 +10,23 @@ import {useDebounceValue} from "usehooks-ts";
 import SearchInput from "@/components/common/SearchInput";
 import NewCategoryForm from "@/components/admin-panel/Categories/NewCategoryForm";
 import LoadingIndicator from "@/components/ui/loading";
+import {IconRenderer} from "@/components/ui/icon-picker";
+import CategoryCard from "@/components/admin-panel/CategoryCard";
+import {useRouter} from "next/navigation";
 
 export default function NewCategoriesPanel() {
     const {getCategoriesList} = useAdminPanelRoutes();
-    const {selectedMainCategory, categories_data, setCategoriesData} = useAdminStore()
+
+    const router = useRouter()
+    const {
+        selectedMainCategory,
+        categories_data,
+        setCategoriesData,
+        selectedJoblessParent,
+        setSelectedJoblessParent,
+        selectedEmployeeParent,
+        setSelectedEmployeeParent
+    } = useAdminStore()
 
     const {mutate: getCategoriesMutation, error, isPending} = useMutation({
         mutationFn: () => getCategoriesList(),
@@ -27,6 +40,15 @@ export default function NewCategoriesPanel() {
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 
+    const selectedJoblessParentList = useMemo(() => {
+        return categories_data.filter(item => item?.['parent_id'] === selectedJoblessParent?.id);
+    }, [categories_data, selectedJoblessParent]);
+
+    const selectedEmployeeParentList = useMemo(() => {
+        return categories_data.filter(item => item?.['parent_id'] === selectedEmployeeParent?.id);
+    }, [categories_data, selectedEmployeeParent]);
+
+
     const JoblessParents = useMemo(() => {
         return categories_data.filter(item => item?.['parent_id'] === null && item?.['tags']?.includes('بیکار'));
     }, [categories_data]);
@@ -35,115 +57,91 @@ export default function NewCategoriesPanel() {
         return categories_data.filter(item => item?.['parent_id'] === null && item?.['tags']?.includes('شاغل'));
     }, [categories_data]);
 
-    const [selectedJoblessParent, setSelectedJoblessParent] = useState<number>(1)
-    const [selectedEmployeeParent, setSelectedEmployeeParent] = useState<number>(1)
-
-
-    const selectedJoblessParentList = useMemo(() => {
-        return categories_data.filter(item => item?.['parent_id'] === selectedJoblessParent);
-    }, [categories_data, selectedJoblessParent]);
-
-    const selectedEmployeeParentList = useMemo(() => {
-        return categories_data.filter(item => item?.['parent_id'] === selectedEmployeeParent);
-    }, [categories_data, selectedEmployeeParent]);
-
-
-
-
 
     const [joblessSearchQuery, setJoblessSearchQuery] = useDebounceValue("", 100);
-
-    const filteredJoblessParents = useMemo(() => {
-        console.log(joblessSearchQuery)
-            return JoblessParents.filter(item => item?.['name_fa'].includes(joblessSearchQuery));
-
-    }, [joblessSearchQuery, JoblessParents]);
-
-
     const [employeeSearchQuery, setEmployeeSearchQuery] = useDebounceValue("", 100);
 
-    const filteredEmployeeParents = useMemo(() => {
-            return EmployeeParents.filter(item => item?.['name_fa'].includes(employeeSearchQuery));
+    const filteredJoblessParents = useMemo(() => {
+        return JoblessParents.filter(item => item?.['name_fa'].includes(joblessSearchQuery));
+    }, [joblessSearchQuery, JoblessParents]);
 
+    const filteredEmployeeParents = useMemo(() => {
+        return EmployeeParents.filter(item => item?.['name_fa'].includes(employeeSearchQuery));
     }, [employeeSearchQuery, EmployeeParents]);
 
 
+    function handleJoblessParentSelect(value) {
+        setSelectedJoblessParent(value)
+        router.push(`/admin-panel/new-categories/${value?.['name_en']}/`)
+    }
+    function handleEmployeeParentSelect(value) {
+        setSelectedEmployeeParent(value)
+        router.push(`/admin-panel/new-categories/${value?.['name_en']}/`)
+    }
+    
     if (error) return <div>Error: {error.message}</div>;
     return (
         <div className={`font-vazir`}>
-            <div className={`flex items-center justify-center w-full `}>
+            <div className={`flex flex-col md:flex-row items-center justify-center gap-3 md:gap-0 md:justify-between md:bg-white md:shadow py-0.5 px-1 rounded-full md:shadow-md w-full `}>
                 <div className={`w-[320px] dir-ltr space-y-4`}>
-                    <MainCategoryMenuBar />
+                    <MainCategoryMenuBar/>
                 </div>
+                    <NewCategoryDialog />
             </div>
-            <div className={`space-y-2 mt-4 flex w-full justify-center md:justify-start`}>
-                <NewCategoryDialog />
-                <hr/>
-            </div>
-            <div className={`my-2 md:grid md:grid-cols-3 xl:grid-cols-4 font-vazir text-sm gap-x-2`}>
-                {selectedMainCategory.id === 1 &&
-                    (
-                        <div
-                            className={`col-span-1 rounded-md overflow-x-hidden overflow-y-scroll no-scrollbar  shadow-[inset_0_0_5px_rgba(0,0,0,0.1)]`}>
-                            <SearchInput
-                                placeholder={'جستجو...'}
-                                onSearch={(value) =>
-                                    setJoblessSearchQuery(value)
-                                }
-                                inputClasses={`rounded-none w-full border-none !bg-transparent  !shadow-none !border-b-1 !border-blue-500`}
-                                className={`rounded-t-md !bg-blue-100`}
-                            />
-                            {isPending ?
-                                <div className={`flex items-center justify-center w-full h-[300px]`}>
-                                    <LoadingIndicator/>
-                                </div>
-                                :
-                                filteredJoblessParents?.map(item =>
-                                    <div key={item?.['id']}>
-                                        <CollapseButton data={item} selectedParent={selectedJoblessParent}
-                                                        setSelected={setSelectedJoblessParent}/>
-                                    </div>
-                                )}
-                        </div>
-                    )}
-
-                {selectedMainCategory.id === 2 &&
-                    (
-                        <div
-                            className={`col-span-1 rounded-md overflow-x-hidden overflow-y-scroll no-scrollbar  shadow-[inset_0_0_5px_rgba(0,0,0,0.1)]`}>
-                            <SearchInput
-                                placeholder={'جستجو...'}
-                                onSearch={(value) =>
-                                    setEmployeeSearchQuery(value)
-                                }
-                                inputClasses={`rounded-none w-full border-none !bg-transparent  !shadow-none !border-b-1 !border-blue-500`}
-                                className={`rounded-t-md !bg-blue-100`}
-                            />
-                            {isPending ?
-                                <div className={`flex items-center justify-center w-full h-[300px]`}>
-                                    <LoadingIndicator/>
-                                </div>
-                                :
-                                filteredEmployeeParents?.map(item =>
-                                    <div key={item?.['id']}>
-                                        <CollapseButton data={item} selectedParent={selectedEmployeeParent}
-                                                        setSelected={setSelectedEmployeeParent}/>
-                                    </div>
-                                )}
-                        </div>
-                    )}
-
-                <div
-                    className="relative h-full md:col-span-2 xl:col-span-3 rounded-lg border border-gray-200 bg-white dark:border-white/[0.05] dark:bg-white/[0.03] font-vazir  shadow shadow-lg">
-                    {selectedMainCategory?.id === 1
-                        ?
-                        (<NewCategoryForm data={selectedJoblessParentList} tag={`بیکار`} isLoading={isPending}/>)
-                        :
-                        (<NewCategoryForm data={selectedEmployeeParentList} tag={`شاغل`} isLoading={isPending}/>)
+            {selectedMainCategory.id === 1 &&
+                <SearchInput
+                    placeholder={'جستجو...'}
+                    onSearch={(value) =>
+                        setJoblessSearchQuery(value)
                     }
-                </div>
-
-
+                    inputClasses={`!shadow-none  rounded-full`}
+                    className={`mt-4 shadow shadow-md  max-w-[200px] rounded-full overflow-hidden`}
+                />
+            }
+            {selectedMainCategory.id === 2 &&
+                <SearchInput
+                    placeholder={'جستجو...'}
+                    onSearch={(value) =>
+                        setEmployeeSearchQuery(value)
+                    }
+                    inputClasses={`!shadow-none  rounded-full`}
+                    className={`mt-4 shadow shadow-md  max-w-[200px] rounded-full overflow-hidden`}
+                />
+            }
+            <div
+                className={`my-2 grid sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5 grid-rows-1 grid-flow-row font-vazir text-sm gap-1 ring-blue-200`}>
+                {
+                    selectedMainCategory.id === 1 &&
+                    (
+                        isPending
+                            ?
+                            <div className={`flex items-center justify-center w-full h-[300px]`}>
+                                <LoadingIndicator/>
+                            </div>
+                            :
+                            filteredJoblessParents?.map((item, index) =>
+                                <div key={item?.['id']}>
+                                    <CategoryCard item={item} index={index} onSelect={handleJoblessParentSelect}/>
+                                </div>
+                            )
+                    )
+                }
+                {
+                    selectedMainCategory.id === 2 &&
+                    (
+                        isPending
+                            ?
+                            <div className={`flex items-center justify-center w-full h-[300px]`}>
+                                <LoadingIndicator/>
+                            </div>
+                            :
+                            filteredEmployeeParents?.map((item, index) =>
+                                <div key={item?.['id']}>
+                                    <CategoryCard item={item} index={index} onSelect={handleEmployeeParentSelect}/>
+                                </div>
+                            )
+                    )
+                }
             </div>
         </div>
     )

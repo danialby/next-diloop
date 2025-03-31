@@ -24,18 +24,7 @@ export default function AdminLayout({
     ? "lg:mr-[290px]"
     : "lg:mr-[70px]";
 
-    const {selectedMainCategory, categories_data} = useAdminStore()
-    const [selectedJoblessParent] = useState<number>(1)
-    const [selectedEmployeeParent] = useState<number>(1)
-
-
-    const selectedParentDataJobless = useMemo(() => {
-        return categories_data.filter(item => item?.['id'] === selectedJoblessParent && item?.['tags']?.includes('بیکار'))[0];
-    }, [categories_data, selectedJoblessParent])
-
-    const selectedParentDataEmployee = useMemo(() => {
-        return categories_data.filter(item => item?.['id'] === selectedEmployeeParent && item?.['tags']?.includes('شاغل'))[0];
-    }, [categories_data, selectedEmployeeParent])
+    const {selectedMainCategory, categories_data, selectedJoblessParent, selectedEmployeeParent} = useAdminStore()
 
     const breadCrumbItems = useMemo(() => {
         return [
@@ -44,11 +33,11 @@ export default function AdminLayout({
                 type: 'link'
             },
             {
-                title : selectedMainCategory?.id === 1 ? selectedParentDataJobless?.name_fa : selectedParentDataEmployee?.name_fa,
+                title : selectedMainCategory?.id === 1 ? selectedJoblessParent?.name_fa : selectedEmployeeParent?.name_fa,
                 type: 'link'
             }
         ]
-    }, [selectedMainCategory, selectedParentDataJobless, selectedParentDataEmployee]);
+    }, [selectedMainCategory,selectedJoblessParent,selectedEmployeeParent]);
 
   return (
     <div className="relative min-h-screen bg-gray-100">
@@ -61,14 +50,8 @@ export default function AdminLayout({
       >
         {/* Page Content */}
         <div className={`p-4 mx-auto md:p-6 left-0`}>
-            <div className={`flex items-center justify-center w-full `}>
-                <div className={`w-[320px] dir-ltr space-y-4`}>
-                    <MainCategoryMenuBar/>
-                </div>
-            </div>
-            <div className={`space-y-2 mt-4 flex w-full justify-between items-center bg-white rounded-full p-1 pr-4 shadow shadow-md`}>
+            <div className={`space-y-2 mb-2 flex w-full justify-between items-center p-1 pr-4 pl-1`}>
                 <CustomBreadCrumb data={breadCrumbItems} separator={<ChevronLeft />} />
-                <NewCategoryDialog />
             </div>
             {children}
         </div>

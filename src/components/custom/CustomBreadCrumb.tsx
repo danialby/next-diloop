@@ -17,8 +17,8 @@ export default function CustomBreadCrumb({data, separator}: CustomBreadCrumbProp
             <BreadcrumbList>
                 {
                     data.map((item, index) =>
-                        <>
-                        <BreadcrumbItem className={`!text-xs`}>
+                        <div key={index} className={`flex items-center gap-1.5`}>
+                        <BreadcrumbItem>
                             {item?.title}
                         </BreadcrumbItem>
                         { index < data?.length - 1 &&
@@ -26,7 +26,7 @@ export default function CustomBreadCrumb({data, separator}: CustomBreadCrumbProp
                             { separator }
                             </BreadcrumbSeparator>
                         }
-                        </>
+                        </div>
                     )
                 }
             </BreadcrumbList>

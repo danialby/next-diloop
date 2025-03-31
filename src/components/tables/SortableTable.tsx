@@ -62,18 +62,21 @@ export function SortableTable({data, columns, inputPlaceHolder, searchColumn}) {
 
   return (
       <div className="w-full">
-        <div className="flex items-center py-4">
+        <div className="flex items-start py-4">
+          <div className={`flex flex-col gap-1`}>
           <Input
               placeholder={inputPlaceHolder}
               value={(table.getColumn(searchColumn)?.getFilterValue() as string) ?? ""}
               onChange={(event) =>
                   table.getColumn(searchColumn)?.setFilterValue(event.target.value)
               }
-              className="max-w-sm"
+              className="max-w-sm !py-2 !text-xs !h-8"
           />
+          {/*<span className={`text-[10px] text-gray-400`}>نام فارسی، نام انگلیسی، URL</span>*/}
+          </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto mr-2">
+              <Button variant="outline" className="ml-auto mr-2 text-xs h-8">
                 ستون ها <ChevronDown />
               </Button>
             </DropdownMenuTrigger>
@@ -86,7 +89,7 @@ export function SortableTable({data, columns, inputPlaceHolder, searchColumn}) {
                     return (
                         <DropdownMenuCheckboxItem
                             key={column.id}
-                            className="capitalize"
+                            className="capitalize text-xs"
                             checked={column.getIsVisible()}
                             onCheckedChange={(value) =>
                                 column.toggleVisibility(!!value)
@@ -106,7 +109,7 @@ export function SortableTable({data, columns, inputPlaceHolder, searchColumn}) {
                   <TableRow key={headerGroup.id}>
                     {headerGroup.headers.map((header) => {
                       return (
-                          <TableHead key={header.id}>
+                          <TableHead key={header.id} className={`text-xs`}>
                             {header.isPlaceholder
                                 ? null
                                 : flexRender(
@@ -127,7 +130,7 @@ export function SortableTable({data, columns, inputPlaceHolder, searchColumn}) {
                           data-state={row.getIsSelected() && "selected"}
                       >
                         {row.getVisibleCells().map((cell) => (
-                            <TableCell key={cell.id}>
+                            <TableCell key={cell.id} className={`text-xs`}>
                               {flexRender(
                                   cell.column.columnDef.cell,
                                   cell.getContext()
