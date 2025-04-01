@@ -1,19 +1,20 @@
-"use client";
-import Link from "next/link";
-import React, { useState } from "react";
-import { Dropdown } from "../ui/dropdown/Dropdown";
-import { DropdownItem } from "../ui/dropdown/DropdownItem";
-import {UserCircle} from "lucide-react";
-export default function UserDropdown() {
-  const [isOpen, setIsOpen] = useState(false);
+'use client'
+import { UserCircle } from 'lucide-react'
+import Link from 'next/link'
+import React, { useState } from 'react'
+import { Dropdown } from '../ui/dropdown/Dropdown'
+import { DropdownItem } from '../ui/dropdown/DropdownItem'
 
-function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-  e.stopPropagation();
-  setIsOpen((prev) => !prev);
-}
+export default function UserDropdown() {
+  const [isOpen, setIsOpen] = useState(false)
+
+  function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+    e.stopPropagation()
+    setIsOpen(prev => !prev)
+  }
 
   function closeDropdown() {
-    setIsOpen(false);
+    setIsOpen(false)
   }
   return (
     <div className="relative">
@@ -23,19 +24,19 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
       >
         <span className="mr-3 overflow-hidden rounded-full h-11 w-11 flex items-center justify-center">
           <UserCircle className="h-[26px] w-[26px]" />
-          {/*<Image*/}
-          {/*  width={44}*/}
-          {/*  height={44}*/}
-          {/*  src="/images/user/owner.jpg"*/}
-          {/*  alt="User"*/}
-          {/*/>*/}
+          {/* <Image */}
+          {/*  width={44} */}
+          {/*  height={44} */}
+          {/*  src="/images/user/owner.jpg" */}
+          {/*  alt="User" */}
+          {/* /> */}
         </span>
 
-        {/*<span className="block mr-1 font-medium text-theme-sm">Musharof</span>*/}
+        {/* <span className="block mr-1 font-medium text-theme-sm">Musharof</span> */}
 
         <svg
           className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${
-            isOpen ? "rotate-180" : ""
+            isOpen ? 'rotate-180' : ''
           }`}
           width="18"
           height="20"
@@ -167,5 +168,5 @@ function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
         </Link>
       </Dropdown>
     </div>
-  );
+  )
 }

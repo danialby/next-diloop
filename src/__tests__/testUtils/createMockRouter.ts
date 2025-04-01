@@ -1,5 +1,5 @@
-//// filepath: /home/reza/work/Projects/Diloop/DiloopFrontEndReactNext/src/__tests__/testUtils/createMockRouter.ts
-import { NextRouter } from 'next/router'
+/// / filepath: /home/reza/work/Projects/Diloop/DiloopFrontEndReactNext/src/__tests__/testUtils/createMockRouter.ts
+import type { NextRouter } from 'next/router'
 import { vi } from 'vitest'
 
 export function createMockRouter(router: Partial<NextRouter> = {}): NextRouter {

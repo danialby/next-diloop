@@ -1,9 +1,9 @@
-global.ResizeObserver = class {
+globalThis.ResizeObserver = class {
   observe() { }
   unobserve() { }
   disconnect() { }
 }
 
 if (!document.elementFromPoint) {
-  document.elementFromPoint = () => null;
+  document.elementFromPoint = () => null
 }

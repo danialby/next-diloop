@@ -1,14 +1,13 @@
- 
 import { vi } from 'vitest'
 
 // ----- Axios Instance Mock -----
 
 // This variable holds the current response data for the post call.
-export let postResponseData = { data: { data: { result: true  } } }
+export let postResponseData = { data: { data: { result: true } } }
 
 // Setter to update the post response data from individual tests.
-export const setPostResponseData = (response: never) => {
-  postResponseData = {data:response}
+export function setPostResponseData(response: never) {
+  postResponseData = { data: response }
 }
 
 export const axiosMock = {
@@ -17,7 +16,7 @@ export const axiosMock = {
     response: { use: vi.fn() },
   },
   get: vi.fn(),
-  post: vi.fn(( ) => {
+  post: vi.fn(() => {
     return Promise.resolve(postResponseData)
   }),
 }

@@ -1,9 +1,11 @@
 // selectors.ts
-export const createSelectors = (state: AdminStoreState) => ({
-    getJoblessParents: () =>
-        state.categories_data.filter(item => item?.['parent_id'] === state.selectedJoblessParent),
-    getEmployeeParents: () =>
-        state.categories_data.filter(item => item?.['parent_id'] === state.selectedEmployeeParent),
+import {AdminStoreState} from "@/types";
+
+export function createSelectors(state: AdminStoreState) {
+  return {
+    getParents: () =>
+      state.categories_data.filter(item => item === state.selectedParent),
     getCategoriesByParent: (parentId: number) =>
-        state.categories_data.filter(item => item?.['parent_id'] === parentId)
-});
+      state.categories_data.filter(item => item?.parent_id === parentId),
+  }
+}

@@ -30,7 +30,7 @@ interface SortConfig {
   order: typeof SORT_ORDERS[keyof typeof SORT_ORDERS]
 }
 
-const SubCategoryPage: React.FC = () => {
+const CategoryPage: React.FC = () => {
   const {
     selectedMainCategory,
     categories_data,
@@ -282,4 +282,4 @@ const SubCategoryPage: React.FC = () => {
   )
 }
 
-export default SubCategoryPage
+export default CategoryPage

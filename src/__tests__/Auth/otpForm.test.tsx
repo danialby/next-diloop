@@ -1,13 +1,10 @@
-import { render, screen, waitFor } from '@/__tests__/testUtils/utils'
-import { describe, expect, it, beforeAll } from 'vitest'
 import { axiosMock, mockNavigationPush, setPostResponseData } from '@/__tests__/testUtils/Mocks'
+import { render, screen, waitFor } from '@/__tests__/testUtils/utils'
 import OtpForm from '@/app/(full-width-pages)/(auth)/login/input-code/page'
 import userEvent from '@testing-library/user-event'
+import { beforeAll, describe, expect, it } from 'vitest'
 
-
-
-
-describe('OtpForm', () => {
+describe('otpForm', () => {
   beforeAll(() => {
     render(<OtpForm />)
   })
@@ -15,7 +12,7 @@ describe('OtpForm', () => {
   it('renders the OTP input form', () => {
     const formText = screen.getByText('کد دریافت شده را در قسمت پایین وارد کنید')
     expect(formText).toBeDefined()
-    const otpInput = screen.getByTestId('otp-input');
+    const otpInput = screen.getByTestId('otp-input')
     expect(otpInput).toBeDefined()
   })
 
@@ -28,11 +25,11 @@ describe('OtpForm', () => {
       expect(axiosMock.post).toHaveBeenCalledWith(
         '/api/v1/verify-otp',
         {
-          "mobile": "",
-          "otp": "123456",
-          "page": "login",
+          mobile: '',
+          otp: '123456',
+          page: 'login',
         },
-        undefined
+        undefined,
       )
     })
 
@@ -41,11 +38,7 @@ describe('OtpForm', () => {
       expect(mockNavigationPush).toHaveBeenCalledWith('/admin-panel')
     })
     await waitFor(() => {
-      expect(document.cookie).toContain('auth_token=token');
-    });
-
-
+      expect(document.cookie).toContain('auth_token=token')
+    })
   })
-
 })
-

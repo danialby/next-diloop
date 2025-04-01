@@ -1,11 +1,11 @@
-import UserLogin from "@/components/auth/UserLogin";
-import { Metadata } from "next";
+import type { Metadata } from 'next'
+import UserLogin from '@/components/auth/UserLogin'
 
 export const metadata: Metadata = {
-  title: "Next.js SignIn Page | TailAdmin - Next.js Dashboard Template",
-  description: "This is Next.js Signin Page TailAdmin Dashboard Template",
-};
+  title: 'Next.js SignIn Page | TailAdmin - Next.js Dashboard Template',
+  description: 'This is Next.js Signin Page TailAdmin Dashboard Template',
+}
 
 export default function UserLoginPage() {
-  return <UserLogin />;
+  return <UserLogin />
 }

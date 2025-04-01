@@ -1,31 +1,30 @@
-"use client";
+'use client'
 
-import { useSidebar } from "@/context/SidebarContext";
-import AppHeader from "@/layout/AppHeader";
-import AppSidebar from "@/layout/AppSidebar";
-import Backdrop from "@/layout/Backdrop";
-import React from "react";
+import { useSidebar } from '@/context/SidebarContext'
+import AppHeader from '@/layout/AppHeader'
+import AppSidebar from '@/layout/AppSidebar'
+import Backdrop from '@/layout/Backdrop'
+import React from 'react'
 
 export default function AdminLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: React.ReactNode
 }) {
-  const { isExpanded, isMobileOpen } = useSidebar();
+  const { isExpanded, isMobileOpen } = useSidebar()
 
   // Dynamic class for main content margin based on sidebar state
   const mainContentMargin = isMobileOpen
-    ? "mr-0"
+    ? 'mr-0'
     : isExpanded
-    ? "lg:mr-[290px]"
-    : "lg:mr-[70px]";
-
+      ? 'lg:mr-[290px]'
+      : 'lg:mr-[70px]'
 
   return (
     <div className="min-h-screen">
-        <Backdrop />
-        {/* Header */}
-        <AppHeader />
+      <Backdrop />
+      {/* Header */}
+      <AppHeader />
       {/* Sidebar and Backdrop */}
       <AppSidebar />
       {/* Main Content Area */}
@@ -33,8 +32,8 @@ export default function AdminLayout({
         className={`flex-1 transition-all  duration-300 ease-in-out ${mainContentMargin}`}
       >
         {/* Page Content */}
-        <div className={`p-4 mx-auto md:p-6 left-0`}>{children}</div>
+        <div className="p-4 mx-auto md:p-6 left-0">{children}</div>
       </div>
     </div>
-  );
+  )
 }

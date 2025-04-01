@@ -1,11 +1,11 @@
 // types.ts
 
-interface MainCategory {
+export interface MainCategory {
   id: number
   title: string | undefined
 }
 
-interface Category {
+export interface Category {
   id: number | undefined
   name_fa: string
   name_en: string

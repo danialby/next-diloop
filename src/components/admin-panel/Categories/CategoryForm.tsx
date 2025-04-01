@@ -1,146 +1,52 @@
-"use client";
-import React, {useMemo} from "react";
-import {SortableTable} from "@/components/tables/SortableTable";
-import {ColumnDef} from "@tanstack/react-table";
-import {Button} from "@/components/ui/button";
-import {ArrowUpDown} from "lucide-react";
-import {toPersianDate, toPersianTime} from "@/utils/dateUtils";
-import ViewCategoryDialog from "@/components/admin-panel/Categories/ViewCategoryDialog";
-import DeleteCategoryDialog from "@/components/admin-panel/Categories/DeleteCategory/DeleteCategoryDialog";
-import LoadingIndicator from "@/components/ui/loading";
-import Image from "next/image";
-import UpdateSubCategoryDialog from "@/components/admin-panel/Categories/UpdateCategory/UpdateSubCategoryDialog";
+'use client'
+import SubCategoryCard from '@/components/admin-panel/SubCategoryCard'
+import LoadingIndicator from '@/components/ui/loading'
+import useAdminStore from '@/store/adminStore'
+import React, { useMemo } from 'react'
 
-export type CategoryRow = {
-    id: number
-    icon_name: string
-    name_fa: string
-    description: string
-    created_at: string
+export interface CategoryRow {
+  id: number
+  icon_name: string
+  name_fa: string
+  description: string
+  created_at: string
 }
 
+export default function CategoryForm({ data, isLoading }) {
+  const {
+    selectedMainCategory,
+  } = useAdminStore()
+  const DataBasedOnTag = useMemo(() => {
+    return data?.filter(item => item?.tags?.includes(selectedMainCategory?.title))
+  }, [data, selectedMainCategory])
 
-
-const columns: ColumnDef<CategoryRow>[] = [
-    {
-        accessorKey: "id",
-        header: ({ column }) => {
-            return (
-                <div className="text-right"><Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    #
-                    <ArrowUpDown/>
-                </Button>
-                </div>
-            )
-        },
-        cell: ({ row }) => (
-            <div className={'text-right pr-4'}>{row.getValue("id")}</div>
-        ),
-    },
-    {
-        accessorKey: "poster_image",
-        header: () => <div className="text-right">آیکون</div>,
-        cell: ({ row }) => (
-            <div className="text-right">
-                { row.getValue("poster_image") ?
-                    ( <Image src={row.getValue("poster_image")} width={100} height={56} className={`w-full h-14 rounded-lg`} alt={''} /> )
-                    :
-                    ( <span>تصویر ندارد</span> )
-                }
+  return (
+    <div
+      className="my-2 grid sm:grid-cols-2 md:grid-cols-5 xl:grid-cols-6 grid-rows-1 grid-flow-row font-vazir text-sm gap-1 ring-blue-200"
+    >
+      {isLoading
+        ? (
+            <div className="flex items-center justify-center w-full h-[300px]">
+              <LoadingIndicator />
             </div>
-        ),
-    },
-    {
-        accessorKey: "name_fa",
-        header: ({ column }) => {
-            return (
-                <div className="text-right"><Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    عنوان
-                    <ArrowUpDown/>
-                </Button>
-                </div>
-            )
-        },
-        cell: ({ row }) => <div className="lowercase">{row.getValue("name_fa")}</div>,
-    },
-    {
-        accessorKey: "description",
-        header: () => <div className="text-right">توضیحات</div>,
-        cell: ({ row }) => (
-            <div>{row.getValue("description")}</div>
-        ),
-    },
-    {
-        accessorKey: "created_at",
-        header: ({ column }) => {
-            return (
-                <div className="text-right"><Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    تاریخ
-                    <ArrowUpDown/>
-                </Button>
-                </div>
-            )
-        },
-        cell: ({ row }) => <>
-            <div className={`flex flex-col`}>
-                <span> {toPersianDate(row.getValue('created_at'))} </span>
-                <span> {toPersianTime(row.getValue('created_at'))} </span>
+          )
+        : DataBasedOnTag.length > 0
+          ? DataBasedOnTag?.map(item => (
+            <div key={item?.id}>
+              <SubCategoryCard item={item} onSelect={undefined} />
             </div>
-        </>
-    },
-    {
-        id: "actions",
-        header: () => <div className="text-right">عملیات</div>,
-        cell: ({ row }) => {
-            return (
-                <div className={'flex gap-1'}>
-                    <ViewCategoryDialog category={row.original}/>
-                    <UpdateSubCategoryDialog category={row.original} />
-                    <DeleteCategoryDialog category={row.original} />
-                </div>
-            )
-        },
-    },
-]
-
-export default function CategoryForm({data, isLoading, tag}) {
-
-    const DataBasedOnTag = useMemo(() => {
-        return data?.filter(item => item?.['tags']?.includes(tag));
-    }, [data, tag]);
-
-    return (
-        <>
-            {isLoading ?
-                <div className={`flex items-center justify-center w-full h-[300px]`}>
-                    <LoadingIndicator />
-                </div>
-                :
-                <div className={`mx-4`}>
-                    {DataBasedOnTag.length > 0 ?
-                        (<SortableTable data={DataBasedOnTag} columns={columns}
-                                        inputPlaceHolder={'جستجو در دسته بندی ها...'}
-                                        searchColumn={'name_fa'}/> )
-                            :
-                        ( <div className={`flex w-full min-h-[100px] items-center justify-center`}>
-                           <span className={`text-sm text-gray-400`}>
-                               این دسته بندی هیج فصلی ندارد...
-                           </span>
-                        </div>
-                        )
-                    }
-                </div>
-            }
-        </>
-    )
+          ),
+          )
+        // <SortableTable data={DataBasedOnTag} columns={columns}
+        //             inputPlaceHolder={'جستجو...'}
+        //             searchColumn={'name_fa'}/> )
+          : (
+              <div className="flex w-full min-h-[100px] items-center justify-center">
+                <span className="text-sm text-gray-400">
+                  این دسته بندی هیج فصلی ندارد...
+                </span>
+              </div>
+            )}
+    </div>
+  )
 }
-

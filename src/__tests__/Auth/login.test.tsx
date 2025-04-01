@@ -1,10 +1,10 @@
-import { render, screen, fireEvent, waitFor } from '@/__tests__/testUtils/utils'
-import userEvent from '@testing-library/user-event'
-import { describe, expect, it, beforeAll } from 'vitest'
 import { axiosMock, mockNavigationPush, setPostResponseData } from '@/__tests__/testUtils/Mocks'
+import { fireEvent, render, screen, waitFor } from '@/__tests__/testUtils/utils'
 import UserLoginPage from '@/app/(full-width-pages)/(auth)/login/page'
+import userEvent from '@testing-library/user-event'
+import { beforeAll, describe, expect, it } from 'vitest'
 
-describe('UserLoginPage', () => {
+describe('userLoginPage', () => {
   beforeAll(() => {
     render(<UserLoginPage />)
   })
@@ -13,7 +13,7 @@ describe('UserLoginPage', () => {
     // Assuming the login heading is "ورود به دیلوپ"
     const heading = screen.getByRole('heading', {
       level: 1,
-      name: /ورود به دیلوپ/i,
+      name: /ورود به دیلوپ/,
     })
     expect(heading).toBeDefined()
   })
@@ -46,9 +46,9 @@ describe('UserLoginPage', () => {
         '/api/v1/login',
         {
           mobile: '09123456789',
-          method: 'otp'
+          method: 'otp',
         },
-        undefined
+        undefined,
       )
     })
     await waitFor(() => {
