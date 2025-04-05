@@ -1,5 +1,6 @@
 'use client'
 
+import Logo from '@/../public/images/logo/diloop-logo.png'
 import { useApiRoutes } from '@/app/api/auth/routes'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form'
@@ -13,7 +14,6 @@ import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import Countdown, { zeroPad } from 'react-countdown'
 import { useForm } from 'react-hook-form'
-import Logo from '/public/images/logo/diloop-logo.png'
 
 export default function InputCodeForm() {
   const router = useRouter()
@@ -51,13 +51,13 @@ export default function InputCodeForm() {
       // send code to number
       console.warn(response)
 
-      setAuthToken(response?.['data'].token)
-      document.cookie = `auth_token=${response?.['data'].token}`
+      setAuthToken(response?.data.token)
+      document.cookie = `auth_token=${response?.data.token}`
       router.push('/admin-panel')
     },
     onError: (error) => {
       console.warn(error)
-      setError(error?.['response']?.data?.message)
+      setError(error?.response?.data?.message)
     },
   })
 
@@ -75,7 +75,7 @@ export default function InputCodeForm() {
     },
     onError: (error) => {
       console.warn(error)
-      setError(error?.['response']?.data?.message)
+      setError(error?.response?.data?.message)
     },
   })
 

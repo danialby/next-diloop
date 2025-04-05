@@ -2,6 +2,7 @@
 import SubCategoryCard from '@/components/admin-panel/SubCategoryCard'
 import LoadingIndicator from '@/components/ui/loading'
 import useAdminStore from '@/store/adminStore'
+import { useRouter } from 'next/navigation'
 import React, { useMemo } from 'react'
 
 export interface CategoryRow {
@@ -15,10 +16,20 @@ export interface CategoryRow {
 export default function CategoryForm({ data, isLoading }) {
   const {
     selectedMainCategory,
+    selectedParent,
+    setSelectedSubCategory,
   } = useAdminStore()
+
+  const router = useRouter()
+
   const DataBasedOnTag = useMemo(() => {
     return data?.filter(item => item?.tags?.includes(selectedMainCategory?.title))
   }, [data, selectedMainCategory])
+
+  function handleSelect(value) {
+    setSelectedSubCategory(value)
+    router.push(`/admin-panel/categories/${selectedParent?.id}/${value?.id}`)
+  }
 
   return (
     <div
@@ -33,7 +44,7 @@ export default function CategoryForm({ data, isLoading }) {
         : DataBasedOnTag.length > 0
           ? DataBasedOnTag?.map(item => (
             <div key={item?.id}>
-              <SubCategoryCard item={item} onSelect={undefined} />
+              <SubCategoryCard item={item} onSelect={() => handleSelect(item)} />
             </div>
           ),
           )

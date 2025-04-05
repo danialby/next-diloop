@@ -1,7 +1,8 @@
 'use client'
+import type { Category } from '@/types'
 import { useAdminPanelRoutes } from '@/app/api/admin-panel/routes'
-import { Button } from '@/components/ui/button'
 
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
@@ -20,7 +21,6 @@ import { Loader2 } from 'lucide-react'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import {Category} from "@/types";
 
 const FormSchema = z.object({
   name_fa: z.string().min(2, {
@@ -74,12 +74,12 @@ export function NewCategoryForm({ closeDialog }) {
       onSuccess: (response) => {
         // send code to number
         console.warn(response)
-          addStoreCategory(
-              // @ts-expect-error data inside response
-              response?.data?.category,
-          ).then(() => {
-                closeDialog()
-          })
+        addStoreCategory(
+          // @ts-expect-error data inside response
+          response?.data?.category,
+        ).then(() => {
+          closeDialog()
+        })
       },
       onError: (error) => {
         console.warn(error)
@@ -90,7 +90,7 @@ export function NewCategoryForm({ closeDialog }) {
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     // @ts-expect-error data is category
-      mutateNewCategory.mutate(data)
+    mutateNewCategory.mutate(data)
     console.warn('Form submitted:')
     console.warn(JSON.stringify(data, null, 2))
   }
@@ -191,9 +191,9 @@ export function NewCategoryForm({ closeDialog }) {
             <FormMessage>
               <div className="space-x-2">
                 <span className="font-bold">خطای سرور :</span>
-                <span className="text-xs">{apiError?.['response']?.data.message}</span>
+                <span className="text-xs">{apiError?.response?.data.message}</span>
                 <br />
-                <span className="text-xs">{JSON.stringify(apiError?.['response']?.data.errors)}</span>
+                <span className="text-xs">{JSON.stringify(apiError?.response?.data.errors)}</span>
               </div>
             </FormMessage>
           )}

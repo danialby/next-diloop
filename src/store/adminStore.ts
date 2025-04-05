@@ -1,7 +1,7 @@
+import type { AdminStoreState, BookResponse, Category, MainCategory } from '@/types'
 // adminStore.ts
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
-import {AdminStoreState, Category, MainCategory} from "@/types";
 
 const useAdminStore = create<AdminStoreState>()(
   devtools(set => ({
@@ -15,6 +15,10 @@ const useAdminStore = create<AdminStoreState>()(
     selectedParent: null,
     setSelectedParent: (item: Category) =>
       set(state => ({ ...state, selectedParent: item })),
+
+    selectedSubCategory: null,
+    setSelectedSubCategory: (item: Category) =>
+      set(state => ({ ...state, selectedSubCategory: item })),
 
     categories_data: [],
     loading: false,
@@ -67,6 +71,63 @@ const useAdminStore = create<AdminStoreState>()(
         set(state => ({
           ...state,
           categories_data: state.categories_data.filter(item => item?.id !== id),
+          loading: false,
+        }))
+      }
+      catch (err) {
+        set(state => ({
+          ...state,
+          error: err instanceof Error ? err.message : 'Unknown error',
+          loading: false,
+        }))
+      }
+    },
+    books_data: [],
+    setBooksData: (books_data: BookResponse[]) =>
+      set(state => ({ ...state, books_data })),
+    addStoreBook: async (book: BookResponse) => {
+      set(state => ({ ...state, loading: true, error: null }))
+      try {
+        set(state => ({
+          ...state,
+          books_data: [...state.books_data, book],
+          loading: false,
+        }))
+      }
+      catch (err) {
+        set(state => ({
+          ...state,
+          error: err instanceof Error ? err.message : 'Unknown error',
+          loading: false,
+        }))
+      }
+    },
+
+    updateStoreBook: async (index: number, book: BookResponse) => {
+      set(state => ({ ...state, loading: true, error: null }))
+      try {
+        set(state => ({
+          ...state,
+          books_data: state.books_data.map(item =>
+            item?.id === index ? book : item,
+          ),
+          loading: false,
+        }))
+      }
+      catch (err) {
+        set(state => ({
+          ...state,
+          error: err instanceof Error ? err.message : 'Unknown error',
+          loading: false,
+        }))
+      }
+    },
+    deleteStoreBook: async (id: number) => {
+      set(state => ({ ...state, loading: true, error: null }))
+      try {
+        set(state => ({
+          ...state,
+          books_data: state.books_data.filter(item => item?.id !== id),
           loading: false,
         }))
       }

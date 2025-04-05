@@ -1,7 +1,7 @@
 'use client'
 
 import { useAdminPanelRoutes } from '@/app/api/admin-panel/routes'
-import { ParentsComboBox } from '@/components/admin-panel/Categories/ParentsComboBox'
+import { FilterableComboBox } from '@/components/admin-panel/FilterableComboBox'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -79,10 +79,10 @@ export function UpdateSubCategoryForm({ closeDialog, category }: UpdateCategoryF
         // send code to number
         console.warn(response)
         // @ts-expect-error data in response
-          updateStoreCategory(response?.data?.category?.id, response?.data?.category,
-          ).then(()  => {
-            closeDialog()
-          })
+        updateStoreCategory(response?.data?.category?.id, response?.data?.category,
+        ).then(() => {
+          closeDialog()
+        })
       },
       onError: (error) => {
         setApiError(error)
@@ -109,7 +109,7 @@ export function UpdateSubCategoryForm({ closeDialog, category }: UpdateCategoryF
                   is_active: 1,
                   parent_id: data?.parent_id,
                   tags: currentCategory?.tags,
-                  poster_image: currentCategory?.poster_image,
+                  poster_image: currentCategory?.poster_image || '',
                 }
     mutateUpdateSubCategory.mutate(category_updateSubData)
     console.warn('Form submitted:')
@@ -118,7 +118,7 @@ export function UpdateSubCategoryForm({ closeDialog, category }: UpdateCategoryF
 
   const parents = useMemo(() => {
     // @ts-expect-error tags can be null
-      return categories_data.filter(item => item?.parent_id === null && item?.tags?.includes(selectedMainCategory?.title))
+    return categories_data.filter(item => item?.parent_id === null && item?.tags?.includes(selectedMainCategory?.title))
   }, [categories_data, selectedMainCategory])
 
   return (
@@ -160,7 +160,7 @@ export function UpdateSubCategoryForm({ closeDialog, category }: UpdateCategoryF
                   <FormItem>
                     <FormLabel>دسته بندی والد</FormLabel>
                     <FormControl>
-                      <ParentsComboBox data={parents} field={currentCategory?.parent_id} onSelect={value => form.setValue('parent_id', value?.id)} />
+                      <FilterableComboBox data={parents} field={currentCategory?.parent_id} onSelect={value => form.setValue('parent_id', value?.id)} option_title="name_fa" />
                     </FormControl>
                   </FormItem>
                 </div>
@@ -201,9 +201,9 @@ export function UpdateSubCategoryForm({ closeDialog, category }: UpdateCategoryF
             <FormMessage>
               <span className="space-x-2">
                 <span className="font-bold">خطای سرور :</span>
-                <span className="text-xs">{apiError?.['response']?.data?.message}</span>
+                <span className="text-xs">{apiError?.response?.data?.message}</span>
                 <br />
-                <span className="text-xs">{JSON.stringify(apiError?.['response']?.data?.errors)}</span>
+                <span className="text-xs">{JSON.stringify(apiError?.response?.data?.errors)}</span>
               </span>
             </FormMessage>
           )}

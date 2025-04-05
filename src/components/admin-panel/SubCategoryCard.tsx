@@ -17,11 +17,7 @@ export default function SubCategoryCard({ item, onSelect }) {
     <div
       className="group relative cursor-pointer overflow-hidden  bg-white scale-[0.96] shadow shadow-sm  rounded-lg hover:shadow-md border hover:border-blue-500 hover:scale-[1] transition transition-[border, shadow, scale]"
     >
-      <div
-        onClick={() => onSelect(item)}
-        className={`relative z-20 h-full w-full flex flex-col items-center justify-center gap-2 p-2 md:px-4 md:pt-2 md:pb-1 md:pl-4 min-h-24 
-                    transition transition-all duration-300 dark:bg-cyan-800 bg-white group-hover:opacity-0`}
-      >
+      <div onClick={() => onSelect(item)} className="relative z-20 h-full w-full flex flex-col items-center justify-center gap-2 p-2 md:px-4 md:pt-2 md:pb-1 md:pl-4 min-h-24 transition transition-all duration-300 dark:bg-cyan-800 bg-white group-hover:opacity-0">
         <div className="flex flex-col gap-1 w-full h-full">
           <span
             className="truncate text-xs font-semibold lg:text-sm"

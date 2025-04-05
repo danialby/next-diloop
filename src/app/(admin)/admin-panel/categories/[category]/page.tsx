@@ -1,7 +1,7 @@
 'use client'
 
+import { CategoryDetailsCard } from '@/components/admin-panel/Categories/CategoryDetailsCard'
 import CategoryForm from '@/components/admin-panel/Categories/CategoryForm'
-import { DetailsCard } from '@/components/admin-panel/Categories/DetailsCard'
 import SearchInput from '@/components/common/SearchInput'
 import {
   Pagination,
@@ -32,7 +32,6 @@ interface SortConfig {
 
 const CategoryPage: React.FC = () => {
   const {
-    selectedMainCategory,
     categories_data,
     selectedParent,
   } = useAdminStore()
@@ -43,12 +42,11 @@ const CategoryPage: React.FC = () => {
   })
   const [currentPage, setCurrentPage] = useState(1)
 
-  const selectedParentList = useMemo(() => {
+  const subCategoriesList = useMemo(() => {
     return categories_data.filter((item) => {
-      // @ts-expect-error tags can be null
-      return item?.parent_id === selectedParent?.id && item?.tags?.includes(selectedMainCategory?.title)
+      return item?.parent_id === selectedParent?.id
     })
-  }, [categories_data, selectedParent, selectedMainCategory])
+  }, [categories_data, selectedParent])
 
   const toggleSortOrder = useCallback((currentOrder: string) => {
     if (currentOrder === SORT_ORDERS.ASCENDING)
@@ -59,7 +57,7 @@ const CategoryPage: React.FC = () => {
   }, [])
 
   const sortCategories = useCallback((
-    categories: typeof selectedParentList,
+    categories: typeof subCategoriesList,
     config: SortConfig,
   ) => {
     if (config.field === null || config.order === SORT_ORDERS.NONE) {
@@ -88,11 +86,11 @@ const CategoryPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useDebounceValue('', 100)
 
   const filteredAndSortedSubCategories = useMemo(() => {
-    const result = selectedParentList.filter(
+    const result = subCategoriesList.filter(
       item => item?.name_fa.includes(searchQuery),
     )
     return sortCategories(result, sortConfig)
-  }, [searchQuery, selectedParentList, sortConfig, sortCategories])
+  }, [searchQuery, subCategoriesList, sortConfig, sortCategories])
 
   // Pagination logic
   const totalItems = filteredAndSortedSubCategories.length
@@ -109,13 +107,13 @@ const CategoryPage: React.FC = () => {
   }
 
   const handleSortChange = useCallback((
-      field: string,
-      setter: (value: (((prevState: SortConfig) => SortConfig) | SortConfig)) => void,
+    field: string,
+    setter: (value: (((prevState: SortConfig) => SortConfig) | SortConfig)) => void,
   ) => {
     // @ts-expect-error SortConfig problem
     setter((prev: SortConfig) => ({
       field,
-      order: toggleSortOrder(prev?.['order']),
+      order: toggleSortOrder(prev?.order),
     }))
     setCurrentPage(1)
   }, [toggleSortOrder])
@@ -177,7 +175,7 @@ const CategoryPage: React.FC = () => {
 
   return (
     <>
-      <DetailsCard data={selectedParent} />
+      <CategoryDetailsCard data={selectedParent} />
       <span className="mt-3 flex gap-1 text-sm">
         <span>زیرشاخه های</span>
         <span className="font-bold">{selectedParent?.name_fa}</span>
@@ -261,7 +259,7 @@ const CategoryPage: React.FC = () => {
                       className="cursor-pointer"
                     >
                       <>
-                      {page}
+                        {page}
                       </>
                     </PaginationLink>
                   </PaginationItem>

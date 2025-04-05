@@ -1,9 +1,9 @@
 'use client'
 import { Input } from '@/components/ui/input'
 import { ImagePlus, XCircleIcon } from 'lucide-react'
+import Image from 'next/image'
 import React from 'react'
 import { useDropzone } from 'react-dropzone'
-import Image from "next/image";
 
 interface ImageUploaderProps {
   image?: File | string
@@ -50,6 +50,8 @@ export function ImageUploader({ onSelectImage, image }: ImageUploaderProps) {
           <Image
             src={preview as string || image as string}
             alt="Uploaded image"
+            width={100}
+            height={100}
             className="max-h-[150px] rounded-lg"
           />
         )}

@@ -1,4 +1,5 @@
 'use client'
+import Logo from '@/../public/images/logo/diloop-logo.png'
 import { ThemeToggleButton } from '@/components/common/ThemeToggleButton'
 import NotificationDropdown from '@/components/header/NotificationDropdown'
 import UserDropdown from '@/components/header/UserDropdown'
@@ -6,7 +7,6 @@ import { useSidebar } from '@/context/SidebarContext'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useRef, useState } from 'react'
-import Logo from '/public/images/logo/diloop-logo.png'
 
 const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false)

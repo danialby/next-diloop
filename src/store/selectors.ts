@@ -1,5 +1,5 @@
 // selectors.ts
-import {AdminStoreState} from "@/types";
+import type { AdminStoreState } from '@/types'
 
 export function createSelectors(state: AdminStoreState) {
   return {

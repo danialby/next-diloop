@@ -1,5 +1,6 @@
 'use client'
 
+import Logo from '@/../public/images/logo/diloop-logo.png'
 import { useApiRoutes } from '@/app/api/auth/routes'
 import { Button } from '@/components/ui/button'
 import {
@@ -13,10 +14,10 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { useAuthStore } from '@/store/authStore'
+
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { useMutation } from '@tanstack/react-query'
-
 import { Loader2 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -24,7 +25,6 @@ import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import Logo from '/public/images/logo/diloop-logo.png'
 
 export default function UserLogin() {
   const router = useRouter()
@@ -48,7 +48,7 @@ export default function UserLogin() {
   const mutateLogin = useMutation(
     {
       // @ts-expect-error login data structure
-      mutationFn: (data) => Login({ mobile: data?.mobile, method: 'otp' }),
+      mutationFn: data => Login({ mobile: data?.mobile, method: 'otp' }),
       onSuccess: (response) => {
         // send code to number
         console.warn(response)
@@ -57,7 +57,7 @@ export default function UserLogin() {
       onError: (error) => {
         console.warn(error)
         // form.setError('mobile', error)
-        setError(error?.['response']?.data?.message)
+        setError(error?.response?.data?.message)
       },
     },
   )
