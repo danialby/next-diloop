@@ -10,7 +10,6 @@ import React, { useMemo } from 'react'
 import { useDebounceValue } from 'usehooks-ts'
 
 export default function CategoriesPanel() {
-
   const router = useRouter()
   const {
     selectedMainCategory,
@@ -49,12 +48,12 @@ export default function CategoriesPanel() {
       <div
         className="my-2 grid sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5 grid-rows-1 grid-flow-row font-vazir text-sm gap-1 ring-blue-200"
       >
-          {
+        {
           filteredParents?.map(item => (
-              <div key={item?.id}>
-                <CategoryCard item={item} onSelect={handleParentSelect} />
-              </div>
-            )
+            <div key={item?.id}>
+              <CategoryCard item={item} onSelect={handleParentSelect} />
+            </div>
+          ),
           )
         }
       </div>

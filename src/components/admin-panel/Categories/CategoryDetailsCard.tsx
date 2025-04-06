@@ -1,5 +1,4 @@
 import AddSubCategoryDialog from '@/components/admin-panel/Categories/AddSubCategory/AddSubCategoryDialog'
-import DeleteCategoryDialog from '@/components/admin-panel/Categories/DeleteCategory/DeleteCategoryDialog'
 import UpdateCategoryDialog from '@/components/admin-panel/Categories/UpdateCategory/UpdateCategoryDialog'
 import { IconRenderer } from '@/components/ui/icon-picker'
 import { toPersianDate, toPersianTime } from '@/utils/dateUtils'
@@ -13,7 +12,7 @@ export function CategoryDetailsCard({ data }) {
         <div className="flex flex-col scale-[0.85] gap-2">
           <AddSubCategoryDialog category={data} />
           <UpdateCategoryDialog category={data} />
-          <DeleteCategoryDialog category={data} />
+          {/* <DeleteCategoryDialog category={data} /> */}
         </div>
       </div>
       <div className="flex flex-col gap-2 p-4 text-xs">

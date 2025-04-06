@@ -49,7 +49,7 @@ function DeleteCategoryDialog({ category }) {
           <Button
             onClick={handleOpen}
             size="icon"
-            className="!rounded-full !bg-rose-400 hover:!bg-rose-500 dark:text-white"
+            className="!rounded-full !bg-rose-400 hover:!bg-rose-500 dark:text-white pointer-events-none"
           >
             <Trash />
           </Button>

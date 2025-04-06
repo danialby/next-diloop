@@ -20,7 +20,7 @@ export function useAdminPanelRoutes() {
     addFormData.append('parent_id', parent_id)
     // addFormData.append('tags[]', tags)
     tags.forEach((item, index) => {
-      addFormData.append(`tags[${index}]`, item);
+      addFormData.append(`tags[${index}]`, item)
     })
     addFormData.append('settings', JSON.stringify(settings))
 
@@ -48,7 +48,7 @@ export function useAdminPanelRoutes() {
     updateFormData.append('is_active', is_active)
     // updateFormData.append('tags[]', tags)
     tags.forEach((item, index) => {
-      updateFormData.append(`tags[${index}]`, item);
+      updateFormData.append(`tags[${index}]`, item)
     })
     updateFormData.append('_method', 'PUT')
     updateFormData.append('settings', JSON.stringify(settings))
@@ -77,7 +77,7 @@ export function useAdminPanelRoutes() {
     updateSubFormData.append('parent_id', parent_id)
     // updateSubFormData.append('tags[]', tags)
     tags.forEach((item, index) => {
-      updateSubFormData.append(`tags[${index}]`, item);
+      updateSubFormData.append(`tags[${index}]`, item)
     })
     updateSubFormData.append('_method', 'PUT')
 
@@ -115,11 +115,11 @@ export function useAdminPanelRoutes() {
     addFormData.append('is_free', is_free)
     // addFormData.append('tags[]', tags)
     tags.forEach((item, index) => {
-      addFormData.append(`tags[${index}]`, item);
+      addFormData.append(`tags[${index}]`, item)
     })
     // addFormData.append('category_ids[]', category_ids)
     category_ids.forEach((item, index) => {
-      addFormData.append(`category_ids[${index}]`, item);
+      addFormData.append(`category_ids[${index}]`, item)
     })
     addFormData.append('score', score)
 
@@ -154,11 +154,11 @@ export function useAdminPanelRoutes() {
     updateBookFormData.append('is_free', is_free)
     // updateBookFormData.append('tags[]', tags)
     tags.forEach((item, index) => {
-      updateBookFormData.append(`tags[${index}]`, item);
+      updateBookFormData.append(`tags[${index}]`, item)
     })
     // updateBookFormData.append('category_ids[]', category_ids)
     category_ids.forEach((item, index) => {
-      updateBookFormData.append(`category_ids[${index}]`, item);
+      updateBookFormData.append(`category_ids[${index}]`, item)
     })
     updateBookFormData.append('score', score)
     updateBookFormData.append('_method', 'PUT')

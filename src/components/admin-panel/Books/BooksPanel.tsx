@@ -50,7 +50,7 @@ export default function BooksPanel() {
   // Filter books by selected main category
   const books = useMemo(() => {
     return books_data?.filter(item =>
-        // @ts-ignore
+    // @ts-ignore
       item?.tags?.includes(selectedMainCategory?.title),
     ) || []
   }, [books_data, selectedMainCategory])

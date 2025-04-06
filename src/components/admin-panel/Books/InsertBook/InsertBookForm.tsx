@@ -77,17 +77,17 @@ export function InsertBookForm({ closeDialog, sub_category }: InsertBookFormProp
   const mutateNewBook = useMutation(
     {
       mutationFn: (data: Book) => addNewBook(
-          {
-              title_en: data?.title_en,
-              title_fa: data?.title_fa,
-              description: data?.description,
-              is_active: 1,
-              is_free: 1,
-              tags: [selectedMainCategory?.title],
-              category_ids: selectedSubCategoryIds?.length > 0 ? selectedSubCategoryIds : [sub_category?.id],
-              poster_image: data?.poster_image || '',
-              score: 0,
-          },
+        {
+          title_en: data?.title_en,
+          title_fa: data?.title_fa,
+          description: data?.description,
+          is_active: 1,
+          is_free: 1,
+          tags: [selectedMainCategory?.title],
+          category_ids: selectedSubCategoryIds?.length > 0 ? selectedSubCategoryIds : [sub_category?.id],
+          poster_image: data?.poster_image || '',
+          score: 0,
+        },
       ),
       onSuccess: (response) => {
         // send code to number
@@ -113,9 +113,9 @@ export function InsertBookForm({ closeDialog, sub_category }: InsertBookFormProp
   }, [categories_data, selectedMainCategory])
 
   // @ts-ignore
-    // @ts-ignore
-    // @ts-ignore
-    return (
+  // @ts-ignore
+  // @ts-ignore
+  return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="w-full gap-x-3 grid grid-cols-2 space-y-4">
         <FormField
@@ -185,8 +185,8 @@ export function InsertBookForm({ closeDialog, sub_category }: InsertBookFormProp
                             multiple={true}
                             data={subCategoriesByMain}
                             field={[sub_category?.id]}
-                            //ts-ignore
-                            onSelect={(values) => setSelectedSubCategoryIds(values?.map(v => v))}
+                            // ts-ignore
+                            onSelect={values => setSelectedSubCategoryIds(values?.map(v => v))}
                             option_title="name_fa"
                           />
                         </FormControl>
@@ -223,10 +223,10 @@ export function InsertBookForm({ closeDialog, sub_category }: InsertBookFormProp
                           <FilterableComboBox
                             multiple={true}
                             data={subCategoriesByMain}
-                            onSelect={values => {
-                                setSelectedSubCategoryIds(values.map(({id}) => {
-                                    return id;
-                                }));
+                            onSelect={(values) => {
+                              setSelectedSubCategoryIds(values.map(({ id }) => {
+                                return id
+                              }))
                             }}
                             option_title="name_fa"
                           />

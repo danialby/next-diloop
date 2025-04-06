@@ -1,13 +1,13 @@
 'use client'
 
+import { useAdminPanelRoutes } from '@/app/api/admin-panel/routes'
 import AdminPanelSidebar from '@/components/admin-panel/AdminPanelSideBar'
+import LoadingIndicator from '@/components/ui/loading'
 import { useSidebar } from '@/context/SidebarContext'
 import AppHeader from '@/layout/AppHeader'
-import React, {useEffect} from 'react'
-import {useAdminPanelRoutes} from "@/app/api/admin-panel/routes";
-import useAdminStore from "@/store/adminStore";
-import {useMutation} from "@tanstack/react-query";
-import LoadingIndicator from "@/components/ui/loading";
+import useAdminStore from '@/store/adminStore'
+import { useMutation } from '@tanstack/react-query'
+import React, { useEffect } from 'react'
 
 export default function AdminLayout({
   children,
@@ -38,31 +38,31 @@ export default function AdminLayout({
   //   ]
   // }, [selectedMainCategory, selectedParent])
 
-    const { getCategoriesList } = useAdminPanelRoutes()
-    const {
-        setCategoriesData,
-    } = useAdminStore()
+  const { getCategoriesList } = useAdminPanelRoutes()
+  const {
+    setCategoriesData,
+  } = useAdminStore()
 
-    const { mutate: getCategoriesMutation, error, isPending } = useMutation({
-        mutationFn: () => getCategoriesList(),
-        onSuccess: (response) => {
-            // @ts-expect-error data in response
-            setCategoriesData(response?.data?.categories)
-        },
-    })
+  const { mutate: getCategoriesMutation, error, isPending } = useMutation({
+    mutationFn: () => getCategoriesList(),
+    onSuccess: (response) => {
+      // @ts-expect-error data in response
+      setCategoriesData(response?.data?.categories)
+    },
+  })
 
-    useEffect(() => {
-        getCategoriesMutation()
-    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    getCategoriesMutation()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-    if (error) {
-        return (
-            <div>
-                Error:
-                {error.message}
-            </div>
-        )
-    }
+  if (error) {
+    return (
+      <div>
+        Error:
+        {error.message}
+      </div>
+    )
+  }
 
   return (
     <div className="relative min-h-screen bg-gray-100 dark:bg-slate-800">
@@ -79,12 +79,13 @@ export default function AdminLayout({
           {/*  <CustomBreadCrumb data={breadCrumbItems} separator={<ChevronLeft />} /> */}
           {/* </div> */}
 
-          {isPending ?
-              <div className={'w-full h-[300px] flex items-center justify-center'}>
+          {isPending
+            ? (
+                <div className="w-full h-[300px] flex items-center justify-center">
                   <LoadingIndicator />
-              </div>
-              :
-              children}
+                </div>
+              )
+            : children}
         </div>
       </div>
     </div>

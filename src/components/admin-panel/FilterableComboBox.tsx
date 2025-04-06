@@ -22,7 +22,7 @@ import { Check, ChevronsUpDown, X } from 'lucide-react'
 import { useState } from 'react'
 
 interface FilterableComboBoxProps {
-  //ts-ignore
+  // ts-ignore
   data: Array<never | any>
   field?: number | number[] | undefined
   onSelect: (value: never[]) => void
@@ -48,7 +48,7 @@ export function FilterableComboBox({
 
   const [selectedValues, setSelectedValues] = useState(initialSelectedValues)
 
-  const handleSelect = (value: never) => {
+  const handleSelect = (value: any) => {
     if (multiple) {
       // @ts-ignore
       const isSelected = selectedValues.some(item => item?.id === value?.id)
