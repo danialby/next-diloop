@@ -38,12 +38,13 @@ export default function AdminLayout({
   //   ]
   // }, [selectedMainCategory, selectedParent])
 
-  const { getCategoriesList } = useAdminPanelRoutes()
+  const { getCategoriesList, getBooksList } = useAdminPanelRoutes()
   const {
     setCategoriesData,
+    setBooksData,
   } = useAdminStore()
 
-  const { mutate: getCategoriesMutation, error, isPending } = useMutation({
+  const { mutate: getCategoriesMutation, error: CategoriesError, isPending } = useMutation({
     mutationFn: () => getCategoriesList(),
     onSuccess: (response) => {
       // @ts-expect-error data in response
@@ -51,15 +52,32 @@ export default function AdminLayout({
     },
   })
 
+  const { mutate: getBooksMutation, error: BooksError } = useMutation({
+    mutationFn: () => getBooksList(),
+    onSuccess: (response) => {
+      // @ts-expect-error data in response
+      setBooksData(response?.data?.books)
+    },
+  })
+
   useEffect(() => {
     getCategoriesMutation()
+    getBooksMutation()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (error) {
+  if (CategoriesError) {
     return (
       <div>
         Error:
-        {error.message}
+        {CategoriesError.message}
+      </div>
+    )
+  }
+  if (BooksError) {
+    return (
+      <div>
+        Error:
+        {BooksError.message}
       </div>
     )
   }

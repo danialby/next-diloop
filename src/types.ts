@@ -38,7 +38,7 @@ export interface BookResponse {
   is_active: number
   is_free: number
   tags: string[] | null
-  poster_image: File | string
+  poster_image: string
   categories: Array<Category>
   score: number
   created_at: string
