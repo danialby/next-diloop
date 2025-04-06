@@ -15,21 +15,21 @@ import { useMutation } from '@tanstack/react-query'
 import { Loader2, Trash, XIcon } from 'lucide-react'
 import React, { useState } from 'react'
 
-function DeleteCategoryDialog({ category }) {
+function DeleteBookDialog({ book }) {
   // Determine input styles based on state (disabled, success, error)
-  const { deleteCategory } = useAdminPanelRoutes()
-  const { deleteStoreCategory } = useAdminStore()
+  const { deleteBook } = useAdminPanelRoutes()
+  const { deleteStoreBook } = useAdminStore()
 
   const [isOpen, setIsOpen] = useState(false)
 
-  const mutateDeleteCategory = useMutation(
+  const mutateDeleteBook = useMutation(
     {
-      mutationFn: (id: number) => deleteCategory({ id }),
+      mutationFn: (id: number) => deleteBook({ id }),
       onSuccess: (response) => {
         // send code to number
         console.warn(response)
         setIsOpen(false)
-        deleteStoreCategory(category?.id).then((r) => {
+        deleteStoreBook(book?.id).then((r) => {
           console.warn(r)
         })
       },
@@ -74,10 +74,10 @@ function DeleteCategoryDialog({ category }) {
               </Button>
               <div className="flex gap-1">
                 <span className="font-light">
-                  آیا از حذف دسته بندی
+                  آیا از حذف کتابچه
                 </span>
                 <span className="font-bold">
-                  {category?.name_fa}
+                  {book?.title_fa}
                 </span>
                 <span className="font-light">
                   اطمینان دارید؟
@@ -98,13 +98,13 @@ function DeleteCategoryDialog({ category }) {
                   انصراف
                 </Button>
                 <Button
-                  onClick={() => mutateDeleteCategory.mutate(category?.id)}
+                  onClick={() => mutateDeleteBook.mutate(book?.id)}
                   variant="ghost"
                   size="sm"
                   className="hover:!bg-rose-100 !text-rose-600"
                 >
                   بله، حذف شود
-                  {mutateDeleteCategory.isPending && <Loader2 className="animate-spin" />}
+                  {mutateDeleteBook.isPending && <Loader2 className="animate-spin" />}
                 </Button>
               </div>
             </DialogFooter>
@@ -115,4 +115,4 @@ function DeleteCategoryDialog({ category }) {
   )
 }
 
-export default DeleteCategoryDialog
+export default DeleteBookDialog

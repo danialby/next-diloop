@@ -100,7 +100,7 @@ export default function UsersList() {
         && (
           <div className="mx-auto p-4 py-0 h-full sticky-top">
             <SortableTable
-              data={UsersData?.['data'].users}
+              data={UsersData?.data.users}
               columns={columns}
               inputPlaceHolder="جستجو در کاربران..."
               searchColumn="mobile"

@@ -1,7 +1,8 @@
 'use client'
 
-import { useAdminPanelRoutes } from '@/app/api/admin-panel/routes'
+import type { Category } from '@/types'
 
+import { useAdminPanelRoutes } from '@/app/api/admin-panel/routes'
 import { Button } from '@/components/ui/button'
 import {
   Form,
@@ -21,7 +22,6 @@ import { Loader2 } from 'lucide-react'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import {Category} from "@/types";
 
 const FormSchema = z.object({
   name_fa: z.string().min(2, {
@@ -54,7 +54,7 @@ export function UpdateCategoryForm({ closeDialog, category }: UpdateCategoryForm
       name_fa: currentCategory?.name_fa,
       name_en: currentCategory?.name_en,
       parent_id: currentCategory?.parent_id,
-      settings: currentCategory?.settings ? currentCategory?.settings[0]?.['icon_name'] : [{}],
+      settings: currentCategory?.settings ? currentCategory?.settings[0]?.icon_name : [{}],
       description: currentCategory?.description || '',
       is_active: 1,
       tags: currentCategory?.tags,
@@ -70,10 +70,10 @@ export function UpdateCategoryForm({ closeDialog, category }: UpdateCategoryForm
       onSuccess: (response) => {
         // send code to number
         console.warn(response)
-          // @ts-expect-error data in response
-          updateStoreCategory(response?.data?.category?.id, response?.data?.category,
+        // @ts-expect-error data in response
+        updateStoreCategory(response?.data?.category?.id, response?.data?.category,
         ).then(() => {
-            closeDialog()
+          closeDialog()
         })
       },
       onError: (error) => {
@@ -98,8 +98,8 @@ export function UpdateCategoryForm({ closeDialog, category }: UpdateCategoryForm
                   description: data?.description,
                   is_active: 1,
                   tags: currentCategory?.tags,
-                  poster_image: currentCategory?.poster_image,
-                  settings: data?.settings,
+                  poster_image: currentCategory?.poster_image || '',
+                  settings: data?.settings || [{}],
                 }
               : {
                   id: currentCategory?.id,
@@ -109,8 +109,8 @@ export function UpdateCategoryForm({ closeDialog, category }: UpdateCategoryForm
                   is_active: 1,
                   parent_id: data?.parent_id,
                   tags: currentCategory?.tags,
-                  poster_image: currentCategory?.poster_image,
-                  settings: data?.settings,
+                  poster_image: currentCategory?.poster_image || '',
+                  settings: data?.settings || [{}],
                 }
     mutateUpdateCategory.mutate(category_updateData)
     console.warn('Form submitted:')
@@ -154,7 +154,7 @@ export function UpdateCategoryForm({ closeDialog, category }: UpdateCategoryForm
               <FormLabel>نام آیکون</FormLabel>
               <FormControl>
                 <IconPicker
-                  defaultValue={category?.settings?.[0]?.['icon_name']}
+                  defaultValue={category?.settings?.[0]?.icon_name}
                   onValueChange={handleIconSelect}
                   categorized={false}
                   searchPlaceholder="جستجوی نام آیکون"
@@ -187,9 +187,9 @@ export function UpdateCategoryForm({ closeDialog, category }: UpdateCategoryForm
             <FormMessage>
               <span className="space-x-2">
                 <span className="font-bold">خطای سرور :</span>
-                <span className="text-xs">{apiError?.['response']?.data?.message}</span>
+                <span className="text-xs">{apiError?.response?.data?.message}</span>
                 <br />
-                <span className="text-xs">{JSON.stringify(apiError?.['response']?.data?.errors)}</span>
+                <span className="text-xs">{JSON.stringify(apiError?.response?.data?.errors)}</span>
               </span>
             </FormMessage>
           )}

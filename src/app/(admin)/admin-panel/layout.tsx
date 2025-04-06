@@ -3,7 +3,11 @@
 import AdminPanelSidebar from '@/components/admin-panel/AdminPanelSideBar'
 import { useSidebar } from '@/context/SidebarContext'
 import AppHeader from '@/layout/AppHeader'
-import React from 'react'
+import React, {useEffect} from 'react'
+import {useAdminPanelRoutes} from "@/app/api/admin-panel/routes";
+import useAdminStore from "@/store/adminStore";
+import {useMutation} from "@tanstack/react-query";
+import LoadingIndicator from "@/components/ui/loading";
 
 export default function AdminLayout({
   children,
@@ -34,6 +38,33 @@ export default function AdminLayout({
   //   ]
   // }, [selectedMainCategory, selectedParent])
 
+    const { getCategoriesList } = useAdminPanelRoutes()
+    const {
+        selectedMainCategory,
+        setCategoriesData,
+    } = useAdminStore()
+
+    const { mutate: getCategoriesMutation, error, isPending } = useMutation({
+        mutationFn: () => getCategoriesList(),
+        onSuccess: (response) => {
+            // @ts-expect-error data in response
+            setCategoriesData(response?.data?.categories)
+        },
+    })
+
+    useEffect(() => {
+        getCategoriesMutation()
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+    if (error) {
+        return (
+            <div>
+                Error:
+                {error.message}
+            </div>
+        )
+    }
+
   return (
     <div className="relative min-h-screen bg-gray-100 dark:bg-slate-800">
       <AppHeader />
@@ -48,7 +79,13 @@ export default function AdminLayout({
           {/* <div className="space-y-2 mb-2 flex w-full justify-between items-center p-1 pr-4 pl-1"> */}
           {/*  <CustomBreadCrumb data={breadCrumbItems} separator={<ChevronLeft />} /> */}
           {/* </div> */}
-          {children}
+
+          {isPending ?
+              <div className={'w-full h-[300px] flex items-center justify-center'}>
+                  <LoadingIndicator />
+              </div>
+              :
+              children}
         </div>
       </div>
     </div>

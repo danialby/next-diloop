@@ -19,7 +19,7 @@ export default function CustomBreadCrumb({ data, separator }: CustomBreadCrumbPr
           data?.map((item, index) => (
             <div key={index} className="flex items-center gap-1.5">
               <BreadcrumbItem>
-                {item?.['title']}
+                {item?.title}
               </BreadcrumbItem>
               { index < data?.length - 1
                 && (

@@ -6,7 +6,7 @@ import { toPersianDate, toPersianTime } from '@/utils/dateUtils'
 import { AlignRight, CalendarCheck2, SpellCheck, Type } from 'lucide-react'
 import React from 'react'
 
-export function DetailsCard({ data }) {
+export function CategoryDetailsCard({ data }) {
   return (
     <div className="border rounded-lg col-span-2 bg-gray-50 dark:bg-secondary overflow-hidden relative shadow shadow-lg my-2 w-full md:w-2/3 min-h-32">
       <div className="w-12.5 h-full absolute left-0 top-0 justify-center items-center py-2 md:py-3 px-4 flex flex-col gap-2 bg-black">

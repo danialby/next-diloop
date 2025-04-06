@@ -3,8 +3,8 @@ layer(base);
 /*
   ---break---
 */
-@plugin 'tailwindcss-animate';
 @import 'tailwindcss';
+@plugin 'tailwindcss-animate';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -600,7 +600,7 @@ layer(base);
   cursor: grabbing; /* Changes the cursor to indicate dragging */
 }
 
-@layer .dark * {
+  .dark * {
     color: white
   }
 

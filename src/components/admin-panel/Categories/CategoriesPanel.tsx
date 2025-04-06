@@ -13,28 +13,12 @@ import React, { useEffect, useMemo } from 'react'
 import { useDebounceValue } from 'usehooks-ts'
 
 export default function CategoriesPanel() {
-  const { getCategoriesList } = useAdminPanelRoutes()
 
   const router = useRouter()
   const {
     selectedMainCategory,
     categories_data,
-    setCategoriesData,
-    setSelectedParent,
   } = useAdminStore()
-
-  const { mutate: getCategoriesMutation, error, isPending } = useMutation({
-    mutationFn: () => getCategoriesList(),
-    onSuccess: (response) => {
-      // @ts-expect-error data in response
-      setCategoriesData(response?.data?.categories)
-    },
-  })
-
-  useEffect(() => {
-    setSelectedParent(null)
-    getCategoriesMutation()
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const parents = useMemo(() => {
     // @ts-expect-error tags can be null
@@ -48,17 +32,7 @@ export default function CategoriesPanel() {
   }, [searchQuery, parents])
 
   function handleParentSelect(value) {
-    setSelectedParent(value)
     router.push(`/admin-panel/categories/${value?.id}/`)
-  }
-
-  if (error) {
-    return (
-      <div>
-        Error:
-        {error.message}
-      </div>
-    )
   }
   return (
     <div className="font-vazir">
@@ -78,19 +52,13 @@ export default function CategoriesPanel() {
       <div
         className="my-2 grid sm:grid-cols-2 md:grid-cols-4 xl:grid-cols-5 grid-rows-1 grid-flow-row font-vazir text-sm gap-1 ring-blue-200"
       >
-        {
-          isPending
-            ? (
-                <div className="flex items-center justify-center w-full h-[300px]">
-                  <LoadingIndicator />
-                </div>
-              )
-            : filteredParents?.map(item => (
+          {
+          filteredParents?.map(item => (
               <div key={item?.id}>
                 <CategoryCard item={item} onSelect={handleParentSelect} />
               </div>
-            ),
             )
+          )
         }
       </div>
     </div>

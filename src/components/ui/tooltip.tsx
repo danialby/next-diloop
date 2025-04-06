@@ -10,7 +10,7 @@ function TooltipProvider({
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Provider>) {
   return (
-      // @ts-expect-error wtf
+  // @ts-expect-error wtf
     <TooltipPrimitive
       data-slot="tooltip-provider"
       delayDuration={delayDuration}

@@ -8,8 +8,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
-import { cn } from '@/lib/utils'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import Fuse from 'fuse.js'
 import { DynamicIcon } from 'lucide-react/dynamic'
@@ -159,7 +157,7 @@ function IconPicker({ ref, value, defaultValue, onValueChange, open, defaultOpen
           type: 'row',
           categoryIndex,
           rowIndex,
-        // @ts-expect-error rows can be empty
+          // @ts-expect-error rows can be empty
           icons: rowIcons,
         })
       })
@@ -263,22 +261,9 @@ function IconPicker({ ref, value, defaultValue, onValueChange, open, defaultOpen
   }, [categorizedIcons, scrollToCategory, categorized, search])
 
   const renderIcon = useCallback((icon: IconData) => (
-    <TooltipProvider key={icon.name}>
-      <Tooltip>
-        <TooltipTrigger
-          className={cn(
-            'p-2 rounded-md border hover:bg-foreground/10 transition',
-            'flex items-center justify-center',
-          )}
-          onClick={() => handleIconClick(icon.name as IconName)}
-        >
-          <IconRenderer name={icon.name as IconName} />
-        </TooltipTrigger>
-        <TooltipContent>
-          <p>{icon.name}</p>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+    <Button size="icon" onClick={() => handleIconClick(icon.name as IconName)} className="rounded-full" variant="outline">
+      <IconRenderer name={icon.name as IconName} />
+    </Button>
   ), [handleIconClick])
 
   const renderVirtualContent = useCallback(() => {
@@ -370,13 +355,13 @@ function IconPicker({ ref, value, defaultValue, onValueChange, open, defaultOpen
     <Popover open={open ?? isOpen} onOpenChange={handleOpenChange}>
       <PopoverTrigger ref={ref} asChild {...props}>
         {children || (
-          <Button variant="outline">
+          <Button variant="default" className="bg-cyan-900 hover:bg-cyan-700 flex items-center">
             {(value || selectedIcon)
               ? (
                   <>
                     <Icon name={(value || selectedIcon)!} />
                     {' '}
-                    {value || selectedIcon}
+                    <span className="text-xs !text-gray-200">{value || selectedIcon}</span>
                   </>
                 )
               : (
