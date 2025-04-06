@@ -1,15 +1,12 @@
 'use client'
 
-import { useAdminPanelRoutes } from '@/app/api/admin-panel/routes'
 import NewCategoryDialog from '@/components/admin-panel/Categories/NewCategory/NewCategoryDialog'
 import CategoryCard from '@/components/admin-panel/CategoryCard'
 import { MainCategoryMenuBar } from '@/components/admin-panel/MainCategoryMenuBar'
 import SearchInput from '@/components/common/SearchInput'
-import LoadingIndicator from '@/components/ui/loading'
 import useAdminStore from '@/store/adminStore'
-import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'next/navigation'
-import React, { useEffect, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useDebounceValue } from 'usehooks-ts'
 
 export default function CategoriesPanel() {

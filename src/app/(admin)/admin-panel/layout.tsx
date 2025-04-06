@@ -40,7 +40,6 @@ export default function AdminLayout({
 
     const { getCategoriesList } = useAdminPanelRoutes()
     const {
-        selectedMainCategory,
         setCategoriesData,
     } = useAdminStore()
 

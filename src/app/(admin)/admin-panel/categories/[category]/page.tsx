@@ -10,7 +10,7 @@ import SubCategoryCard from "@/components/admin-panel/SubCategoryCard";
 const CategoryPage: React.FC = () => {
   const router = useRouter()
   const params = useParams()
-  const { category: CategoryId } = params
+  const { category: CategoryId = 0 } = params
   const {
     categories_data,
   } = useAdminStore()

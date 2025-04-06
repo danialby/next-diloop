@@ -186,7 +186,7 @@ export function InsertBookForm({ closeDialog, sub_category }: InsertBookFormProp
                             data={subCategoriesByMain}
                             field={[sub_category?.id]}
                             //ts-ignore
-                            onSelect={(values) => setSelectedSubCategoryIds(values.map(v => v))}
+                            onSelect={(values) => setSelectedSubCategoryIds(values?.map(v => v))}
                             option_title="name_fa"
                           />
                         </FormControl>
@@ -224,7 +224,9 @@ export function InsertBookForm({ closeDialog, sub_category }: InsertBookFormProp
                             multiple={true}
                             data={subCategoriesByMain}
                             onSelect={values => {
-                                setSelectedSubCategoryIds(values.map(v => v?.id));
+                                setSelectedSubCategoryIds(values.map(({id}) => {
+                                    return id;
+                                }));
                             }}
                             option_title="name_fa"
                           />

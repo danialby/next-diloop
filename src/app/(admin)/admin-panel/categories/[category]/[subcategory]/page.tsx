@@ -5,7 +5,6 @@ import BooksCard from '@/components/admin-panel/Books/BooksCard'
 
 import { SubCategoryDetailsCard } from '@/components/admin-panel/SubCategories/SubCategoryDetailsCard'
 import DataControlPanel from '@/components/common/DataControlPanel'
-import LoadingIndicator from '@/components/ui/loading'
 import useAdminStore from '@/store/adminStore'
 import { useMutation } from '@tanstack/react-query'
 import React, { useEffect, useMemo } from 'react'
@@ -20,19 +19,18 @@ const SubCategoryPage: React.FC = () => {
   } = useAdminStore()
 
     const params = useParams()
-    const { subcategory: SubCategoryId } = params
+    const { subcategory: SubCategoryId = 0 } = params
     const {
         categories_data,
     } = useAdminStore()
 
     const page_data = useMemo(() => {
-        console.log('here')
-        return categories_data.filter(item => item?.id === +SubCategoryId)[0]
+        return categories_data?.filter(item => item?.id === +SubCategoryId)[0]
     }, [SubCategoryId, categories_data])
 
   const { getBooksList } = useAdminPanelRoutes()
 
-  const { mutate: getBooksMutation, isPending } = useMutation({
+  const { mutate: getBooksMutation } = useMutation({
     mutationFn: () => getBooksList(),
     onSuccess: (response) => {
       // @ts-expect-error data in response

@@ -25,7 +25,7 @@ interface FilterableComboBoxProps {
   //ts-ignore
   data: Array<never | any>
   field?: number | number[] | undefined
-  onSelect: (value: never | never[] | undefined) => void
+  onSelect: (value: never[]) => void
   option_title: string
   multiple?: boolean
   placeholder?: string
