@@ -10,15 +10,25 @@ import useAdminStore from '@/store/adminStore'
 import { useMutation } from '@tanstack/react-query'
 import React, { useEffect, useMemo } from 'react'
 import {BookResponse} from "@/types";
-import {useRouter} from "next/navigation";
+import {useParams, useRouter} from "next/navigation";
 
 const SubCategoryPage: React.FC = () => {
     const router = useRouter()
   const {
     books_data,
     setBooksData,
-    selectedSubCategory,
   } = useAdminStore()
+
+    const params = useParams()
+    const { subcategory: SubCategoryId } = params
+    const {
+        categories_data,
+    } = useAdminStore()
+
+    const page_data = useMemo(() => {
+        console.log('here')
+        return categories_data.filter(item => item?.id === +SubCategoryId)[0]
+    }, [SubCategoryId, categories_data])
 
   const { getBooksList } = useAdminPanelRoutes()
 
@@ -35,19 +45,20 @@ const SubCategoryPage: React.FC = () => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const booksOfSubCategory = useMemo(() => {
-    return books_data?.filter(book => book?.categories.filter(category => category?.id === selectedSubCategory?.id).length > 0)
-  }, [books_data, selectedSubCategory])
+    return books_data?.filter(book => book?.categories.filter(category => category?.id === +SubCategoryId).length > 0)
+  }, [books_data, SubCategoryId])
 
 
     function handleBookSelect(value: BookResponse) {
       router.push(`/admin-panel/books/${value?.id}`)
     }
   return (
+      page_data &&
     <>
-      <SubCategoryDetailsCard data={selectedSubCategory} />
+      <SubCategoryDetailsCard data={page_data} />
       <span className="mt-3 flex gap-1 text-sm">
         <span>کتابچه های</span>
-        <span className="font-bold">{selectedSubCategory?.name_fa}</span>
+        <span className="font-bold">{page_data?.name_fa}</span>
       </span>
       <DataControlPanel
         disablePagination={true}
@@ -65,13 +76,7 @@ const SubCategoryPage: React.FC = () => {
           return (
             <>
               {
-                isPending
-                  ? (
-                      <div className="flex items-center justify-center w-full h-[300px]">
-                        <LoadingIndicator />
-                      </div>
-                    )
-                  : (
+                  paginatedData?.length > 0 ?
                       <div className="my-2 grid sm:grid-cols-2 md:grid-cols-5 grid-rows-1 grid-flow-row font-vazir text-sm gap-1 ring-blue-200">
                         {paginatedData.map(book => (
                           <div key={book?.id}>
@@ -82,7 +87,13 @@ const SubCategoryPage: React.FC = () => {
                           </div>
                         ))}
                       </div>
-                    )
+                  : (
+                  <div className="flex w-full min-h-[100px] items-center justify-center">
+                  <span className="text-sm text-gray-400">
+                  کتابچه ای ثبت نشده است...
+                  </span>
+                  </div>
+                  )
               }
             </>
           )

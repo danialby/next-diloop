@@ -18,7 +18,10 @@ export function useAdminPanelRoutes() {
     addFormData.append('description', description)
     addFormData.append('is_active', is_active)
     addFormData.append('parent_id', parent_id)
-    addFormData.append('tags[]', tags)
+    // addFormData.append('tags[]', tags)
+    tags.forEach((item, index) => {
+      addFormData.append(`tags[${index}]`, item);
+    })
     addFormData.append('settings', JSON.stringify(settings))
 
     if (poster_image) {
@@ -43,7 +46,10 @@ export function useAdminPanelRoutes() {
     updateFormData.append('name_fa', name_fa)
     updateFormData.append('description', description)
     updateFormData.append('is_active', is_active)
-    updateFormData.append('tags[]', tags)
+    // updateFormData.append('tags[]', tags)
+    tags.forEach((item, index) => {
+      updateFormData.append(`tags[${index}]`, item);
+    })
     updateFormData.append('_method', 'PUT')
     updateFormData.append('settings', JSON.stringify(settings))
 
@@ -69,7 +75,10 @@ export function useAdminPanelRoutes() {
     updateSubFormData.append('description', description)
     updateSubFormData.append('is_active', is_active)
     updateSubFormData.append('parent_id', parent_id)
-    updateSubFormData.append('tags[]', tags)
+    // updateSubFormData.append('tags[]', tags)
+    tags.forEach((item, index) => {
+      updateSubFormData.append(`tags[${index}]`, item);
+    })
     updateSubFormData.append('_method', 'PUT')
 
     if (poster_image && poster_image instanceof File) {
@@ -104,8 +113,14 @@ export function useAdminPanelRoutes() {
     addFormData.append('description', description)
     addFormData.append('is_active', is_active)
     addFormData.append('is_free', is_free)
-    addFormData.append('tags[]', tags)
-    addFormData.append('category_ids[]', category_ids)
+    // addFormData.append('tags[]', tags)
+    tags.forEach((item, index) => {
+      addFormData.append(`tags[${index}]`, item);
+    })
+    // addFormData.append('category_ids[]', category_ids)
+    category_ids.forEach((item, index) => {
+      addFormData.append(`category_ids[${index}]`, item);
+    })
     addFormData.append('score', score)
 
     if (poster_image) {
@@ -137,8 +152,14 @@ export function useAdminPanelRoutes() {
     updateBookFormData.append('description', description)
     updateBookFormData.append('is_active', is_active)
     updateBookFormData.append('is_free', is_free)
-    updateBookFormData.append('tags[]', tags)
-    updateBookFormData.append('category_ids[]', category_ids)
+    // updateBookFormData.append('tags[]', tags)
+    tags.forEach((item, index) => {
+      updateBookFormData.append(`tags[${index}]`, item);
+    })
+    // updateBookFormData.append('category_ids[]', category_ids)
+    category_ids.forEach((item, index) => {
+      updateBookFormData.append(`category_ids[${index}]`, item);
+    })
     updateBookFormData.append('score', score)
     updateBookFormData.append('_method', 'PUT')
 
