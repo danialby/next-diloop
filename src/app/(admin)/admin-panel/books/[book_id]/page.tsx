@@ -1,268 +1,395 @@
 'use client'
 
+import { BookCreator } from '@/components/admin-panel/Books/BookCreator'
 import BookDetailsCard from '@/components/admin-panel/Books/BookDetailsCard'
-import { StoryViewer } from '@/components/admin-panel/Books/StoryViewer'
+import MobileFrame from '@/components/admin-panel/Books/MobileFrame'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
 import useAdminStore from '@/store/adminStore'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { BookPlus, ImagePlus, Plus, Stars } from 'lucide-react'
+import { BookPlus, ImagePlus, Stars, Trash2 } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import React, { useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 
+// Type Definitions
 interface ContentPage {
+  id: string
+  type: 'content'
   title_fa: string
   title_en: string
   description: string
 }
 
-interface QuizQuestion {
-  quiz_id: string
-  type: string
-  sub_type: string
-  settings: string
-  q_order: string
-}
-
-interface QuizAnswer {
-  id: number
-  text: string
-}
-
-interface Quiz {
+interface ImagePage {
+  id: string
+  type: 'image'
   title: string
-  description: string
-  answers: Array<QuizAnswer>
+  imageUrl: string | File
+  caption?: string
 }
+
+interface QuizPage {
+  id: string
+  type: 'quiz'
+  question: string
+  options: string[]
+  correctAnswer: number
+}
+
+type Page = ContentPage | ImagePage | QuizPage
 
 const BookPage: React.FC = () => {
-  const {
-    books_data,
-  } = useAdminStore()
-
+  // Data Fetching
+  const { books_data } = useAdminStore()
   const params = useParams()
   const { book_id: BookId = 0 } = params
 
-  const page_data = useMemo(() => {
-    return books_data?.filter(item => item?.id === +BookId)[0]
-  }, [BookId, books_data])
+  const page_data = useMemo(() =>
+    books_data?.find(item => item?.id === +BookId), [BookId, books_data])
 
-  const [ContentPage, setContentPage] = useState<ContentPage>({
-    title_fa: '',
-    title_en: '',
-    description: '',
-  })
-
-  const [pages, setPages] = useState<ContentPage[]>([])
-
-  const FormSchema = z.object({
-    title_fa: z.string().min(2, {
-      message: 'عنوان فارسی حداقل باید ۲ کاراکتر باشد',
-    }),
-    title_en: z.string().min(2, {
-      message: 'نام انگلیسی حداقل باید ۲ کاراکتر باشد',
-    }),
-    description: z.any(),
-  })
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      title_fa: '',
-      title_en: '',
-      description: '',
-    },
-  })
-  // const [ImagePage, setImagePage] = useState<File | string>('')
-  // const [QuizPage, setQuizPage] = useState<Quiz>(
-  //   {
-  //     title: '',
-  //     description: '',
-  //     answers: [{
-  //       id: 0,
-  //       text: '',
-  //     }],
-  //   },
-  // )
-  //
-  // const updateAnswers = (answer) => {
-  //   setQuizPage(previousState => {
-  //     return { ...previousState }
-  //   });
-  // }
-  const addPage = (pageData: ContentPage) => {
-    setPages(prevState => [...prevState, pageData])
-  }
-
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    addPage({
-      title_en: data?.title_en,
-      title_fa: data?.title_fa,
-      description: data?.description,
-    })
-  }
+  // State Management
+  const [pages, setPages] = useState<Page[]>([])
   const [currentPageIndex, setCurrentPageIndex] = useState(0)
+  const [activeTab, setActiveTab] = useState<'content' | 'image' | 'quiz'>('content')
+  const [editingPageId, setEditingPageId] = useState<string | null>(null)
 
-  const handleNextPage = () => {
-    setCurrentPageIndex(prev =>
-      prev < pages.length - 1 ? prev + 1 : 0,
-    )
+  // Handle real-time updates
+  const handleContentChange = (field: keyof ContentPage, value: string) => {
+    if (!editingPageId)
+      return
+    setPages(prev => prev.map(page =>
+      page.id === editingPageId && page.type === 'content'
+        ? { ...page, [field]: value }
+        : page,
+    ))
   }
 
-  const handlePrevPage = () => {
-    setCurrentPageIndex(prev =>
-      prev > 0 ? prev - 1 : pages.length - 1,
-    )
+  const handleImageChange = (field: keyof ImagePage, value: string | File) => {
+    if (!editingPageId)
+      return
+    setPages(prev => prev.map(page =>
+      page.id === editingPageId && page.type === 'image'
+        ? { ...page, [field]: value }
+        : page,
+    ))
   }
+
+  const handleQuizChange = (field: keyof QuizPage, value: any) => {
+    if (!editingPageId)
+      return
+    setPages(prev => prev.map(page =>
+      page.id === editingPageId && page.type === 'quiz'
+        ? { ...page, [field]: value }
+        : page,
+    ))
+  }
+
+  // Add new empty page
+  const addEmptyPage = (type: 'content' | 'image' | 'quiz') => {
+    const newPage: Page = {
+      id: `page-${Date.now()}`,
+      type,
+      ...(type === 'content'
+        ? {
+            title_fa: '',
+            title_en: '',
+            description: '',
+          }
+        : type === 'image'
+          ? {
+              title: '',
+              imageUrl: '',
+              caption: '',
+            }
+          : {
+              question: '',
+              options: ['', ''],
+              correctAnswer: 0,
+            }),
+    }
+
+    setPages(prev => [...prev, newPage])
+    setCurrentPageIndex(pages.length)
+    setEditingPageId(newPage.id)
+    setActiveTab(type)
+  }
+
+  // Navigation and management
+  const handlePageNavigation = (index: number) => {
+    setCurrentPageIndex(index)
+    setEditingPageId(pages[index].id)
+    setActiveTab(pages[index].type)
+  }
+
+  const handleDeletePage = (index: number) => {
+    setPages(prev => prev.filter((_, i) => i !== index))
+    setCurrentPageIndex(prev => Math.min(prev, pages.length - 2))
+  }
+
+  if (!page_data)
+    return null
+
+  const currentPage = pages[currentPageIndex]
+
   return (
-    page_data
-    && (
-      <>
-        <BookDetailsCard book={page_data} />
+    <>
+      <BookDetailsCard book={page_data} />
 
-        <Card className="grid grid-cols-2 divide-x h-full w-full py-0">
-          <div className="w-full flex justify-center p-3">
-            <Tabs defaultValue="Page" className="w-full dir-rtl">
-              <TabsList>
-                <TabsTrigger value="Page">
-                  <BookPlus />
-                  صفحه
-                </TabsTrigger>
-                <TabsTrigger value="Image">
-                  <ImagePlus />
-                  تصویر
-                </TabsTrigger>
-                <TabsTrigger value="Quiz">
-                  {' '}
-                  <Stars />
-                  آزمون
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent value="Page">
-                <div className="flex flex-col gap-1">
-                  <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="w-full gap-x-3 grid grid-cols-2 space-y-4">
-                      <FormField
-                        control={form.control}
-                        name="title_fa"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>عنوان فارسی</FormLabel>
-                            <FormControl>
-                              <Input {...field} />
-                            </FormControl>
-                            <FormMessage className="text-xs" />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="title_en"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>نام انگلیسی</FormLabel>
-                            <FormControl>
-                              <Input {...field} />
-                            </FormControl>
-                            <FormMessage className="text-xs" />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="description"
-                        render={({ field }) => (
-                          <FormItem className="col-span-2">
-                            <FormLabel>توضیحات</FormLabel>
-                            <FormControl>
-                              <Textarea {...field} rows={5} className="h-[150px] pb-[100px] overflow-y-scroll" />
-                            </FormControl>
-                          </FormItem>
-                        )}
-                      />
-                      <Button type="submit" className="w-1/3 self-end">
-                        <Plus />
-                        افزودن
+      <div className="flex flex-col gap-4">
+        {/* Page List Section */}
+        <Card className="p-4">
+          <div className="flex justify-between items-center mb-4">
+            <h3 className="font-medium">صفحات کتاب</h3>
+            <div className="flex gap-2">
+              <Button size="sm" onClick={() => addEmptyPage('content')}>
+                <BookPlus className="w-4 h-4 mr-2" />
+                صفحه محتوا
+              </Button>
+              <Button size="sm" onClick={() => addEmptyPage('image')}>
+                <ImagePlus className="w-4 h-4 mr-2" />
+                صفحه تصویر
+              </Button>
+              <Button size="sm" onClick={() => addEmptyPage('quiz')}>
+                <Stars className="w-4 h-4 mr-2" />
+                صفحه آزمون
+              </Button>
+            </div>
+          </div>
+
+          {pages.length === 0
+            ? (
+                <p className="text-gray-500 text-sm">هنوز صفحه‌ای اضافه نشده است</p>
+              )
+            : (
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {pages.map((page, index) => (
+                    <div
+                      key={page.id}
+                      className={`flex items-center justify-between p-3 rounded-lg border ${
+                        currentPageIndex === index ? 'border-blue-500 bg-blue-50' : 'border-gray-200'
+                      }`}
+                    >
+                      <div
+                        className="flex-1 cursor-pointer"
+                        onClick={() => handlePageNavigation(index)}
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium">
+                            {page.type === 'content'
+                              ? 'صفحه محتوا'
+                              : page.type === 'image' ? 'صفحه تصویر' : 'صفحه آزمون'}
+                          </span>
+                          {page.type === 'content' && page.title_fa && (
+                            <span className="text-sm text-gray-600 truncate">
+                              -
+                              {page.title_fa}
+                            </span>
+                          )}
+                          {page.type === 'image' && page.title && (
+                            <span className="text-sm text-gray-600 truncate">
+                              -
+                              {page.title}
+                            </span>
+                          )}
+                          {page.type === 'quiz' && page.question && (
+                            <span className="text-sm text-gray-600 truncate">
+                              -
+                              {page.question}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDeletePage(index)}
+                      >
+                        <Trash2 className="w-4 h-4" />
                       </Button>
-                    </form>
-                  </Form>
+                    </div>
+                  ))}
                 </div>
-              </TabsContent>
-              <TabsContent value="Image">
-                <div className="flex flex-col gap-2">
-                  <Label>تصویر</Label>
-                  <Input type="file" />
-                  <Button className="w-1/3 self-end">
-                    <Plus />
-                    افزودن
-                  </Button>
-                </div>
-              </TabsContent>
-              <TabsContent value="Quiz">
-                {/* <div className="flex flex-col gap-3"> */}
-                {/*  <div className="flex flex-col gap-1"> */}
-                {/*    <Label>عنوان</Label> */}
-                {/*    <Input value={QuizPage?.title} /> */}
-                {/*  </div> */}
-                {/*  <div className="flex flex-col gap-1"> */}
-                {/*    <Label>متن</Label> */}
-                {/*    <Textarea value={QuizPage?.description} /> */}
-                {/*  </div> */}
-                {/*  <div className="flex flex-col gap-1"> */}
-                {/*    <Label> */}
-                {/*      گزینه ها */}
-                {/*    </Label> */}
-                {/*    { */}
-                {/*      QuizPage?.answers.length > 1 */}
-                {/*      && (QuizPage?.answers.map((item, index) => { */}
-                {/*        return ( */}
-                {/*          <div className="flex" key={index}> */}
-                {/*            <Input value={item?.text} /> */}
-                {/*            <Button size="icon" className="rounded-full" variant="outline"> */}
-                {/*              <Plus /> */}
-                {/*            </Button> */}
-                {/*          </div> */}
-                {/*        ) */}
-                {/*      }) */}
-                {/*      ) */}
-                {/*    } */}
-                {/*    <div className="flex"> */}
-                {/*      <Input value="" /> */}
-                {/*      <Button size="icon" className="rounded-full" variant="outline" onClick={() => }> */}
-                {/*        <Plus /> */}
-                {/*      </Button> */}
-                {/*    </div> */}
-                {/*  </div> */}
-                {/*  <Button className="w-1/3 self-end"> */}
-                {/*    <Plus /> */}
-                {/*    افزودن */}
-                {/*  </Button> */}
-                {/* </div> */}
-              </TabsContent>
-            </Tabs>
-          </div>
-          <div className="w-full">
-            {/* { JSON.stringify(pages)} */}
-            <StoryViewer
-              stories={pages.map((page, index) => ({
-                id: `page-${index}`,
-                ...page,
-              }))}
-              currentIndex={currentPageIndex}
-              onNext={handleNextPage}
-              onPrev={handlePrevPage}
-              onClose={undefined}
-            />
-          </div>
+              )}
         </Card>
-      </>
-    )
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Editor Section */}
+          {currentPage && (
+            <Card className="p-4">
+              <Tabs value={activeTab} className="w-full dir-rtl">
+                <TabsList className="grid w-full grid-cols-3">
+                  <TabsTrigger value="content" onClick={() => setActiveTab('content')}>
+                    محتوا
+                  </TabsTrigger>
+                  <TabsTrigger value="image" onClick={() => setActiveTab('image')}>
+                    تصویر
+                  </TabsTrigger>
+                  <TabsTrigger value="quiz" onClick={() => setActiveTab('quiz')}>
+                    آزمون
+                  </TabsTrigger>
+                </TabsList>
+
+                {/* Content Editor */}
+                {currentPage.type === 'content' && (
+                  <TabsContent value="content" className="mt-4 space-y-4">
+                    <div>
+                      <Label>عنوان فارسی</Label>
+                      <Input
+                        value={currentPage.title_fa}
+                        onChange={e => handleContentChange('title_fa', e.target.value)}
+                        className="mt-2"
+                      />
+                    </div>
+                    <div>
+                      <Label>عنوان انگلیسی</Label>
+                      <Input
+                        value={currentPage.title_en}
+                        onChange={e => handleContentChange('title_en', e.target.value)}
+                        className="mt-2"
+                      />
+                    </div>
+                    <div>
+                      <Label>توضیحات</Label>
+                      <Textarea
+                        value={currentPage.description}
+                        onChange={e => handleContentChange('description', e.target.value)}
+                        className="mt-2 min-h-[100px]"
+                      />
+                    </div>
+                  </TabsContent>
+                )}
+
+                {/* Image Editor */}
+                {currentPage.type === 'image' && (
+                  <TabsContent value="image" className="mt-4 space-y-4">
+                    <div>
+                      <Label>عنوان تصویر</Label>
+                      <Input
+                        value={currentPage.title}
+                        onChange={e => handleImageChange('title', e.target.value)}
+                        className="mt-2"
+                      />
+                    </div>
+                    <div>
+                      <Label>تصویر</Label>
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          if (e.target.files?.[0]) {
+                            handleImageChange('imageUrl', e.target.files[0])
+                          }
+                        }}
+                        className="mt-2"
+                      />
+                    </div>
+                    <div>
+                      <Label>توضیح تصویر (اختیاری)</Label>
+                      <Input
+                        value={currentPage.caption || ''}
+                        onChange={e => handleImageChange('caption', e.target.value)}
+                        className="mt-2"
+                      />
+                    </div>
+                  </TabsContent>
+                )}
+
+                {/* Quiz Editor */}
+                {currentPage.type === 'quiz' && (
+                  <TabsContent value="quiz" className="mt-4 space-y-4">
+                    <div>
+                      <Label>سوال</Label>
+                      <Input
+                        value={currentPage.question}
+                        onChange={e => handleQuizChange('question', e.target.value)}
+                        className="mt-2"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>گزینه‌ها</Label>
+                      {currentPage.options.map((option, index) => (
+                        <div key={index} className="flex items-center gap-2">
+                          <Input
+                            value={option}
+                            onChange={(e) => {
+                              const newOptions = [...currentPage.options]
+                              newOptions[index] = e.target.value
+                              handleQuizChange('options', newOptions)
+                            }}
+                          />
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              const newOptions = [...currentPage.options]
+                              newOptions.splice(index, 1)
+                              handleQuizChange('options', newOptions)
+                            }}
+                          >
+                            حذف
+                          </Button>
+                        </div>
+                      ))}
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => {
+                          handleQuizChange('options', [...currentPage.options, ''])
+                        }}
+                      >
+                        افزودن گزینه
+                      </Button>
+                    </div>
+                    <div>
+                      <Label>گزینه صحیح</Label>
+                      <select
+                        value={currentPage.correctAnswer}
+                        onChange={e => handleQuizChange('correctAnswer', Number(e.target.value))}
+                        className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 mt-2"
+                      >
+                        {currentPage.options.map((_, index) => (
+                          <option key={index} value={index}>
+                            گزینه
+                            {' '}
+                            {index + 1}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </TabsContent>
+                )}
+              </Tabs>
+            </Card>
+          )}
+
+          {/* Preview Section */}
+          <div className="w-full">
+            <MobileFrame>
+              {pages.length > 0
+                ? (
+                    <BookCreator
+                      pages={pages}
+                      currentIndex={currentPageIndex}
+                      onNext={() => setCurrentPageIndex(prev => (prev < pages.length - 1 ? prev + 1 : 0))}
+                      onPrev={() => setCurrentPageIndex(prev => (prev > 0 ? prev - 1 : pages.length - 1))}
+                      onClose={() => handleDeletePage(currentPageIndex)}
+                    />
+                  )
+                : (
+                    <div className="flex items-center justify-center h-full">
+                      <p className="text-gray-500">صفحه‌ای برای نمایش وجود ندارد</p>
+                    </div>
+                  )}
+            </MobileFrame>
+          </div>
+        </div>
+      </div>
+    </>
   )
 }
 

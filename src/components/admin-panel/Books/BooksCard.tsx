@@ -16,7 +16,7 @@ export default function BooksCard({ item }: BooksCardProps) {
   const router = useRouter()
   function goBookPage(e) {
     e.stopPropagation()
-    router.push(`/admin/books/${item.id}`)
+    router.push(`/admin-panel/books/${item.id}`)
   }
 
   return (
