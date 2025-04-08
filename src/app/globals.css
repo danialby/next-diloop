@@ -616,6 +616,43 @@ layer(base);
     @apply pointer-events-none grayscale-1 cursor-default opacity-50
   }
 
+
+.macos-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+}
+
+/* For WebKit browsers (Chrome, Safari) */
+.macos-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.macos-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.macos-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+
+.macos-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Optional: Add smooth appearance on hover */
+.macos-scrollbar {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.macos-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.2);
+}
   /*
   ---break---
 */
