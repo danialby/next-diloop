@@ -11,7 +11,7 @@ import { Card } from '@/components/ui/card'
 import LoadingIndicator from '@/components/ui/loading'
 import useAdminStore from '@/store/adminStore'
 import { useMutation } from '@tanstack/react-query'
-import { Folder } from 'lucide-react'
+import { ChevronLeft, Folder } from 'lucide-react'
 import React, { useEffect, useMemo } from 'react'
 
 export default function BooksPanel() {
@@ -130,8 +130,12 @@ export default function BooksPanel() {
                               key={category.id}
                             >
                               <div className="flex justify-between items-center px-2 py-1 gap-1.5 bg-cyan-500/30">
-                                <Folder size={14} className="text-cyan-800" />
-                                <div className="w-full font-semibold text-sm text-cyan-800">{category?.name_fa}</div>
+                                <div className="flex gap-1 items-center">
+                                  <Folder size={14} className="text-cyan-800 w-5" />
+                                  <div className="font-semibold text-sm text-cyan-800">{categories_data?.filter(_category => _category?.id === category?.parent_id)[0].name_fa}</div>
+                                  <ChevronLeft size={14} className="text-cyan-800 w-5" />
+                                  <div className="font-semibold text-sm text-cyan-800">{category?.name_fa}</div>
+                                </div>
                                 <Button variant="link" className="text-xs py-0 h-6 px-1 text-cyan-700 font-bold">
                                   نمایش همه
                                 </Button>
