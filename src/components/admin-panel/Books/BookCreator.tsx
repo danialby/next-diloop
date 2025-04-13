@@ -2,7 +2,8 @@
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { ChevronDown, ChevronUp, Star } from 'lucide-react'
 import * as React from 'react'
 
 interface ContentPage {
@@ -62,43 +63,56 @@ interface BookCreatorProps {
   onNext: () => void
   onPrev: () => void
   onClose: () => void
+  onIndexChange: (index: number) => void // Add this prop
   className?: string
   renderContent?: (page: Page) => React.ReactNode
 }
 
-function BookCreator({
-  ref,
-  pages,
-  currentIndex,
-  onNext,
-  onPrev,
-  onClose,
-  className,
-  renderContent,
-}: BookCreatorProps & { ref?: React.RefObject<HTMLDivElement | null> }) {
+function BookCreator({ ref, pages, currentIndex, onNext, onPrev, onClose, onIndexChange, className, renderContent }: BookCreatorProps & { ref?: React.RefObject<HTMLDivElement | null> }) {
   const contentRef = React.useRef<HTMLDivElement>(null)
-  const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null)
-  const currentPage = pages[currentIndex]
-
+  const [direction, setDirection] = React.useState<'up' | 'down'>('down')
+  const getPageColor = (page: Page): string => {
+    switch (page.type) {
+      case 'content':
+        return 'bg-blue-500' // Blue for content pages
+      case 'image':
+        return 'bg-green-500' // Green for image pages
+      case 'quiz':
+        return 'bg-yellow-500' // Purple for quiz pages
+      case 'question':
+        return 'bg-purple-500' // Yellow for question pages
+      case 'letsGo':
+        return 'bg-pink-500' // Indigo for "let's go" pages
+      case 'rating':
+        return 'bg-orange-500' // Pink for rating pages
+      default:
+        return 'bg-gray-500' // Default fallback
+    }
+  }
   React.useEffect(() => {
     if (contentRef.current) {
       contentRef.current.scrollTop = 0
     }
   }, [currentIndex])
 
-  const handleDragStart = (index: number) => {
-    setDraggedIndex(index)
+  const handlePrev = () => {
+    setDirection('up')
+    onPrev()
   }
 
-  const handleDragOver = (e: React.DragEvent, index: number) => {
-    e.preventDefault()
-    if (draggedIndex === null || draggedIndex === index)
-      return
-    setDraggedIndex(index)
+  const handleNext = () => {
+    setDirection('down')
+    onNext()
   }
 
-  const handleDragEnd = () => {
-    setDraggedIndex(null)
+  const handleIndicatorClick = (index: number) => {
+    if (index > currentIndex) {
+      setDirection('down')
+    }
+    else if (index < currentIndex) {
+      setDirection('up')
+    }
+    onIndexChange(index)
   }
 
   const defaultRenderContent = (page: Page) => {
@@ -174,13 +188,13 @@ function BookCreator({
             </h2>
             <div className="flex gap-4 mt-8 justify-center">
               <button
-                onClick={onNext}
+                onClick={handleNext}
                 className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
               >
                 {page.yesText}
               </button>
               <button
-                onClick={onNext}
+                onClick={handleNext}
                 className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
               >
                 {page.noText}
@@ -198,11 +212,16 @@ function BookCreator({
               {page.description}
             </div>
             <button
-              onClick={onNext}
+              onClick={handleNext}
               className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
             >
               {page.buttonText}
             </button>
+            <div className="quick-replies">
+              <button className="quick-reply celebration">🎉 Awesome!</button>
+              <button className="quick-reply celebration">👍 Thanks!</button>
+              <button className="quick-reply celebration">🔥 Lit!</button>
+            </div>
           </>
         )
       case 'rating':
@@ -235,7 +254,7 @@ function BookCreator({
                 ))}
               </div>
               <button
-                onClick={onNext}
+                onClick={handleNext}
                 disabled={page.rating === null}
                 className={`px-6 py-3 rounded-lg transition-colors ${
                   page.rating === null
@@ -265,28 +284,51 @@ function BookCreator({
     )
   }
 
+  const slideVariants = {
+    enter: (direction: 'up' | 'down') => ({
+      y: direction === 'up' ? '100%' : '-100%',
+      opacity: 0,
+    }),
+    center: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.3,
+        ease: 'easeOut',
+      },
+    },
+    exit: (direction: 'up' | 'down') => ({
+      y: direction === 'up' ? '-100%' : '100%',
+      opacity: 0,
+      transition: {
+        duration: 0.3,
+        ease: 'easeIn',
+      },
+    }),
+  }
+
   return (
     <div
       ref={ref}
       className={cn(
-        'relative h-full w-full bg-white flex flex-col',
+        'relative h-full w-full bg-white flex overflow-hidden',
         className,
       )}
     >
-      {/* Draggable page indicators */}
-      <div className="absolute top-10 left-0 right-0 flex justify-center gap-2 z-10">
-        {pages.map((_, index) => (
-          <div
+      {/* Vertical page indicators */}
+      <div className="absolute top-1/2 hover:w-6 w-5 -left-3 transition transition-all transform -translate-y-1/2 flex flex-col gap-0.25 z-10 items-end h-[calc(100%_-_32px)]">
+        {pages.map((page, index) => (
+          <button // Changed div to button
             key={index}
-            draggable
-            onDragStart={() => handleDragStart(index)}
-            onDragOver={e => handleDragOver(e, index)}
-            onDragEnd={handleDragEnd}
+            onClick={() => handleIndicatorClick(index)} // Handle click
             className={cn(
-              'w-8 h-1 rounded-full cursor-grab active:cursor-grabbing',
-              index === currentIndex ? 'bg-red-500' : 'bg-gray-300',
-              draggedIndex === index && 'opacity-50',
+              'w-full flex-grow transition-all relative origin-right first:rounded-tr-md last:rounded-br-md transform hover:translate-x-1 focus:outline-none',
+              index === currentIndex
+                ? `transform translate-x-1 rounded-r-md min-h-3 ${getPageColor(page)}` // Use the page-specific color for current indicator
+                : `opacity-60 ${getPageColor(page)}`,
             )}
+            style={{ height: `calc(100%/${pages?.length}px` }}
+            aria-label={`Go to page ${index + 1}`}
           />
         ))}
       </div>
@@ -299,35 +341,45 @@ function BookCreator({
         ✕
       </button>
 
-      {/* Page content with fixed max height and scroll */}
-      <div
-        ref={contentRef}
-        className="flex-1 overflow-y-auto p-8 pt-16 pb-8 max-h-[80vh]"
-      >
-        <div className="max-w-2xl mx-auto flex flex-col">
-          {renderContent ? renderContent(currentPage) : defaultRenderContent(currentPage)}
-        </div>
+      {/* Animated content area */}
+      <div className="flex-1 overflow-hidden relative">
+        <AnimatePresence custom={direction} initial={false}>
+          <motion.div
+            key={currentIndex}
+            custom={direction}
+            variants={slideVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            className="absolute inset-0 p-8 overflow-y-auto"
+            ref={contentRef}
+          >
+            <div className="max-w-2xl mx-auto flex flex-col h-full">
+              {renderContent ? renderContent(pages[currentIndex]) : defaultRenderContent(pages[currentIndex])}
+            </div>
+          </motion.div>
+        </AnimatePresence>
       </div>
 
-      {/* Navigation controls with chevrons */}
-      <div className="absolute inset-0 flex items-center justify-between pointer-events-none">
+      {/* Navigation buttons */}
+      <div className="absolute inset-0 flex flex-col items-center justify-between pointer-events-none">
         <Button
           size="icon"
           variant="ghost"
-          onClick={onPrev}
-          className="pointer-events-auto p-2 ml-4 rounded-full transition-colors"
+          onClick={handlePrev}
+          className="pointer-events-auto p-2 mt-4 rounded-full hover:bg-gray-100"
           aria-label="Previous page"
         >
-          <ChevronRight className="w-6 h-6 text-gray-700" />
+          <ChevronUp className="w-6 h-6 text-gray-700" />
         </Button>
         <Button
           size="icon"
           variant="ghost"
-          onClick={onNext}
-          className="pointer-events-auto p-2 mr-4 rounded-full transition-colors"
+          onClick={handleNext}
+          className="pointer-events-auto p-2 mb-4 rounded-full hover:bg-gray-100"
           aria-label="Next page"
         >
-          <ChevronLeft className="w-6 h-6 text-gray-700" />
+          <ChevronDown className="w-6 h-6 text-gray-700" />
         </Button>
       </div>
 
@@ -336,8 +388,8 @@ function BookCreator({
         && contentRef.current.scrollHeight > contentRef.current.clientHeight
         && contentRef.current.scrollTop + contentRef.current.clientHeight
         < contentRef.current.scrollHeight - 20 && (
-        <div className="absolute bottom-4 left-0 right-0 flex justify-center">
-          <div className="bg-black bg-opacity-50 text-white text-xs px-3 py-1 rounded-full">
+        <div className="absolute bottom-4 right-4">
+          <div className="bg-black bg-opacity-50 text-white text-xs px-3 py-1 rounded-full rotate-90">
             Scroll to continue
           </div>
         </div>
