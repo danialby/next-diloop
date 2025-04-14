@@ -217,11 +217,6 @@ function BookCreator({ ref, pages, currentIndex, onNext, onPrev, onClose, onInde
             >
               {page.buttonText}
             </button>
-            <div className="quick-replies">
-              <button className="quick-reply celebration">🎉 Awesome!</button>
-              <button className="quick-reply celebration">👍 Thanks!</button>
-              <button className="quick-reply celebration">🔥 Lit!</button>
-            </div>
           </>
         )
       case 'rating':

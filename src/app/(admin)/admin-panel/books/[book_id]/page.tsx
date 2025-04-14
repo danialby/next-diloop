@@ -2,6 +2,7 @@
 
 import { BookCreator } from '@/components/admin-panel/Books/BookCreator'
 import BookDetailsCard from '@/components/admin-panel/Books/BookDetailsCard'
+import DeleteBookPageDialog from '@/components/admin-panel/Books/BookPages/DeleteBookPageDialog'
 import MobileFrame from '@/components/admin-panel/Books/MobileFrame'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -19,7 +20,6 @@ import {
   PlusCircle,
   Star,
   Stars,
-  XCircle,
 } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import { useMemo, useState } from 'react'
@@ -264,17 +264,18 @@ export default function BookEditor() {
                 </span>
               </div>
             </div>
-            <Button
-              className="absolute -left-7 top-0 text-rose-400 z-10 transition-all group-hover:left-0"
-              variant="link"
-              size="sm"
-              onClick={(e) => {
-                e.stopPropagation()
-                handleDeletePage(index)
-              }}
-            >
-              <XCircle className="w-4 h-4" />
-            </Button>
+            {/* <Button */}
+            {/*  className="absolute -left-7 top-0 text-rose-400 z-10 transition-all group-hover:left-0" */}
+            {/*  variant="link" */}
+            {/*  size="sm" */}
+            {/*  onClick={(e) => { */}
+            {/*    e.stopPropagation() */}
+            {/*    handleDeletePage(index) */}
+            {/*  }} */}
+            {/* > */}
+            {/*  <XCircle className="w-4 h-4" /> */}
+            {/* </Button> */}
+            <DeleteBookPageDialog book_page={page} onDelete={handleDeletePage} />
           </div>
         )
       })}
