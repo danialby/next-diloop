@@ -177,5 +177,12 @@ export function useAdminPanelRoutes() {
       },
     })
   }
-  return { getUsersList, getCategoriesList, addNewCategory, updateCategory, updateSubCategory, deleteCategory, getBooksList, addNewBook, deleteBook, updateBook }
+
+  const deleteBookPage = async ({ id }) => {
+    return await axiosInstance._delete(`/admin/api/v1/skill-teach/book-page/${id}`, {
+      id,
+    })
+  }
+
+  return { getUsersList, getCategoriesList, addNewCategory, updateCategory, updateSubCategory, deleteCategory, getBooksList, addNewBook, deleteBook, updateBook, deleteBookPage }
 }

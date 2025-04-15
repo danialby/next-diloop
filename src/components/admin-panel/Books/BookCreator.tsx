@@ -1,5 +1,6 @@
 'use client'
 
+import BookProgressBar from '@/components/admin-panel/Books/BookPages/BookProgressBar'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
@@ -77,7 +78,6 @@ function BookCreator({
   renderContent,
 }: BookCreatorProps & { ref?: React.RefObject<HTMLDivElement | null> }) {
   const contentRef = React.useRef<HTMLDivElement>(null)
-  const [draggedIndex, setDraggedIndex] = React.useState<number | null>(null)
   const currentPage = pages[currentIndex]
 
   React.useEffect(() => {
@@ -86,34 +86,19 @@ function BookCreator({
     }
   }, [currentIndex])
 
-  const handleDragStart = (index: number) => {
-    setDraggedIndex(index)
-  }
-
-  const handleDragOver = (e: React.DragEvent, index: number) => {
-    e.preventDefault()
-    if (draggedIndex === null || draggedIndex === index)
-      return
-    setDraggedIndex(index)
-  }
-
-  const handleDragEnd = () => {
-    setDraggedIndex(null)
-  }
-
   const defaultRenderContent = (page: Page) => {
     switch (page.type) {
       case 'content':
         return (
           <>
             <h2 className="text-2xl font-bold text-gray-800 mb-4 break-all">
-              {page.title_fa}
+              {page.title_fa || <span className="text-gray-200">عنوان</span>}
             </h2>
             <h3 className="text-lg text-gray-600 mb-6 break-all">
               {page.title_en}
             </h3>
             <div className="prose max-w-none text-gray-700 break-all">
-              {page.description}
+              {page.description || <span className="text-gray-200">توضیحات</span>}
             </div>
           </>
         )
@@ -274,27 +259,12 @@ function BookCreator({
       )}
     >
       {/* Draggable page indicators */}
-      <div className="absolute top-10 left-0 right-0 flex justify-center gap-2 z-10">
-        {pages.map((_, index) => (
-          <div
-            key={index}
-            draggable
-            onDragStart={() => handleDragStart(index)}
-            onDragOver={e => handleDragOver(e, index)}
-            onDragEnd={handleDragEnd}
-            className={cn(
-              'w-8 h-1 rounded-full cursor-grab active:cursor-grabbing',
-              index === currentIndex ? 'bg-red-500' : 'bg-gray-300',
-              draggedIndex === index && 'opacity-50',
-            )}
-          />
-        ))}
-      </div>
+      <BookProgressBar currentPageIndex={currentIndex} totalPages={pages.length} />
 
       {/* Close button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-10 text-gray-700 hover:text-gray-900"
+        className="absolute top-8 left-4 z-10 text-gray-700 hover:text-gray-900"
       >
         ✕
       </button>
@@ -302,32 +272,34 @@ function BookCreator({
       {/* Page content with fixed max height and scroll */}
       <div
         ref={contentRef}
-        className="flex-1 overflow-y-auto p-8 pt-16 pb-8 max-h-[80vh]"
+        className="flex-1 overflow-y-auto p-8 pt-28 pb-8 max-h-[80vh]"
       >
-        <div className="max-w-2xl mx-auto flex flex-col">
+        <div className="max-w-2xl mx-auto flex flex-col h-full relative">
           {renderContent ? renderContent(currentPage) : defaultRenderContent(currentPage)}
         </div>
       </div>
 
       {/* Navigation controls with chevrons */}
-      <div className="absolute inset-0 flex items-center justify-between pointer-events-none">
+      <div className="absolute inset-0 flex top-16 justify-between pointer-events-none">
         <Button
           size="icon"
-          variant="ghost"
+          variant="link"
           onClick={onPrev}
           className="pointer-events-auto p-2 ml-4 rounded-full transition-colors"
           aria-label="Previous page"
+          disabled={currentIndex === 0}
         >
-          <ChevronRight className="w-6 h-6 text-gray-700" />
+          <ChevronRight size={32} className="text-gray-700" />
         </Button>
         <Button
           size="icon"
-          variant="ghost"
+          variant="link"
           onClick={onNext}
           className="pointer-events-auto p-2 mr-4 rounded-full transition-colors"
           aria-label="Next page"
+          disabled={currentIndex === pages?.length}
         >
-          <ChevronLeft className="w-6 h-6 text-gray-700" />
+          <ChevronLeft size={32} className="text-gray-700" />
         </Button>
       </div>
 
