@@ -25,56 +25,97 @@ import { useParams } from 'next/navigation'
 import { useMemo, useState } from 'react'
 
 // Type Definitions
-type PageType = 'content' | 'image' | 'quiz' | 'question' | 'letsGo' | 'rating'
+// type PageType = 'content' | 'image' | 'quiz' | 'question' | 'letsGo' | 'rating'
+type PageType = 'content'
 
 interface BasePage {
   id: string
   type: PageType
 }
 
+// interface ContentPage extends BasePage {
+//   type: 'content'
+//   title: string
+//   description: string
+// }
+//
+// interface ImagePage extends BasePage {
+//   type: 'image'
+//   title: string
+//   imageUrl: string | File
+//   caption?: string
+// }
+//
+// interface QuizPage extends BasePage {
+//   type: 'quiz'
+//   question: string
+//   options: string[]
+//   correctAnswer: number
+// }
+//
+// interface QuestionPage extends BasePage {
+//   type: 'question'
+//   question: string
+//   yesText: string
+//   noText: string
+// }
+//
+// interface LetsGoPage extends BasePage {
+//   type: 'letsGo'
+//   title: string
+//   description: string
+//   buttonText: string
+// }
+//
+// interface RatingPage extends BasePage {
+//   type: 'rating'
+//   question: string
+//   submitText: string
+//   rating: number | null
+// }
+
 interface ContentPage extends BasePage {
   type: 'content'
-  title_fa: string
-  title_en: string
-  description: string
+  title: string
 }
 
-interface ImagePage extends BasePage {
+interface ImageItem extends BasePage {
   type: 'image'
-  title: string
+  title?: string
   imageUrl: string | File
   caption?: string
 }
 
-interface QuizPage extends BasePage {
+interface QuizItem extends BasePage {
   type: 'quiz'
   question: string
   options: string[]
   correctAnswer: number
 }
 
-interface QuestionPage extends BasePage {
+interface QuestionItem extends BasePage {
   type: 'question'
   question: string
   yesText: string
   noText: string
 }
 
-interface LetsGoPage extends BasePage {
+interface LetsGoItem extends BasePage {
   type: 'letsGo'
   title: string
   description: string
   buttonText: string
 }
 
-interface RatingPage extends BasePage {
+interface RatingItem extends BasePage {
   type: 'rating'
   question: string
   submitText: string
   rating: number | null
 }
 
-type Page = ContentPage | ImagePage | QuizPage | QuestionPage | LetsGoPage | RatingPage
+// type Page = ContentPage | ImagePage | QuizPage | QuestionPage | LetsGoPage | RatingPage
+type Page = ContentPage
 
 // Configuration
 const PAGE_TYPES = [
@@ -113,23 +154,23 @@ const COLOR_CLASSES = {
   },
 } as const
 
-const PAGE_ICONS = {
-  content: BookOpenText,
-  image: ImageIcon,
-  quiz: Stars,
-  question: Check,
-  letsGo: ChevronRight,
-  rating: Star,
-}
-
-const PAGE_COLORS: Record<PageType, keyof typeof COLOR_CLASSES> = {
-  content: 'blue',
-  image: 'green',
-  quiz: 'yellow',
-  question: 'purple',
-  letsGo: 'pink',
-  rating: 'orange',
-}
+// const PAGE_ICONS = {
+//   content: BookOpenText,
+//   image: ImageIcon,
+//   quiz: Stars,
+//   question: Check,
+//   letsGo: ChevronRight,
+//   rating: Star,
+// }
+//
+// const PAGE_COLORS: Record<PageType, keyof typeof COLOR_CLASSES> = {
+//   content: 'blue',
+//   image: 'green',
+//   quiz: 'yellow',
+//   question: 'purple',
+//   letsGo: 'pink',
+//   rating: 'orange',
+// }
 
 // Component
 export default function BookEditor() {
@@ -154,46 +195,15 @@ export default function BookEditor() {
     ))
   }
 
-  const addEmptyPage = (type: PageType) => {
-    const basePage = { id: `page-${Date.now()}`, type }
+  const addEmptyPage = () => {
+    const basePage = { id: `page-${Date.now()}` }
 
     const newPage = {
       ...basePage,
-      ...(type === 'content'
-        ? {
-            title_fa: '',
-            title_en: '',
-            description: '',
-          }
-        : type === 'image'
-          ? {
-              title: '',
-              imageUrl: '',
-              caption: '',
-            }
-          : type === 'quiz'
-            ? {
-                question: '',
-                options: ['', ''],
-                correctAnswer: 0,
-              }
-            : type === 'question'
-              ? {
-                  question: '',
-                  yesText: 'بله',
-                  noText: 'خیر',
-                }
-              : type === 'letsGo'
-                ? {
-                    title: '',
-                    description: '',
-                    buttonText: 'شروع کنیم!',
-                  }
-                : {
-                    question: '',
-                    submitText: 'ثبت امتیاز',
-                    rating: null,
-                  }),
+      ...{
+        title: '',
+        description: '',
+      },
     } as Page
 
     setPages(prev => [...prev, newPage])
@@ -237,28 +247,31 @@ export default function BookEditor() {
   )
 
   const renderPageList = () => (
-    <div className="max-h-50 grid grid-cols-5 gap-1.5 overflow-y-auto p-3 bg-black/5 rounded-xl shadow">
+    <div className="max-h-50 grid grid-cols-5 gap-1.5 overflow-y-auto p-3 bg-black/5 rounded-xl shadow macos-scrollbar">
       {pages.map((page, index) => {
-        const IconComponent = PAGE_ICONS[page.type]
-        const color = PAGE_COLORS[page.type]
+        // const IconComponent = PAGE_ICONS[page.type]
+        // const color = PAGE_COLORS[page.type]
 
         return (
+
           <PageCard
             key={page?.id}
             page={page}
             index={index}
             className={clsx(
-              'group flex items-center justify-between p-2 rounded-lg border',
+              'group flex items-center justify-between p-2 rounded-lg border min-h-16 relative bg-white',
               'relative cursor-pointer overflow-hidden scale-95 transition-transform',
-              COLOR_CLASSES[color].pageItem,
               index === currentPageIndex && 'scale-110 border-2 shadow-lg',
             )}
-            IconComponent={IconComponent}
             onNavigate={handlePageNavigation}
             onDelete={handleDeletePage}
           />
+
         )
       })}
+      <Button variant="outline" onClick={() => addEmptyPage('content')} className="min-h-16">
+        <PlusCircle />
+      </Button>
     </div>
   )
 
@@ -271,27 +284,11 @@ export default function BookEditor() {
         return (
           <div className="space-y-4">
             <div>
-              <Label>عنوان فارسی</Label>
+              <Label>عنوان</Label>
               <Input
-                value={currentPage.title_fa}
-                onChange={e => handlePageChange<ContentPage>('title_fa', e.target.value)}
+                value={currentPage.title}
+                onChange={e => handlePageChange<ContentPage>('title', e.target.value)}
                 className="mt-2"
-              />
-            </div>
-            <div>
-              <Label>عنوان انگلیسی</Label>
-              <Input
-                value={currentPage.title_en}
-                onChange={e => handlePageChange<ContentPage>('title_en', e.target.value)}
-                className="mt-2"
-              />
-            </div>
-            <div>
-              <Label>توضیحات</Label>
-              <Textarea
-                value={currentPage.description}
-                onChange={e => handlePageChange<ContentPage>('description', e.target.value)}
-                className="mt-2 min-h-[100px]"
               />
             </div>
           </div>
@@ -515,28 +512,31 @@ export default function BookEditor() {
 
       <div className="md:grid grid-cols-2 gap-4 flex flex-col">
         <div className="flex flex-col gap-2">
-          {/* Page Type Selection */}
-          <div className="flex justify-between items-center mt-4">
-            {renderPageTypeButtons()}
-          </div>
 
           {/* Page List */}
           <Card className="p-4">
             <h3 className="font-medium">صفحات کتاب</h3>
-            {pages.length === 0
-              ? (
-                  <p className="text-gray-500 text-sm">هنوز صفحه‌ای اضافه نشده است</p>
-                )
-              : (
-                  renderPageList()
-                )}
+            { renderPageList() }
 
             {/* Editor Section */}
-            {currentPage && (
-              <Card className="p-4 mt-4">
-                {renderEditor()}
-              </Card>
-            )}
+            {pages?.length > 0
+              && (
+                <Card className="p-4 mt-4">
+                  <div className="space-y-4">
+                    <div>
+                      <Label>عنوان</Label>
+                      <Input
+                        value={currentPage.title}
+                        onChange={e => handlePageChange<ContentPage>('title', e.target.value)}
+                        className="mt-2"
+                      />
+                    </div>
+                  </div>
+                  {renderEditor()}
+                  {/* Page Type Selection */}
+                  {renderPageTypeButtons()}
+                </Card>
+              )}
           </Card>
         </div>
 
@@ -561,7 +561,7 @@ export default function BookEditor() {
                       کتابی برای نمایش وجود ندارد
                     </h3>
                     <p className="text-sm text-gray-400">
-                      برای شروع، یک صفحه جدید از انواع مختلف اضافه کنید
+                      برای شروع، یک صفحه جدید اضافه کنید
                     </p>
                   </div>
                 )}

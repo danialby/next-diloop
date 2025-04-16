@@ -10,7 +10,6 @@ interface PageCardProps {
   }
   index: number
   className: string
-  IconComponent: React.ComponentType<{ size: number }>
   onNavigate: (index: number) => void
   onDelete: (index: number) => void
 }
@@ -19,7 +18,6 @@ export function PageCard({
   page,
   index,
   className,
-  IconComponent,
   onNavigate,
   onDelete,
 }: PageCardProps) {
@@ -29,17 +27,11 @@ export function PageCard({
       className={className}
       onClick={() => onNavigate(index)}
     >
-      <div className="max-w-full">
+      <div className="max-w-full w-full  h-full">
         <div className="flex flex-col gap-1 items-start">
-          <IconComponent size={18} />
+          {/* <span className="absolute top-0 -right-5 text-xs p-0.25 w-8 flex items-end justify-end h-4 rounded-bl-sm bg-black text-white">{index + 1}</span> */}
           <span className="text-xs text-gray-600 truncate max-w-full">
-            {'question' in page
-              ? page.question
-              : 'title' in page
-                ? page.title
-                : page.type === 'quiz'
-                  ? 'سوال آزمون'
-                  : ''}
+            { page.title }
           </span>
         </div>
       </div>

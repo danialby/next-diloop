@@ -9,8 +9,7 @@ import * as React from 'react'
 interface ContentPage {
   id: string
   type: 'content'
-  title_fa: string
-  title_en: string
+  title: string
   description: string
 }
 
@@ -90,17 +89,14 @@ function BookCreator({
     switch (page.type) {
       case 'content':
         return (
-          <>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4 break-all">
-              {page.title_fa || <span className="text-gray-200">عنوان</span>}
-            </h2>
-            <h3 className="text-lg text-gray-600 mb-6 break-all">
-              {page.title_en}
-            </h3>
-            <div className="prose max-w-none text-gray-700 break-all">
-              {page.description || <span className="text-gray-200">توضیحات</span>}
-            </div>
-          </>
+          page.title
+          && (
+            <>
+              <h2 className="text-xl font-bold text-gray-800 mb-4 break-all">
+                {page.title}
+              </h2>
+            </>
+          )
         )
       case 'image':
         return (
