@@ -3,79 +3,87 @@
 import BookProgressBar from '@/components/admin-panel/Books/BookPages/BookProgressBar'
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { ChevronLeft, ChevronRight, Star } from 'lucide-react'
+import { clsx } from 'clsx'
+import { ChevronLeft, ChevronRight, Heart, Smile, Star } from 'lucide-react'
 import * as React from 'react'
 
-interface ContentPage {
+// Use the same types from BookPage
+type PageItemType = 'heading' | 'text' | 'rating' | 'question' | 'image' | 'video' | 'button' | 'yesNoButtons'
+
+interface BasePageItem {
   id: string
-  type: 'content'
-  title: string
-  description: string
+  type: PageItemType
 }
 
-interface ImagePage {
-  id: string
+interface HeadingItem extends BasePageItem {
+  type: 'heading'
+  text: string
+  size: 'h1' | 'h2' | 'h3'
+}
+
+interface TextItem extends BasePageItem {
+  type: 'text'
+  content: string
+}
+
+interface RatingItem extends BasePageItem {
+  type: 'rating'
+  question: string
+  iconShape: 'star' | 'heart' | 'smiley'
+  maxRating: number
+  rating: number | null
+}
+
+interface QuestionItem extends BasePageItem {
+  type: 'question'
+  question: string
+  options: string[]
+}
+
+interface ImageItem extends BasePageItem {
   type: 'image'
-  title: string
-  imageUrl: string | File
+  url: string | File
   caption?: string
 }
 
-interface QuizPage {
-  id: string
-  type: 'quiz'
-  question: string
-  options: string[]
-  correctAnswer: number
+interface VideoItem extends BasePageItem {
+  type: 'video'
+  url: string
 }
 
-interface QuestionPage {
-  id: string
-  type: 'question'
+interface ButtonItem extends BasePageItem {
+  type: 'button'
+  text: string
+  action: string
+}
+
+interface YesNoButtonsItem extends BasePageItem {
+  type: 'yesNoButtons'
   question: string
   yesText: string
   noText: string
 }
 
-interface LetsGoPage {
+type PageItem = HeadingItem | TextItem | RatingItem | QuestionItem | ImageItem | VideoItem | ButtonItem | YesNoButtonsItem
+
+interface Page {
   id: string
-  type: 'letsGo'
   title: string
-  description: string
-  buttonText: string
+  items: PageItem[]
 }
-
-interface RatingPage {
-  id: string
-  type: 'rating'
-  question: string
-  submitText: string
-  rating: number | null
-}
-
-type Page = ContentPage | ImagePage | QuizPage | QuestionPage | LetsGoPage | RatingPage
 
 interface BookCreatorProps {
   pages: Page[]
   currentIndex: number
-  onReorder?: (fromIndex: number, toIndex: number) => void
   onNext: () => void
   onPrev: () => void
   onClose: () => void
+  onUpdate?: (page: Page) => void
   className?: string
-  renderContent?: (page: Page) => React.ReactNode
+  isEditing?: boolean
 }
 
-function BookCreator({
-  ref,
-  pages,
-  currentIndex,
-  onNext,
-  onPrev,
-  onClose,
-  className,
-  renderContent,
-}: BookCreatorProps & { ref?: React.RefObject<HTMLDivElement | null> }) {
+function BookCreator({ ref, pages, currentIndex, onNext, onPrev, onClose, onUpdate, className, isEditing = false }: BookCreatorProps & { ref?: React.RefObject<HTMLDivElement | null> }) {
   const contentRef = React.useRef<HTMLDivElement>(null)
   const currentPage = pages[currentIndex]
 
@@ -85,61 +93,107 @@ function BookCreator({
     }
   }, [currentIndex])
 
-  const defaultRenderContent = (page: Page) => {
-    switch (page.type) {
-      case 'content':
+  const handleRatingChange = (rating: number) => {
+    if (!onUpdate || currentPage.items.length === 0)
+      return
+
+    const ratingItem = currentPage.items.find(item => item.type === 'rating') as RatingItem | undefined
+    if (!ratingItem)
+      return
+
+    const updatedItems = currentPage.items.map(item =>
+      item.type === 'rating' ? { ...item, rating } : item,
+    )
+
+    onUpdate({
+      ...currentPage,
+      items: updatedItems,
+    })
+  }
+
+  const renderRatingIcons = (item: RatingItem) => {
+    const IconComponent
+            = item.iconShape === 'heart'
+              ? Heart
+              : item.iconShape === 'smiley'
+                ? Smile
+                : Star
+
+    return (
+      <div className="flex gap-2">
+        {Array.from({ length: item.maxRating }).map((_, i) => (
+          <button
+            key={i}
+            onClick={() => !isEditing && handleRatingChange(i + 1)}
+            className="focus:outline-none"
+          >
+            <IconComponent
+              className={`w-10 h-10 ${
+                item.rating && i < item.rating
+                  ? 'fill-yellow-400 text-yellow-400'
+                  : 'text-gray-300'
+              }`}
+            />
+          </button>
+        ))}
+      </div>
+    )
+  }
+
+  const renderItemContent = (item: PageItem) => {
+    switch (item.type) {
+      case 'heading':
         return (
-          page.title
-          && (
-            <>
-              <h2 className="text-xl font-bold text-gray-800 mb-4 break-all">
-                {page.title}
-              </h2>
-            </>
-          )
+          <h2 className={clsx(
+            'font-bold text-gray-800 mb-4 break-all',
+            item.size === 'h1'
+              ? 'text-2xl'
+              : item.size === 'h2'
+                ? 'text-xl'
+                : 'text-lg',
+          )}
+          >
+            {item.text}
+          </h2>
         )
-      case 'image':
+      case 'text':
+        return <p className="text-gray-700 break-all">{item.content}</p>
+      case 'rating':
         return (
           <>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4 break-all">
-              {page.title}
-            </h2>
-            <div className="mt-6">
-              {typeof page.imageUrl === 'string'
-                ? (
-                    <img
-                      src={page.imageUrl}
-                      alt={page.title}
-                      className="max-w-full h-auto rounded-lg"
-                    />
-                  )
-                : (
-                    <div className="bg-gray-200 p-8 rounded-lg text-center break-all">
-                      <p>Image preview would appear here</p>
-                    </div>
-                  )}
+            <h3 className="text-xl font-bold text-gray-800 mb-4 break-all">
+              {item.question}
+            </h3>
+            <div className="flex flex-col items-center gap-6 mt-8">
+              {renderRatingIcons(item)}
+              {!isEditing && (
+                <button
+                  onClick={onNext}
+                  disabled={item.rating === null}
+                  className={`px-6 py-3 rounded-lg transition-colors ${
+                    item.rating === null
+                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : 'bg-blue-500 text-white hover:bg-blue-600'
+                  }`}
+                >
+                  ارسال
+                </button>
+              )}
             </div>
-            {page.caption && (
-              <p className="mt-4 text-sm text-gray-500 break-all">{page.caption}</p>
-            )}
           </>
         )
-      case 'quiz':
+      case 'question':
         return (
           <>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4 break-all">
-              سوال آزمون
-            </h2>
-            <p className="text-lg mb-6 break-all">{page.question}</p>
-            <div className="space-y-2">
-              {page.options.map((option, idx) => (
+            <h3 className="text-xl font-bold text-gray-800 mb-4 break-all">
+              {item.question}
+            </h3>
+            <div className="space-y-2 mt-6">
+              {item.options.map((option, idx) => (
                 <div
                   key={idx}
-                  className={`p-3 border rounded-lg ${
-                    idx === page.correctAnswer
-                      ? 'border-green-500 bg-green-50'
-                      : 'border-gray-200'
-                  }`}
+                  className="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 cursor-pointer"
+                  onClick={!isEditing ? onNext : undefined}
                 >
                   {option}
                 </div>
@@ -147,84 +201,71 @@ function BookCreator({
             </div>
           </>
         )
-      case 'question':
+      case 'image':
         return (
           <>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4 break-all">
-              {page.question}
-            </h2>
+            <div className="mt-6">
+              {typeof item.url === 'string'
+                ? (
+                    <img
+                      src={item.url}
+                      alt={item.caption || ''}
+                      className="max-w-full h-auto rounded-lg"
+                    />
+                  )
+                : (
+                    <div className="bg-gray-200 p-8 rounded-lg text-center break-all">
+                      <p>تصویر آپلود شده</p>
+                    </div>
+                  )}
+            </div>
+            {item.caption && (
+              <p className="mt-4 text-sm text-gray-500 break-all">{item.caption}</p>
+            )}
+          </>
+        )
+      case 'video':
+        return (
+          <div className="mt-6">
+            {item.url && (
+              <div className="aspect-w-16 aspect-h-9">
+                <iframe
+                  src={item.url}
+                  className="w-full h-64 rounded-lg"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            )}
+          </div>
+        )
+      case 'button':
+        return (
+          <button
+            onClick={!isEditing ? onNext : undefined}
+            className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+          >
+            {item.text}
+          </button>
+        )
+      case 'yesNoButtons':
+        return (
+          <>
+            <h3 className="text-xl font-bold text-gray-800 mb-4 break-all">
+              {item.question}
+            </h3>
             <div className="flex gap-4 mt-8 justify-center">
               <button
-                onClick={onNext}
+                onClick={!isEditing ? onNext : undefined}
                 className="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
               >
-                {page.yesText}
+                {item.yesText}
               </button>
               <button
-                onClick={onNext}
+                onClick={!isEditing ? onNext : undefined}
                 className="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
               >
-                {page.noText}
-              </button>
-            </div>
-          </>
-        )
-      case 'letsGo':
-        return (
-          <>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4 break-all">
-              {page.title}
-            </h2>
-            <div className="prose max-w-none text-gray-700 mb-8 break-all">
-              {page.description}
-            </div>
-            <button
-              onClick={onNext}
-              className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-            >
-              {page.buttonText}
-            </button>
-          </>
-        )
-      case 'rating':
-        return (
-          <>
-            <h2 className="text-2xl font-bold text-gray-800 mb-4 break-all">
-              {page.question}
-            </h2>
-            <div className="flex flex-col items-center gap-6 mt-8">
-              <div className="flex gap-2">
-                {[1, 2, 3, 4, 5].map(star => (
-                  <button
-                    key={star}
-                    type="button"
-                    onClick={() => {
-                      const updatedPages = [...pages]
-                      const currentPage = updatedPages[currentIndex] as RatingPage
-                      currentPage.rating = star
-                    }}
-                    className="focus:outline-none"
-                  >
-                    <Star
-                      className={`w-10 h-10 ${
-                        page.rating && star <= page.rating
-                          ? 'fill-yellow-400 text-yellow-400'
-                          : 'text-gray-300'
-                      }`}
-                    />
-                  </button>
-                ))}
-              </div>
-              <button
-                onClick={onNext}
-                disabled={page.rating === null}
-                className={`px-6 py-3 rounded-lg transition-colors ${
-                  page.rating === null
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    : 'bg-blue-500 text-white hover:bg-blue-600'
-                }`}
-              >
-                {page.submitText}
+                {item.noText}
               </button>
             </div>
           </>
@@ -241,7 +282,7 @@ function BookCreator({
         className,
       )}
       >
-        <p className="text-gray-500">No pages added yet</p>
+        <p className="text-gray-500">صفحه‌ای وجود ندارد</p>
       </div>
     )
   }
@@ -254,10 +295,8 @@ function BookCreator({
         className,
       )}
     >
-      {/* Draggable page indicators */}
       <BookProgressBar currentPageIndex={currentIndex} totalPages={pages.length} />
 
-      {/* Close button */}
       <button
         onClick={onClose}
         className="absolute top-8 left-4 z-10 text-gray-700 hover:text-gray-900"
@@ -265,24 +304,36 @@ function BookCreator({
         ✕
       </button>
 
-      {/* Page content with fixed max height and scroll */}
       <div
         ref={contentRef}
-        className="flex-1 overflow-y-auto p-8 pt-28 pb-8 max-h-[80vh]"
+        className="flex-1 overflow-y-auto px-3 pt-28 pb-12 max-h-[80vh]"
       >
-        <div className="max-w-2xl mx-auto flex flex-col h-full relative">
-          {renderContent ? renderContent(currentPage) : defaultRenderContent(currentPage)}
+        <div className="max-w-2xl mx-auto flex flex-col h-full relative overflow-y-scroll macos-scrollbar">
+          {/* Page title */}
+          {currentPage.title && (
+            <h2 className="text-2xl font-bold text-gray-800 mb-6 break-all">
+              {currentPage.title}
+            </h2>
+          )}
+
+          {/* Page items */}
+          <div className="space-y-6">
+            {currentPage.items.map(item => (
+              <div key={item.id}>
+                {renderItemContent(item)}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Navigation controls with chevrons */}
       <div className="absolute inset-0 flex top-16 justify-between pointer-events-none">
         <Button
           size="icon"
           variant="link"
           onClick={onPrev}
           className="pointer-events-auto p-2 ml-4 rounded-full transition-colors"
-          aria-label="Previous page"
+          aria-label="صفحه قبلی"
           disabled={currentIndex === 0}
         >
           <ChevronRight size={32} className="text-gray-700" />
@@ -292,21 +343,20 @@ function BookCreator({
           variant="link"
           onClick={onNext}
           className="pointer-events-auto p-2 mr-4 rounded-full transition-colors"
-          aria-label="Next page"
-          disabled={currentIndex === pages?.length}
+          aria-label="صفحه بعدی"
+          disabled={currentIndex === pages.length - 1}
         >
           <ChevronLeft size={32} className="text-gray-700" />
         </Button>
       </div>
 
-      {/* Scroll indicator */}
       {contentRef.current
         && contentRef.current.scrollHeight > contentRef.current.clientHeight
         && contentRef.current.scrollTop + contentRef.current.clientHeight
         < contentRef.current.scrollHeight - 20 && (
         <div className="absolute bottom-4 left-0 right-0 flex justify-center">
           <div className="bg-black bg-opacity-50 text-white text-xs px-3 py-1 rounded-full">
-            Scroll to continue
+            برای ادامه اسکرول کنید
           </div>
         </div>
       )}

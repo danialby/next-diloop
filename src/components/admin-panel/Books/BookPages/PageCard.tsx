@@ -1,44 +1,98 @@
+'use client'
+
 import { Button } from '@/components/ui/button'
-import { XCircle } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { GripVertical, XCircle } from 'lucide-react'
 
 interface PageCardProps {
   page: {
     id: string
-    type: string
-    question?: string
-    title?: string
+    title: string
+    items: Array<{
+      type: string
+      text?: string
+      question?: string
+      content?: string
+    }>
   }
   index: number
-  className: string
+  isActive?: boolean
+  className?: string
   onNavigate: (index: number) => void
   onDelete: (index: number) => void
+  isDragging?: boolean
+  dragHandleProps?: any
 }
 
 export function PageCard({
   page,
   index,
+  isActive = false,
   className,
   onNavigate,
   onDelete,
+  isDragging = false,
+  dragHandleProps,
 }: PageCardProps) {
+  const getPreviewText = () => {
+    if (page.title)
+      return page.title
+
+    const firstItem = page.items[0]
+    if (!firstItem)
+      return 'صفحه خالی'
+
+    switch (firstItem.type) {
+      case 'heading': return firstItem.text || 'عنوان'
+      case 'text': return firstItem.content?.substring(0, 20) + (firstItem.content?.length > 20 ? '...' : '') || 'متن'
+      case 'question': return firstItem.question || 'سوال'
+      case 'rating': return 'امتیازدهی'
+      case 'image': return 'تصویر'
+      case 'video': return 'ویدیو'
+      case 'button': return 'دکمه'
+      case 'yesNoButtons': return 'بله/خیر'
+      default: return 'محتوای ناشناخته'
+    }
+  }
+
   return (
     <div
-      key={page.id}
-      className={className}
+      className={cn(
+        'relative group p-2 rounded-lg border cursor-pointer transition-all h-16 flex items-center',
+        isActive ? 'border-blue-500 bg-blue-50 shadow-md' : 'border-gray-200 hover:border-gray-300',
+        isDragging && 'shadow-lg z-50 bg-white',
+        className,
+      )}
       onClick={() => onNavigate(index)}
     >
-      <div className="max-w-full w-full  h-full">
-        <div className="flex flex-col gap-1 items-start">
-          {/* <span className="absolute top-0 -right-5 text-xs p-0.25 w-8 flex items-end justify-end h-4 rounded-bl-sm bg-black text-white">{index + 1}</span> */}
-          <span className="text-xs text-gray-600 truncate max-w-full">
-            { page.title }
+      {/* Drag handle */}
+      <div
+        {...dragHandleProps}
+        className="p-1 mr-1 text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing"
+        onClick={e => e.stopPropagation()}
+      >
+        <GripVertical className="w-4 h-4" />
+      </div>
+
+      <div className="flex-1 overflow-hidden">
+        <div className="flex items-center gap-2 w-full">
+          <span className="text-xs font-medium text-gray-500 w-5 flex-shrink-0">
+            {index + 1}
+          </span>
+          <span className="text-sm text-gray-800 truncate">
+            {getPreviewText()}
           </span>
         </div>
       </div>
+
       <Button
-        className="absolute -left-7 top-0 text-rose-400 z-1 transition-all group-hover:-left-1.5"
-        variant="link"
-        size="sm"
+        className={cn(
+          'absolute -left-6 top-1/2 -translate-y-1/2 text-rose-400 z-10 transition-all opacity-0',
+          'hover:text-rose-600 group-hover:opacity-100',
+          isActive && 'opacity-100 left-0',
+        )}
+        variant="ghost"
+        size="icon"
         onClick={(e) => {
           e.stopPropagation()
           onDelete(index)
