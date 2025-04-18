@@ -2,7 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
-import { GripVertical, XCircle } from 'lucide-react'
+import { XCircle } from 'lucide-react'
 
 interface PageCardProps {
   page: {
@@ -20,8 +20,6 @@ interface PageCardProps {
   className?: string
   onNavigate: (index: number) => void
   onDelete: (index: number) => void
-  isDragging?: boolean
-  dragHandleProps?: any
 }
 
 export function PageCard({
@@ -31,8 +29,6 @@ export function PageCard({
   className,
   onNavigate,
   onDelete,
-  isDragging = false,
-  dragHandleProps,
 }: PageCardProps) {
   const getPreviewText = () => {
     if (page.title)
@@ -58,28 +54,18 @@ export function PageCard({
   return (
     <div
       className={cn(
-        'relative group p-2 rounded-lg border cursor-pointer transition-all h-16 flex items-center',
-        isActive ? 'border-blue-500 bg-blue-50 shadow-md' : 'border-gray-200 hover:border-gray-300',
-        isDragging && 'shadow-lg z-50 bg-white',
+        'relative group p-2 rounded-lg border cursor-pointer transition-all h-16 flex items-center  overflow-hidden',
+        isActive ? 'border-yellow-500 bg-yellow-50 shadow-md  !scale-[1.1]' : 'border-gray-200 hover:border-gray-300',
         className,
       )}
       onClick={() => onNavigate(index)}
     >
-      {/* Drag handle */}
-      <div
-        {...dragHandleProps}
-        className="p-1 mr-1 text-gray-400 hover:text-gray-600 cursor-grab active:cursor-grabbing"
-        onClick={e => e.stopPropagation()}
-      >
-        <GripVertical className="w-4 h-4" />
-      </div>
-
       <div className="flex-1 overflow-hidden">
-        <div className="flex items-center gap-2 w-full">
+        <div className="flex items-start gap-4 w-full flex-col">
           <span className="text-xs font-medium text-gray-500 w-5 flex-shrink-0">
             {index + 1}
           </span>
-          <span className="text-sm text-gray-800 truncate">
+          <span className="text-xs text-gray-600 truncate">
             {getPreviewText()}
           </span>
         </div>
@@ -87,9 +73,9 @@ export function PageCard({
 
       <Button
         className={cn(
-          'absolute -left-6 top-1/2 -translate-y-1/2 text-rose-400 z-10 transition-all opacity-0',
+          'absolute -left-7 top-3 -translate-y-1/2 text-rose-400 z-10 transition-all opacity-0',
           'hover:text-rose-600 group-hover:opacity-100',
-          isActive && 'opacity-100 left-0',
+          isActive && 'opacity-100 -left-2',
         )}
         variant="ghost"
         size="icon"
