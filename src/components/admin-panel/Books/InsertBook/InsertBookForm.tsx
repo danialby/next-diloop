@@ -1,5 +1,5 @@
 'use client'
-import type { Book, Category } from '@/types'
+import type { Book, Category } from '@/types/types'
 import { useAdminPanelRoutes } from '@/app/api/admin-panel/routes'
 
 import { FilterableComboBox } from '@/components/admin-panel/FilterableComboBox'

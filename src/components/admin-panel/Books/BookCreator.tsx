@@ -306,7 +306,7 @@ function BookCreator({ ref, pages, currentIndex, onNext, onPrev, onClose, onUpda
 
       <div
         ref={contentRef}
-        className="flex-1 overflow-y-auto px-3 pt-28 pb-12 max-h-[80vh]"
+        className="flex-1 overflow-y-auto px-3 pt-28 pb-0 max-h-[80vh]"
       >
         <div className="max-w-2xl mx-auto flex flex-col h-full relative overflow-y-scroll macos-scrollbar">
           {/* Page title */}

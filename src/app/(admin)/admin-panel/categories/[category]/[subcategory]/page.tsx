@@ -1,6 +1,6 @@
 'use client'
 
-import type { BookResponse } from '@/types'
+import type { BookResponse } from '@/types/types'
 import { useAdminPanelRoutes } from '@/app/api/admin-panel/routes'
 
 import BooksCard from '@/components/admin-panel/Books/BooksCard'

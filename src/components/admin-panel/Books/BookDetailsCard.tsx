@@ -1,4 +1,4 @@
-import type { BookResponse } from '@/types'
+import type { BookResponse } from '@/types/types'
 import DeleteCategoryDialog from '@/components/admin-panel/Categories/DeleteCategory/DeleteCategoryDialog'
 import UpdateCategoryDialog from '@/components/admin-panel/Categories/UpdateCategory/UpdateCategoryDialog'
 import { toPersianDate, toPersianTime } from '@/utils/dateUtils'

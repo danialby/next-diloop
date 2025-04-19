@@ -1,6 +1,6 @@
 'use client'
 
-import type { Category } from '@/types'
+import type { Category } from '@/types/types'
 
 import { useAdminPanelRoutes } from '@/app/api/admin-panel/routes'
 import { Button } from '@/components/ui/button'

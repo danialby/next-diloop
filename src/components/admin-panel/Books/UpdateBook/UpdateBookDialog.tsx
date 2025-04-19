@@ -1,4 +1,4 @@
-import type { BookResponse, Category } from '@/types'
+import type { BookResponse, Category } from '@/types/types'
 import { UpdateBookForm } from '@/components/admin-panel/Books/UpdateBook/UpdateBookForm'
 import { Button } from '@/components/ui/button'
 import {

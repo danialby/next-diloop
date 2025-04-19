@@ -1,4 +1,4 @@
-import type { AdminStoreState, BookResponse, Category, MainCategory } from '@/types'
+import type { AdminStoreState, BookResponse, Category, MainCategory } from '@/types/types'
 // adminStore.ts
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'

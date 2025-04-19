@@ -1,4 +1,4 @@
-import type { Category } from '@/types'
+import type { Category } from '@/types/types'
 
 import { InsertBookForm } from '@/components/admin-panel/Books/InsertBook/InsertBookForm'
 import { Button } from '@/components/ui/button'

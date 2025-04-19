@@ -1,4 +1,4 @@
-import type { BookResponse } from '@/types'
+import type { BookResponse } from '@/types/types'
 import DeleteBookDialog from '@/components/admin-panel/Books/DeleteBook/DeleteBookDialog'
 import UpdateBookDialog from '@/components/admin-panel/Books/UpdateBook/UpdateBookDialog'
 import { Button } from '@/components/ui/button'
